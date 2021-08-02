@@ -3,123 +3,12 @@
     <head-top></head-top>
     <!-- 高级搜索-->
     <div class="search_container">
-      <el-select v-model="value_protocal" placeholder="请选择">
-        <el-option
-          v-for="item in options_protocal"
-          :key="item.value_protocal"
-          :label="item.label_protocal"
-          :value="item.value_protocal"
-        >
-        </el-option>
-      </el-select>
-      <el-button type="warning">上链时间</el-button>
-
-      <el-date-picker
-        v-model="valuedate1"
-        type="datetime"
-        placeholder="选择起始日期时间"
-      >
-      </el-date-picker>
-      ~
-      <el-date-picker
-        v-model="valuedate2"
-        type="datetime"
-        placeholder="选择结束日期时间"
-      >
-      </el-date-picker>
-         <el-select v-model="value_protocal2" placeholder="请选择"   style="padding-left: 30px">
-        <el-option
-          v-for="item in options_protocal2"
-          :key="item.value_protocal2"
-          :label="item.label_protocal2"
-          :value="item.value_protocal2"
-        >
-        </el-option>
-      </el-select>
-       <el-button type="warning">证据类型</el-button>
-       <el-input
-        v-model="inputMF1"
-        placeholder="请输入证据类型"
-        style="width: 120px"
-      ></el-input>
-      ~
-       <el-input
-        v-model="inputMF2"
-        placeholder="请输入证据类型）"
-        style="width: 120px"
-      ></el-input>
-    </div>
-    <div class="search_container">
-      <el-select v-model="value_protocal" placeholder="请选择">
-        <el-option
-          v-for="item in options_protocal"
-          :key="item.value_protocal"
-          :label="item.label_protocal"
-          :value="item.value_protocal"
-        >
-        </el-option>
-      </el-select>
-      <el-button type="warning">公证机构</el-button>
-      <el-input
-        v-model="inputMF3"
-        placeholder="请输入公证机构名称"
-        style="width: 408px"
-      ></el-input>
-     
-    <el-select v-model="value_protocal" placeholder="请选择" style="padding-left:30px">
-        <el-option
-          v-for="item in options_protocal"
-          :key="item.value_protocal"
-          :label="item.label_protocal"
-          :value="item.value_protocal"
-        >
-        </el-option>
-      </el-select>
-       <el-button type="warning">用户名称</el-button>
+       用户名称：
        <el-input
         v-model="inputMF4"
         placeholder="请输入用户名称（默认全部）"
         style="width: 260px"
-      ></el-input>
-    </div>
-    <div class="search_container">
-      
-    </div>
-    <div class="search_container">
-         <el-select v-model="value_protocal" placeholder="请选择">
-        <el-option
-          v-for="item in options_protocal"
-          :key="item.value_protocal"
-          :label="item.label_protocal"
-          :value="item.value_protocal"
-        >
-        </el-option>
-      </el-select>
-      <el-button type="warning">证据编号</el-button>
-      <el-input
-        v-model="inputMF5"
-        placeholder="请输入电子证据编号(默认全部)"
-        style="width: 408px"
-      ></el-input> 
-      <el-select v-model="value_save" placeholder="请选择" style="padding-left:30px">
-        <el-option
-          v-for="item in options_save"
-          :key="item.value_save"
-          :label="item.label_save"
-          :value="item.value_save"
-        >
-        </el-option>
-      </el-select>
-       <el-button type="warning">保管状态</el-button>
-        <el-select v-model="value_trade" placeholder="请选择"  >
-        <el-option
-          v-for="item in options_trade"
-          :key="item.value_trade"
-          :label="item.label_trade"
-          :value="item.value_trade"
-        >
-        </el-option>
-      </el-select>
+       ></el-input>
         <el-switch
         v-model="value_crypto"
         on-text="解密"

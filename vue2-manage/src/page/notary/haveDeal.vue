@@ -1,21 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
-     
+    <div class="search_container">     
       订单状态:
       <el-select v-model="value_order" placeholder="请选择" >
         <el-option
           v-for="item in options_order"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      支付状态:
-      <el-select v-model="value_pay" placeholder="请选择" >
-        <el-option
-          v-for="item in options_pay"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -36,7 +26,7 @@
               </el-form-item>
               <el-form-item label="支付金额">
                 <span>{{ props.row.pay_num }}</span>
-              </el-form-item>
+              </el-form-item> 
               <el-form-item label="支付状态">
                 <span>{{ props.row.pay_status }}</span>
               </el-form-item>
@@ -45,6 +35,7 @@
         </el-table-column>
         <el-table-column label="申办编号" prop="id"></el-table-column>
         <el-table-column label="申请事项" prop="notarization_name"></el-table-column>
+        <el-table-column label="申请人" prop=""></el-table-column>
         <el-table-column label="申请时间" prop="apply_time"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -96,27 +87,6 @@ export default {
         }, {
           value: '2',
           label: '审核中'
-        }],
-      // 支付状态
-      value_pay:"",
-        options_pay: [{
-          value: '0',
-          label: '不限'
-        },{
-          value: '1',
-          label: '未支付'
-        }, {
-          value: '2',
-          label: '已支付'
-        }, {
-          value: '3',
-          label: '退款中'
-        }, {
-          value: '4',
-          label: '已退款'
-        }, {
-          value: '5',
-          label: '线下支付'
         }],
       // 表格
       tableData: [],
@@ -172,14 +142,18 @@ export default {
                   break;
               }
               (tableData.id = result.data[index].id),
+
                 (tableData.notarization_name =
                   result.data[index].notarization_name),
+
                 (tableData.notarization_name =
                   result.data[index].law_notarization.notarization_name),
+
                 (tableData.reservation_time =
                   result.data[index].reservation_from +
                   "~" +
                   result.data[index].reservation_to),
+                  
                 (tableData.apply_time = result.data[index].created_at),
                 this.tableData.push(tableData);
             });
@@ -232,15 +206,20 @@ export default {
                   break;
               }
               (tableData.id = result.data[index].id),
+
                 (tableData.notarization_name =
                   result.data[index].notarization_name),
+
                 (tableData.notarization_id =
                   result.data[index].notarization_id),
+
                 (tableData.reservation_time =
                   result.data[index].reservation_from +
                   "~" +
                   result.data[index].reservation_to),
+
                 (tableData.apply_time = result.data[index].created_at),
+
                 this.tableData.push(tableData);
             });
           } else if (result.error_code != 0) {

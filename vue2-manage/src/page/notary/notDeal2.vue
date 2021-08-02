@@ -20,15 +20,7 @@
           :value="item.value"
         ></el-option>
       </el-select>
-      支付状态:
-      <el-select v-model="value_pay" placeholder="请选择" >
-        <el-option
-          v-for="item in options_pay"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+      
       
       <!-- <el-button type="primary" style="margin-left:5px">金额统计：105057817815169587......83871839013966618669</el-button> -->
       <el-switch v-model="value_crypto" on-text="解密" off-text="加密" style="padding-right:30px" ></el-switch>
@@ -56,7 +48,8 @@
         </el-table-column>
         <el-table-column label="申办编号" prop="id"></el-table-column>
         <el-table-column label="申请事项" prop="notarization_name"></el-table-column>
-        <el-table-column label="申请时间" prop="apply_time"></el-table-column>
+        <el-table-column label="申请人" prop=""></el-table-column>
+        <el-table-column label="申请时间" prop="apply_time"></el-table-column>       
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button  size="small" type="primary" @click="handleDel(scope.$index, scope.row)">在线查看</el-button>
@@ -110,27 +103,6 @@ export default {
         }, {
           value: '2',
           label: '审核中'
-        }],
-      // 支付状态
-      value_pay:"",
-        options_pay: [{
-          value: '0',
-          label: '不限'
-        },{
-          value: '1',
-          label: '未支付'
-        }, {
-          value: '2',
-          label: '已支付'
-        }, {
-          value: '3',
-          label: '退款中'
-        }, {
-          value: '4',
-          label: '已退款'
-        }, {
-          value: '5',
-          label: '线下支付'
         }],
       // 表格
       tableData: [],
