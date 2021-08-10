@@ -125,6 +125,39 @@ export const tradeList = data => fetch('/tradeList',data);
  */
 export const notarizationApplyListEncrypt = data => fetch('/notarizationApplyListEncrypt',data);
 
+/*
+ * 	公证员查询公证列表
+ */
+export const notarRecord = data => fetch('/notar/notarRecord',data, 'POST');
+/*
+ * 	预约公证
+ */
+export const appoint = data => fetch('/notar/appoint',data, 'POST');
+/*
+ * 	审核结果申请
+ */
+export const audit = data => fetch('/notar/audit',data, 'POST');
+/*
+ * 	公证管理员查询公证列表
+ */
+export const notarmanageRecord = data => fetch('/aut/notarRecord',data, 'POST');
+/*
+ * 	查询证据列表
+ */
+export const evidenceQuery = data => fetch('/aut/evidenceQuery',data, 'POST');
+/**
+* 	存证类型查询
+*/
+export const eviTypeQuery = data => fetch('/eviTypeQuery',data, 'POST');
+/**
+* 	公证类型查询
+*/
+export const noTypeQuery = data => fetch('/noTypeQuery',data, 'POST');
+/**
+* 	公证机构查询
+*/
+export const orgQuery = data => fetch('/orgQuery',data, 'POST');
+
 
 
 
