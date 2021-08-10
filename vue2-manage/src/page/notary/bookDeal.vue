@@ -40,21 +40,16 @@
         <el-table-column label="申请人" prop="userId"></el-table-column>
         <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
         <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
-        <el-table-column label="申请事项" prop="notarizationMatters"></el-table-column>
-        <el-table-column label="公证类型" prop="notarizationType"></el-table-column>     
+        <el-table-column label="申请事项" prop="notarizationMatters" style="margin-left: 30px"></el-table-column>
+        <el-table-column label="公证类型" prop="notarizationType" ></el-table-column>    
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="small" type="success" @click="notarySuccess(scope.row.evidenceId,this.notary_id)" >通过</el-button>
-            <el-button size="small" type="danger" @click="notaryRefuse(scope.row.evidenceId,this.notary_id)" >拒绝</el-button>
-            <!--
-            <el-button  size="small" type="primary" @click="handleDel(scope.$index, scope.row)">在线查看</el-button>
-            <el-button  size="small" type="warning" @click="handleDel(scope.$index, scope.row)">审核通过</el-button>
-            <el-button  size="small" type="danger" @click="handleDel(scope.$index, scope.row)">审核不通过</el-button>
-            -->
+            <el-button type="primary" @click="appointDeal(scope.row.evidenceId,this.notary_id)" >申请公证</el-button>
+            <!--<el-button type="danger" @click="refuse(scope.row.evidenceId,this.notary_id)" >拒绝</el-button>-->
           </template>
         </el-table-column>
       </el-table>
-      <div class="search_container">      
+    <div class="search_container">
       <el-switch v-model="decrypt" on-text="解密" off-text="加密" @change="initData()" ></el-switch>
     </div>
       <div class="pagination">
@@ -120,10 +115,10 @@ export default {
         const query = {
           decryptFlag: this.decryptFlag,
           notaryId: this.notary_id,
-          dealType: "1",
+          dealType: "0",
         };
         var num = 0;
-        //查询待处理列表
+        //查询可预约列表
         await notarRecord(query).then(result => {
           if (result.state == true) {
             this.tableData = [];
@@ -177,85 +172,17 @@ export default {
       this.pageIndex = val;
       this.initData();
     },
-
-    
-    // 搜索
-    async handleSearch() {
+    async appointDeal(evidenceId, notaryId){
       const query = {
-        start_time: this.start_time,
-        end_time: this.end_time,
-        notarization_id: this.value_apply
-      };
-      //   console.log(query);
-      try {
-        await reservationList(query).then(result => {
-          if (result.error_code == 0) {
-            this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
-              let tableData = {};
-              switch (result.data[index].status) {
-                case 1:
-                  tableData.reservation_status = "预约成功";
-                  break;
-                case 2:
-                  tableData.reservation_status = "预约失败";
-                  break;
-                case 3:
-                  tableData.reservation_status = "处理完毕";
-                  break;
-                case 4:
-                  tableData.reservation_status = "预约处理中";
-                  break;
-                case 5:
-                  tableData.reservation_status = "预约已撤销";
-                  break;
-              }
-              (tableData.id = result.data[index].id),
-                (tableData.notarization_name =
-                  result.data[index].notarization_name),
-                (tableData.notarization_id =
-                  result.data[index].notarization_id),
-                (tableData.reservation_time =
-                  result.data[index].reservation_from +
-                  "~" +
-                  result.data[index].reservation_to),
-                (tableData.apply_time = result.data[index].created_at),
-                this.tableData.push(tableData);
-            });
-          } else if (result.error_code != 0) {
-            throw new Error("获取数据失败");
-          }
-        });
-      } catch (error) {
-        throw new Error(error.message);
+        evidence_id: evidenceId,
+        notary_id: notaryId,
       }
-    },
-    async notarySuccess(evidenceId,notaryId){
-        const query = {
-          evidence_id: evidenceId,
-          notary_id: notaryId,
-          acceptFlag: 1,
-        };
-        let result = await audit(query);
-        if (result.status == true){
-          alert("你已通过该申请");
-        }else{
-          alert("操作失败" + result.message);
-        }
-    },
-    async notaryRefuse(evidenceId,notaryId){
-        const query = {         
-          evidence_id: evidenceId,
-          notary_id: notaryId,
-          acceptFlag: 0,
-        };
-        let result = await audit(query);
-        if (result.status == true){
-          alert("你已拒绝该申请");
-        }else{
-          alert("操作失败" + result.message);
-        }
+      let result = await appoint(query);
+      if (result.status){
+        alert("你已成功申请");
+      }else{
+        alert("预约失败");
+      }
     }
   }
 };

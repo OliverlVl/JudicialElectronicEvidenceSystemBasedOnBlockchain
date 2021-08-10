@@ -1,48 +1,55 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">     
-      订单状态:
-      <el-select v-model="value_order" placeholder="请选择" >
-        <el-option
-          v-for="item in options_order"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-button type="primary" @click="handleSearch()">搜索</el-button>
-    </div>
     <div class="table_container">
       <el-table :data="tableData" style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="公证服务机构">
-                <span>{{ props.row.notarization_agent }}</span>
+              <el-form-item label="文件大小">
+                <span>{{ props.row.fileSize }}</span>
               </el-form-item>
-              <el-form-item label="订单状态">
-                <span>{{ props.row.order_status }}</span>
+              <el-form-item label="文件哈希值">
+                <span>{{ props.row.fileHash }}</span>
               </el-form-item>
-              <el-form-item label="支付金额">
-                <span>{{ props.row.pay_num }}</span>
-              </el-form-item> 
-              <el-form-item label="支付状态">
-                <span>{{ props.row.pay_status }}</span>
+              <el-form-item label="存证时间">
+                <span>{{ props.row.evidenceTime }}</span>
+              </el-form-item>
+              <el-form-item label="上链时间">
+                <span>{{ props.row.blockchainTime }}</span>
+              </el-form-item>
+              <el-form-item label="存证区块链交易ID">
+                <span>{{ props.row.evidenceBlockchainId }}</span>
+              </el-form-item>
+              <el-form-item label="公证状态">
+                <span>{{ props.row.notarizationStatus }}</span>
+              </el-form-item>
+              <el-form-item label="公证金额">
+                <span>{{ props.row.notarizationMoney }}</span>
+              </el-form-item>
+              <el-form-item label="交易支付状态">
+                <span>{{ props.row.transactionStatus }}</span>
+              </el-form-item>
+              <el-form-item label="公证申请时间">
+                <span>{{ props.row.notarizationStartTime }}</span>
+              </el-form-item>
+              <el-form-item label="公证完成时间">
+                <span>{{ props.row.notarizationEndTime }}</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="申办编号" prop="id"></el-table-column>
-        <el-table-column label="申请事项" prop="notarization_name"></el-table-column>
-        <el-table-column label="申请人" prop=""></el-table-column>
-        <el-table-column label="申请时间" prop="apply_time"></el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button  size="small" type="danger" @click="handleDel(scope.$index, scope.row)">撤销申办</el-button>
-          </template>
-        </el-table-column>
+        <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
+        <el-table-column label="申请人" prop="userId"></el-table-column>
+        <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
+        <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
+        <el-table-column label="申请事项" prop="notarizationMatters"></el-table-column>
+        <el-table-column label="公证类型" prop="notarizationType"></el-table-column>
       </el-table>
+      <div class="search_container">
+        <el-switch v-model="decrypt" on-text="解密" off-text="加密" @change="handleSearch()"></el-switch>
+        <!--<el-button type="primary" @click="handleSearch()" style="margin-left: 520px">刷新</el-button>-->
+      </div>
       <div class="pagination">
         <el-pagination
           background
@@ -70,99 +77,87 @@ import {
 export default {
   data() {
     return {
-      // 公证机构
-      value_agent:"",
-      options_agent: [],
-      // 订单状态
-      value_order:"",
-      options_order: [{
-          value: '不限',
-          label: '不限'
-        },{
-          value: '0',
-          label: '失败'
-        }, {
-          value: '1',
-          label: '成功'
-        }, {
-          value: '2',
-          label: '审核中'
-        }],
+      //解密
+      decrypt: true,
+      decryptFlag: 1,
       // 表格
       tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      telephone: "",
-     
-
+      //公证员ID
+      notary_id: "",
     };
   },
   created() {
-    this.telephone = localStorage.getItem("telephone");
+    this.notary_id = localStorage.getItem("notaryId");
+    this.decryptFlag = 1;
     this.initData();
   },
   computed: {},
   components: {
-    headTop
+    headTop,
   },
   methods: {
-
     // 初始化数据
     async initData() {
       try {
         const query = {
-          telephone: this.telephone,
-          limit: this.pageSize,
-          page: this.pageIndex
+          decryptFlag: this.decryptFlag,
+          notaryId: this.notary_id,
+          dealType: "2",
         };
-        await notarizationApplyList(query).then(result => {
-          if (result.error_code == 0) {
+        await notarRecord(query).then((result) => {
+          if (result.state == true) {
             this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
+            var num = 0;
+            //this.pageTotal = result.meta.total;
+            result.data.forEach((item) => {
               let tableData = {};
-
-              switch (result.data[index].status) {
-                case 1:
-                  tableData.reservation_status = "预约成功";
-                  break;
-                case 2:
-                  tableData.reservation_status = "预约失败";
-                  break;
-                case 3:
-                  tableData.reservation_status = "处理完毕";
-                  break;
-                case 4:
-                  tableData.reservation_status = "预约处理中";
-                  break;
-                case 5:
-                  tableData.reservation_status = "预约已撤销";
-                  break;
-              }
-              (tableData.id = result.data[index].id),
-
-                (tableData.notarization_name =
-                  result.data[index].notarization_name),
-
-                (tableData.notarization_name =
-                  result.data[index].law_notarization.notarization_name),
-
-                (tableData.reservation_time =
-                  result.data[index].reservation_from +
-                  "~" +
-                  result.data[index].reservation_to),
-                  
-                (tableData.apply_time = result.data[index].created_at),
+              num = num + 1;
+              //公证状态
+              (tableData.notarizationStatus = item.notarizationStatus),
+                //存证编号
+                (tableData.evidenceId = item.evidenceId),
+                //申请事项
+                (tableData.notarizationMatters = item.notarizationMatters),
+                //申请时间
+                (tableData.notarizationStartTime = item.notarizationStartTime),
+                //申请人
+                (tableData.userId = item.userId),
+                //证据类型
+                (tableData.evidenceType = item.evidenceType),
+                //文件哈希值
+                (tableData.fileHash = item.fileHash),
+                //存证名称
+                (tableData.evidenceName = item.evidenceName),
+                //文件大小
+                (tableData.fileSize = item.fileSize),
+                //存证区块链ID
+                (tableData.evidenceBlockchainId = item.evidenceBlockchainId),
+                //存证时间
+                (tableData.evidenceTime = item.evidenceTime),
+                //上链时间
+                (tableData.blockchainTime = item.blockchainTime),
+                //公证类型
+                (tableData.notarizationType = item.notarizationType),
+                //公证金额
+                (tableData.notarizationMoney = item.notarizationMoney),
+                //公证完成时间
+                (tableData.notarizationEndTime = item.notarizationEndTime),
+                //交易支付状态
+                (tableData.transactionStatus = item.transactionStatus),
                 this.tableData.push(tableData);
             });
-          } else if (result.error_code != 0) {
+            this.pageTotal = num ;
+          } else {
             throw new Error("获取数据失败");
           }
+          this.pageTotal = num;
         });
       } catch (error) {
-        throw new Error(error.message);
+        throw new Error(result.message);
       }
     },
     // 处理导航页
@@ -171,67 +166,71 @@ export default {
       this.pageIndex = val;
       this.initData();
     },
-
-    
     // 搜索
     async handleSearch() {
-      const query = {
-        start_time: this.start_time,
-        end_time: this.end_time,
-        notarization_id: this.value_apply
-      };
-      //   console.log(query);
       try {
-        await reservationList(query).then(result => {
-          if (result.error_code == 0) {
+        if (this.decrypt) {
+          this.decryptFlag = 1;
+        } else {
+          this.decryptFlag = 0;
+        }
+        const query = {
+          decryptFlag: this.decryptFlag,
+          notaryId: this.notary_id,
+          dealType: "2",
+        };
+        await notarRecord(query).then((result) => {
+          if (result.state == true) {
             this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
+            var num = 0;
+            //this.pageTotal = result.meta.total;
+            result.data.forEach((item) => {
               let tableData = {};
-              switch (result.data[index].status) {
-                case 1:
-                  tableData.reservation_status = "预约成功";
-                  break;
-                case 2:
-                  tableData.reservation_status = "预约失败";
-                  break;
-                case 3:
-                  tableData.reservation_status = "处理完毕";
-                  break;
-                case 4:
-                  tableData.reservation_status = "预约处理中";
-                  break;
-                case 5:
-                  tableData.reservation_status = "预约已撤销";
-                  break;
-              }
-              (tableData.id = result.data[index].id),
-
-                (tableData.notarization_name =
-                  result.data[index].notarization_name),
-
-                (tableData.notarization_id =
-                  result.data[index].notarization_id),
-
-                (tableData.reservation_time =
-                  result.data[index].reservation_from +
-                  "~" +
-                  result.data[index].reservation_to),
-
-                (tableData.apply_time = result.data[index].created_at),
-
-                this.tableData.push(tableData);
+              num = num + 1;
+              //公证状态
+              (table.notarizationStatus = item.notarizationStatus),
+              //存证编号
+              (tableData.evidenceId = item.evidenceId),
+              //申请事项
+              (tableData.notarizationMatters = item.notarizationMatters),
+              //申请时间
+              (tableData.notarizationStartTime = item.notarizationStartTime),
+              //申请人
+              (tableData.userId = item.userId),
+              //证据类型
+              (tableData.evidenceType = item.evidenceType),
+              //文件哈希值
+              (tableData.fileHash = item.fileHash),
+              //存证名称
+              (tableData.evidenceName = item.evidenceName),
+              //文件大小
+              (tableData.fileSize = item.fileSize),
+              //存证区块链ID
+              (tableData.evidenceBlockchainId = item.evidenceBlockchainId),
+              //存证时间
+              (tableData.evidenceTime = item.evidenceTime),
+              //上链时间
+              (tableData.blockchainTime = item.blockchainTime),
+              //公证类型
+              (tableData.notarizationType = item.notarizationType),
+              //公证金额
+              (tableData.notarizationMoney = item.notarizationMoney),
+              //公证完成时间
+              (tableData.notarizationEndTime = item.notarizationEndTime),
+              //交易支付状态
+              (tableData.transactionStatus = item.transactionStatus),
+              this.tableData.push(tableData);
             });
-          } else if (result.error_code != 0) {
+          } else {
             throw new Error("获取数据失败");
           }
+          this.pageTotal = num;
         });
       } catch (error) {
-        throw new Error(error.message);
+        throw new Error(result.message);
       }
     },
-
-  }
+  },
 };
 </script>
 

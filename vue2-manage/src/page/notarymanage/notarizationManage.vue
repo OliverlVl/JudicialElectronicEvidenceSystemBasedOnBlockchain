@@ -8,8 +8,6 @@
 						<template slot="title"><i class="el-icon-date"></i>公证管理</template>
 						<el-menu-item index="totalNotarization">待处理列表</el-menu-item>
 						<el-menu-item index="totalNotarizationApply">已处理列表</el-menu-item>
-						<!-- <el-menu-item index="totalReservation">公证预约记录</el-menu-item> -->
-						<!-- <el-menu-item index="totalFee">公证缴费记录</el-menu-item> -->
 					</el-submenu>
 					<el-submenu index="6">
 						<template slot="title"><i class="el-icon-setting"></i>证据管理</template>

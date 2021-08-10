@@ -3,67 +3,159 @@
     <head-top></head-top>
     <!-- 高级搜索-->
     <div class="search_container">
-       用户名称：
-       <el-input
-        v-model="inputMF4"
-        placeholder="请输入用户名称（默认全部）"
-        style="width: 260px"
-       ></el-input>
-        <el-switch
-        v-model="value_crypto"
+      &emsp; 存证时间范围: &emsp;
+      <el-date-picker
+        v-model="valuedate1"
+        type="datetime"
+        placeholder="选择起始日期时间"
+      >
+      </el-date-picker>
+      ~
+      <el-date-picker
+        v-model="valuedate2"
+        type="datetime"
+        placeholder="选择结束日期时间"
+      >
+      </el-date-picker>
+
+      &emsp; 证据文件大小范围: &emsp;
+      <el-select v-model="fileSize" placeholder="请选择">
+        <el-option
+          v-for="item in file_size"
+          :key="item.file_value"
+          :label="item.file_label"
+          :value="item.file_value"
+        >
+        </el-option>
+      </el-select>
+    </div>
+    <div class="search_container">
+      &emsp; 上链时间范围: &emsp;
+      <el-date-picker
+        v-model="valuedate3"
+        type="datetime"
+        placeholder="选择起始日期时间"
+      >
+      </el-date-picker>
+      ~
+      <el-date-picker
+        v-model="valuedate4"
+        type="datetime"
+        placeholder="选择结束日期时间"
+      >
+      </el-date-picker>
+
+      &emsp; <span style="padding-right: 64px">公证状态:</span> &emsp;
+      <el-select v-model="notarizationStatus" placeholder="请选择">
+        <el-option
+          v-for="item in notarization_state"
+          :key="item.state_value"
+          :label="item.state_label"
+          :value="item.state_value"
+        >
+        </el-option>
+      </el-select>
+    </div>
+    <div class="search_container">
+      &emsp; 存证区块链交易id: &emsp;
+      <el-input
+        v-model="usernameWildcard"
+        placeholder="存证区块链交易id"
+        style="width: 376px"
+      ></el-input>
+      &emsp; <span style="padding-right: 64px">存证类型:</span> &emsp;
+      <el-select v-model="evidenceType" placeholder="请选择">
+        <el-option
+          v-for="item in evidence_type"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
+      </el-select>
+    </div>
+    <div class="search_container">
+      &emsp; 证据名称: &emsp;
+      <el-input
+        v-model="evidenceNames"
+        placeholder="请输入证据名称"
+        style="width: 440px"
+      ></el-input>
+
+      &emsp; 存证编号: &emsp;
+      <el-input
+        v-model="evidenceId"
+        placeholder="请输入存证编号"
+        style="width: 440px; padding-left:60px"
+      ></el-input>
+    </div>
+    <div class="search_container">
+      &emsp; 申请人: &emsp;
+      <el-input
+        v-model="userId"
+        placeholder="请输入申请人名称"
+        style="width: 440px; margin-left: 15px"
+      ></el-input>
+
+      &emsp; 申请人编号: &emsp;
+      <el-input
+        v-model="usernameWildcard"
+        placeholder="请输入申请人编号"
+        style="width: 440px; padding-left:46px"
+      ></el-input>
+    </div>
+    
+    <div>
+      <el-switch
+        v-model="decrypt_flag"
         on-text="解密"
         off-text="加密"
         style="margin-left: 30px"
       ></el-switch>
+
       <el-button
         type="primary"
         @click="handleSearch()"
-        style="margin-left: 30px"
+        style="margin-left: 238px"
         >搜索</el-button
       >
     </div>
 
-  <!-- 列表 -->
-  <div class="table_container">
+    <!-- 列表 -->
+    <div class="table_container">
       <el-table :data="tableData" style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="用户">
-                <span>{{ props.row.evidence_source }}</span>
+              <el-form-item label="文件哈希">
+                <span>{{ props.row.fileHash }}</span>
               </el-form-item>
-              <el-form-item label="证据类型">
-                <span>{{ props.row.evidence_type }}</span>
+              <el-form-item label="证据保存区块ID">
+                <span>{{ props.row.evidenceBlockchainId }}</span>
               </el-form-item>
-              <el-form-item label="所属区块链">
-                <span>{{ props.row.block_chain }}</span>
+              <el-form-item label="公证开始时间">
+                <span>{{ props.row.notarizationStartTime }}</span>
               </el-form-item>
-              <el-form-item label="证据hash">
-                <span>{{ props.row.evidence_hash }}</span>
+              <el-form-item label="公证状态">
+                <span>{{ props.row.notarizationStatus }}</span>
               </el-form-item>
-              <el-form-item label="区块交易ID">
-                <span>{{ props.row.transaction_hash }}</span>
-              </el-form-item>
-              <el-form-item label="公证服务提供方">
-                <span>{{ props.row.notarization_institute }}</span>
-              </el-form-item>
-              <el-form-item label="证据保管状态">
-                <span>{{ props.row.save_status }}</span>
+              <el-form-item label="公证金额">
+                <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="证据编号" prop="id"></el-table-column>
-        <el-table-column label="证据名称" prop="evidence_name"></el-table-column>
-        <el-table-column label="上链时间" prop="block_time"></el-table-column>
-        <el-table-column label="操作" width="150">
-          <template slot-scope="scope">
-            <!-- <el-button size="small" type="primary" @click="handlePublic(scope.row)">申请公证</el-button> -->
-            <el-button size="small" type="primary" @click="handleDown(scope.row)">在线查看</el-button>
-            <!-- <el-button size="small" type="primary" @click="handleShare(scope.$index, scope.row)">分享</el-button> -->
-            <!-- <el-button size="small" @click="shareDetail(scope.row)">分享详情</el-button> -->
-          </template>
-        </el-table-column>
+        <el-table-column label="证据编号" prop="evidenceId"></el-table-column>
+        <el-table-column label="证据名称" prop="evidenceName"></el-table-column>
+        <el-table-column
+          label="上链时间"
+          prop="blockchainTime"
+        ></el-table-column>
+        <el-table-column label="证据类型" prop="evidenceType"></el-table-column>
+        <el-table-column
+          label="公证机构"
+          prop="organizationName"
+        ></el-table-column>
       </el-table>
       <!-- 分页-->
       <div class="pagination">
@@ -77,51 +169,8 @@
         ></el-pagination>
       </div>
     </div>
-    <!-- 共享对象弹窗-->
-    <el-dialog
-      title="存证共享对象详情"
-      :visible.sync="dialogVisible"
-      width="30%"
-      :before-close="handleClose"
-    >
-      <el-table :data="tableData3" height="250" border style="width: 100%">
-        <el-table-column prop="id" label="分享id" width="180"></el-table-column>
-        <el-table-column prop="share_telephone" label="分享对象手机号" width="180"></el-table-column>
-        <el-table-column prop="share_time" label="分享时间"></el-table-column>
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-    <!-- 申请公证弹窗-->
-    <el-dialog
-      title="公证申请"
-      :visible.sync="dialogVisible_notarization"
-      size="tiny"
-      :before-close="handleClose"
-    >
-      <el-select v-model="value_apply" filterable placeholder="选择申请类型">
-        <el-option
-          v-for="item in options_apply"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-select v-model="value_notarization" filterable placeholder="选择公证机构">
-        <el-option
-          v-for="item in options_notarization"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible_notarization = false">取 消</el-button>
-        <el-button type="primary" @click="handlePublic2()">确 定</el-button>
-      </span>
-    </el-dialog>
+
+    <!--申请公证  -->
   </div>
 </template>
 
@@ -137,53 +186,75 @@ import {
 export default {
   data() {
     return {
-      // 协议选择器
-      options_protocal: [
+      // 文件大小选择器
+      file_size: [
         {
-          value_protocal: "选项1",
-          label_protocal: "AND",
+          file_value: 1,
+          file_label: "1M以下",
         },
         {
-          value_protocal: "选项2",
-          label_protocal: "OR",
+          file_value: 2,
+          file_label: "1~10M",
         },
         {
-          value_protocal: "选项3",
-          label_protocal: "NOT",
-        },
-      ],
-       options_protocal2: [
-        {
-          value_protocal2: "选项1",
-          label_protocal2: "AND",
+          file_value: 3,
+          file_label: "10M以上",
         },
         {
-          value_protocal2: "选项2",
-          label_protocal2: "OR",
-        },
-        {
-          value_protocal2: "选项3",
-          label_protocal2: "NOT",
+          file_value: -1,
+          file_label: "不限",
         },
       ],
-      options_save:[ {
-          value_save: "选项1",
-          label_save: "AND",
+      //公证状态选择器
+      notarization_state: [
+        {
+          state_value: 0,
+          state_label: "未公证",
         },
         {
-          value_save: "选项2",
-          label_save: "OR",
+          state_value: 1,
+          state_label: "等待公证",
         },
         {
-          value_save: "选项3",
-          label_save: "NOT",
-        },],
-      value_protocal2: "OR",
-      value_protocal: "AND",
-      value_save:"NOT",
+          state_value: 2,
+          state_label: "公证审核中",
+        },
+        {
+          state_value: 3,
+          state_label: "公证成功",
+        },
+        {
+          state_value: 4,
+          state_label: "公证失败",
+        },
+        {
+          state_value: -1,
+          state_label: "不限",
+        },
+      ],
+      //存证类型选择器
+      evidence_type: [
+        {
+          label: "不限",
+          value: -1,
+        },
+      ],
       //时间选择器
-      valuedate1:"",
-      valuedate2:"",
+      valuedate1: "none",
+      valuedate2: "none",
+      //存证类型
+      evidenceType: "不限",
+      //文件大小
+      fileSize: "不限",
+      fileSizeFloor: -1,
+      fileSizeUpper: -1,
+      //文件名
+      evidenceNames: "",
+      //公证状态
+      notarizationStatus: "不限",
+
+      // 是否解密
+      decrypt_flag: true,
       // 复合搜索框
       input_search: "",
       select: "",
@@ -199,28 +270,11 @@ export default {
       // 弹窗
       dialogVisible: false,
       tableData3: [],
-      // 是否解密
-      value_crypto: true,
-      // 保管状态选择器
-      options_trade: [
-        {
-          value_trade: "选项1",
-          label_trade: "即将过期",
-        },
-        {
-          value_trade: "选项2",
-          label_trade: "未过期",
-        },
-        {
-          value_trade: "选项3",
-          label_trade: "已过期",
-        },
-      ],
-      value_trade: "全部状态",
     };
   },
   created() {
-    this.telephone = localStorage.getItem("telephone");
+    //this.telephone = localStorage.getItem("telephone");
+    this.userId = localStorage.getItem("userId");
     this.initData();
   },
   computed: {},
@@ -232,38 +286,54 @@ export default {
     async initData() {
       try {
         const query = {
-          telephone: this.telephone,
-          limit: this.pageSize,
-          page: this.pageIndex,
+          fileSizeFloor: -1,
+          fileSizeUpper: -1,
+          evidenceNameWildcard: "none",
+          evidenceType: "none",
+          evidenceTimeStart: "none",
+          evidenceTimeEnd: "none",
+          notarizationStatus: -1,
+          decrypt_flag: true,
         };
-        await tradeList(query).then((result) => {
+        await getEvidenceAll(query).then((result) => {
           if (result.error_code == 0) {
             this.tableData = [];
-            this.pageTotal = result.meta.total;
+            //this.pageTotal = result.meta.total;
+            var num = 0;
             result.data.forEach((item, index) => {
               let tableData = {};
-
-                (tableData.id = result.data[index].id),
-                (tableData.type = result.data[index].type),
-                (tableData.time = result.data[index].time),
-                (tableData.money = result.data[index].money),
-                (tableData.left_money = result.data[index].left_money),
-                (tableData.status = result.data[index].status),
-                (tableData.block_time = result.data[index].time),
-                (tableData.evidence_name = result.data[index].evidence_name),
-                (tableData.evidence_type = result.data[index].evidence_type),
-                (tableData.evidence_hash = result.data[index].evidence_hash),
-                (tableData.block_chain = "司法链"),
-                (tableData.notarization_institute = result.data[index].notarization_institute),
-                (tableData.evidence_source = result.data[index].user),
-                (tableData.transaction_hash = result.data[index].trade_hash),
-                (tableData.save_status = "未过期"),
+              (tableData.evidenceId = result.data[index].evidenceId),
+                (tableData.evidenceName = result.data[index].evidenceName),
+                (tableData.blockchainTime = result.data[index].blockchainTime),
+                (tableData.evidenceType = result.data[index].evidenceType),
+                (tableData.fileHash = result.data[index].fileHash),
+                (tableData.evidenceBlockchainId =
+                  result.data[index].evidenceBlockchainId),
+                (tableData.organizationName =
+                  result.data[index].organizationName),
+                (tableData.notarizationStartTime =
+                  result.data[index].notarizationStartTime),
+                (tableData.notarizationStatus =
+                  result.data[index].notarizationStatus),
+                (tableData.notarizationMoney =
+                  result.data[index].notarizationMoney),
                 this.tableData.push(tableData);
-                
+              num = num + 1;
             });
+            this.pageTotal = num;
           } else if (result.error_code != 0) {
             throw new Error("获取数据失败");
           }
+        });
+        //获取存证类型
+        await eviTypeQuery().then((typeres) => {
+          this.evidence_type = [{ label: "不限", value: -1 }];
+          result.data.forEach((item, index) => {
+            let evidence_type = {};
+            (evidence_type.value = typeres.data[index].organization_id),
+              (evidence_type.label = typeres.data[index].organization_name),
+              this.evidence_type.push(evidence_type);
+          });
         });
       } catch (error) {
         throw new Error(error.message);
@@ -285,53 +355,76 @@ export default {
       //   console.log(end);
       //   console.log(end.getTime());
     },
+    tryy() {
+      const query = {
+        name: "none",
+      };
+      if (this.evidenceNames == "") {
+        alert(query.name);
+      } else {
+        query.name = this.evidenceNames;
+        alert(query.name);
+      }
+    },
     // 搜索
     async handleSearch() {
       const query = {
-        start_time: this.start_time,
-        end_time: this.end_time,
-        notarization_id: this.value_apply,
+        fileSizeFloor: -1,
+        fileSizeUpper: -1,
+        evidenceNameWildcard: "none",
+        evidenceType: "none",
+        evidenceTimeStart: this.valuedate1,
+        evidenceTimeEnd: this.valuedate2,
+        notarizationStatus: this.notarizationStatus,
+        decrypt_flag: this.decrypt_flag,
       };
-      //   console.log(query);
+      switch (this.fileSize) {
+        case 1:
+          query.fileSizeUpper = 1;
+          break;
+        case 2:
+          query.fileSizeFloor = 1;
+          query.fileSizeUpper = 10;
+          break;
+        case 3:
+          query.fileSizeFloor = 10;
+          break;
+        default:
+          query.fileSizeFloor = -1;
+          query.fileSizeUpper = -1;
+          break;
+      }
+      if (this.evidenceNames == "") {
+        query.evidenceNameWildcard = "none";
+      } else {
+        query.evidenceNameWildcard = this.evidenceNames;
+      }
       try {
         await reservationList(query).then((result) => {
-          if (result.error_code == 0) {
-            this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
-              let tableData = {};
-              switch (result.data[index].status) {
-                case 1:
-                  tableData.reservation_status = "预约成功";
-                  break;
-                case 2:
-                  tableData.reservation_status = "预约失败";
-                  break;
-                case 3:
-                  tableData.reservation_status = "处理完毕";
-                  break;
-                case 4:
-                  tableData.reservation_status = "预约处理中";
-                  break;
-                case 5:
-                  tableData.reservation_status = "预约已撤销";
-                  break;
-              }
-              (tableData.id = result.data[index].id),
-                (tableData.notarization_name =
-                  result.data[index].notarization_name),
-                (tableData.notarization_id =
-                  result.data[index].notarization_id),
-                (tableData.reservation_time =
-                  result.data[index].reservation_from +
-                  "~" +
-                  result.data[index].reservation_to),
-                (tableData.apply_time = result.data[index].created_at),
-                this.tableData.push(tableData);
-            });
-          } else if (result.error_code != 0) {
-            throw new Error("获取数据失败");
-          }
+          this.tableData = [];
+          //this.pageTotal = result.meta.total;
+          var num = 0;
+          result.data.forEach((item, index) => {
+            let tableData = {};
+            (tableData.evidenceId = result.data[index].evidenceId),
+              (tableData.evidenceName = result.data[index].evidenceName),
+              (tableData.blockchainTime = result.data[index].blockchainTime),
+              (tableData.evidenceType = result.data[index].evidenceType),
+              (tableData.fileHash = result.data[index].fileHash),
+              (tableData.evidenceBlockchainId =
+                result.data[index].evidenceBlockchainId),
+              (tableData.organizationName =
+                result.data[index].organizationName),
+              (tableData.notarizationStartTime =
+                result.data[index].notarizationStartTime),
+              (tableData.notarizationStatus =
+                result.data[index].notarizationStatus),
+              (tableData.notarizationMoney =
+                result.data[index].notarizationMoney),
+              this.tableData.push(tableData);
+            num = num + 1;
+          });
+          this.pageTotal = num;
         });
       } catch (error) {
         throw new Error(error.message);

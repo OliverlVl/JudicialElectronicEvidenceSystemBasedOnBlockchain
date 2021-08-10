@@ -24,6 +24,7 @@ const manageNotarization = r => require.ensure([], () => r(require('@/page/notar
 const haveDeal = r => require.ensure([], () => r(require('@/page//notary/haveDeal')), 'haveDeal');//公证中心-已处理列表
 const myInfoReset = r => require.ensure([], () => r(require('@/page/notary/myInfoReset')), 'myInfoReset');//个人信息-信息修改
 const notDeal2 = r => require.ensure([], () => r(require('@/page/notary/notDeal2')), 'notDeal2');//公证中心-待处理列表
+const bookDeal = r => require.ensure([], () => r(require('@/page/notary/bookDeal')), 'notDeal2');//公证中心-可预约列表
 
 // 公证管理员
 const notarizationManage = r => require.ensure([], () => r(require('@/page/notarymanage/notarizationManage')), 'notarizationManage');//首页
@@ -109,6 +110,10 @@ const routes = [
 			path: '/notDeal2',
 			component: notDeal2,
 			meta: ['公证中心', '待处理列表'],
+		},{
+			path: '/bookDeal',
+			component: bookDeal,
+			meta: ['公证中心', '可预约列表'],
 		}]
 	},
 	{
