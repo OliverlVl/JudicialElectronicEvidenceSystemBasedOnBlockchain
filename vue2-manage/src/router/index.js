@@ -24,13 +24,12 @@ const manageNotarization = r => require.ensure([], () => r(require('@/page/notar
 const haveDeal = r => require.ensure([], () => r(require('@/page//notary/haveDeal')), 'haveDeal');//公证中心-已处理列表
 const myInfoReset = r => require.ensure([], () => r(require('@/page/notary/myInfoReset')), 'myInfoReset');//个人信息-信息修改
 const notDeal2 = r => require.ensure([], () => r(require('@/page/notary/notDeal2')), 'notDeal2');//公证中心-待处理列表
-const bookDeal = r => require.ensure([], () => r(require('@/page/notary/bookDeal')), 'notDeal2');//公证中心-可预约列表
 
 // 公证管理员
 const notarizationManage = r => require.ensure([], () => r(require('@/page/notarymanage/notarizationManage')), 'notarizationManage');//首页
 const totalNotarization = r => require.ensure([], () => r(require('@/page/notarymanage/totalNotarization')), 'totalNotarization');//公证事项列表(空白)
 const totalNotarizationApply = r => require.ensure([], () => r(require('@/page/notarymanage/totalNotarizationApply')), 'totalNotarizationApply');//公证申办记录
-const totalFee = r => require.ensure([], () => r(require('@/page/notarymanage/totalFee')), 'totalFee');//公证缴费记录
+// const totalFee = r => require.ensure([], () => r(require('@/page/notarymanage/totalFee')), 'totalFee');//公证缴费记录
 const totalUser = r => require.ensure([], () => r(require('@/page/notarymanage/totalUser')), 'totalUser');//公证员列表（空白）
 const totalEvidenceList = r => require.ensure([], () => r(require('@/page/notarymanage/totalEvidenceList')), 'totalEvidenceList');//证据列表
 
@@ -55,11 +54,11 @@ const routes = [
 		},{
 			path: '/evidenceListCopy2',
 			component: evidenceListCopy2,
-			meta: ['存证中心', '存证列表'],
+			meta: ['存证服务', '存证列表'],
 		},{
 			path: '/addEvidence',
 			component: addEvidence,
-			meta: ['存证中心', '新增存证'],
+			meta: ['存证服务', '新增存证'],
 		},{
 			path: '/notarizationListCopy',
 			component: notarizationListCopy,
@@ -110,10 +109,6 @@ const routes = [
 			path: '/notDeal2',
 			component: notDeal2,
 			meta: ['公证中心', '待处理列表'],
-		},{
-			path: '/bookDeal',
-			component: bookDeal,
-			meta: ['公证中心', '可预约列表'],
 		}]
 	},
 	{
