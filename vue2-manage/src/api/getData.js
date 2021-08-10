@@ -26,7 +26,7 @@ export const addStorageEvidence = data => fetch('/user/storageEvidence', data, '
 /**
  * 存证列表查询
  */
-export const evidenceQuery = data => fetch('/user/evidenceQuery', data, 'POST');
+export const userEvidenceQuery = data => fetch('/user/evidenceQuery', data, 'POST');
 
 /**
  * 公证机构查询
@@ -150,9 +150,7 @@ export const evidenceQuery = data => fetch('/aut/evidenceQuery',data, 'POST');
 */
 export const eviTypeQuery = data => fetch('/eviTypeQuery',data, 'POST');
 /**
-* 	公证类型查询
-*/
-export const noTypeQuery = data => fetch('/noTypeQuery',data, 'POST');
+
 /**
 * 	公证机构查询
 */

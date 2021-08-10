@@ -198,7 +198,7 @@ import {
   noTypeQuery,
   notarReq,
   notarPay,
-  evidenceQuery,
+  userEvidenceQuery,
 } from "@/api/getData";
 export default {
   data() {
@@ -467,7 +467,7 @@ export default {
       }
       // 请求数据
       try {
-        await evidenceQuery(this.evidence).then((result) => {
+        await userEvidenceQuery(this.evidence).then((result) => {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
