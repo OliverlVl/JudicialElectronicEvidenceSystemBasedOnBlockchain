@@ -75,12 +75,7 @@
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
 import {
-  notarizationList,
-  reservationList,
-  delReservation,
-  agentList,
-  notarizationApplyList,
-  notarizationApplyListEncrypt,
+  notarRecord,
 } from "@/api/getData";
 export default {
   data() {
@@ -89,7 +84,7 @@ export default {
       decrypt: true,
       decryptFlag: 1,
       // 表格
-      tableData: [],
+      tableData: [{}],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -128,45 +123,13 @@ export default {
           if (result.state == true) {
             this.tableData = [];
             result.data.forEach((item) => {
-              let tableData = {};
-              //公证状态
-              (tableData.notarizationStatus = item.notarizationStatus),
-              //存证编号
-              (tableData.evidenceId = item.evidenceId),
-              //申请事项
-              (tableData.notarizationMatters = item.notarizationMatters),
-              //申请时间
-              (tableData.notarizationStartTime = item.notarizationStartTime),
-              //申请人
-              (tableData.userId = item.userId),
-              //证据类型
-              (tableData.evidenceType = item.evidenceType),
-              //文件哈希值
-              (tableData.fileHash = item.fileHash),
-              //存证名称
-              (tableData.evidenceName = item.evidenceName),
-              //文件大小
-              (tableData.fileSize = item.fileSize),
-              //存证区块链ID
-              (tableData.evidenceBlockchainId = item.evidenceBlockchainId),
-              //存证时间
-              (tableData.evidenceTime = item.evidenceTime),
-              //上链时间
-              (tableData.blockchainTime = item.blockchainTime),
-              //公证类型
-              (tableData.notarizationType = item.notarizationType),
-              //公证金额
-              (tableData.notarizationMoney = item.notarizationMoney),
-              //交易支付状态
-              (tableData.transactionStatus = item.transactionStatus),
-              this.tableData.push(tableData);
-              num = num + 1;
+              this.tableData.push(item);
             });//foreach结束
+            this.pageTotal = this.tableData.length;
           }else {
             throw new Error("获取数据失败");
           }//if结束
         });//await结束
-        this.pageTotal = num;
       } catch (error) {
         throw new Error(error.message);
       }

@@ -47,7 +47,7 @@
         <el-table-column label="公证类型" prop="notarizationType"></el-table-column>
       </el-table>
       <div class="search_container">
-        <el-switch v-model="decrypt" on-text="解密" off-text="加密" @change="handleSearch()"></el-switch>
+        <el-switch v-model="decrypt" on-text="解密" off-text="加密" @change="initData()"></el-switch>
         <!--<el-button type="primary" @click="handleSearch()" style="margin-left: 520px">刷新</el-button>-->
       </div>
       <div class="pagination">
@@ -68,11 +68,7 @@
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
 import {
-  notarizationList,
-  reservationList,
-  delReservation,
-  agentList,
-  notarizationApplyList,
+  notarRecord,
 } from "@/api/getData";
 export default {
   data() {
@@ -81,7 +77,7 @@ export default {
       decrypt: true,
       decryptFlag: 1,
       // 表格
-      tableData: [],
+      tableData: [{}],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -103,6 +99,11 @@ export default {
     // 初始化数据
     async initData() {
       try {
+        if (this.decrypt) {
+          this.decryptFlag = 1;
+        } else {
+          this.decryptFlag = 0;
+        }
         const query = {
           decryptFlag: this.decryptFlag,
           notaryId: this.notary_id,
@@ -112,49 +113,13 @@ export default {
           if (result.state == true) {
             this.tableData = [];
             var num = 0;
-            //this.pageTotal = result.meta.total;
             result.data.forEach((item) => {
-              let tableData = {};
-              num = num + 1;
-              //公证状态
-              (tableData.notarizationStatus = item.notarizationStatus),
-                //存证编号
-                (tableData.evidenceId = item.evidenceId),
-                //申请事项
-                (tableData.notarizationMatters = item.notarizationMatters),
-                //申请时间
-                (tableData.notarizationStartTime = item.notarizationStartTime),
-                //申请人
-                (tableData.userId = item.userId),
-                //证据类型
-                (tableData.evidenceType = item.evidenceType),
-                //文件哈希值
-                (tableData.fileHash = item.fileHash),
-                //存证名称
-                (tableData.evidenceName = item.evidenceName),
-                //文件大小
-                (tableData.fileSize = item.fileSize),
-                //存证区块链ID
-                (tableData.evidenceBlockchainId = item.evidenceBlockchainId),
-                //存证时间
-                (tableData.evidenceTime = item.evidenceTime),
-                //上链时间
-                (tableData.blockchainTime = item.blockchainTime),
-                //公证类型
-                (tableData.notarizationType = item.notarizationType),
-                //公证金额
-                (tableData.notarizationMoney = item.notarizationMoney),
-                //公证完成时间
-                (tableData.notarizationEndTime = item.notarizationEndTime),
-                //交易支付状态
-                (tableData.transactionStatus = item.transactionStatus),
-                this.tableData.push(tableData);
+                this.tableData.push(item);
             });
-            this.pageTotal = num ;
+            this.pageTotal = this.tableData.length;
           } else {
             throw new Error("获取数据失败");
           }
-          this.pageTotal = num;
         });
       } catch (error) {
         throw new Error(result.message);
@@ -182,11 +147,8 @@ export default {
         await notarRecord(query).then((result) => {
           if (result.state == true) {
             this.tableData = [];
-            var num = 0;
-            //this.pageTotal = result.meta.total;
             result.data.forEach((item) => {
               let tableData = {};
-              num = num + 1;
               //公证状态
               (table.notarizationStatus = item.notarizationStatus),
               //存证编号

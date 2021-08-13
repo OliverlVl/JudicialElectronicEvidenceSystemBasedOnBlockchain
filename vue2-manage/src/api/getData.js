@@ -434,3 +434,18 @@ export const getAddressById = address_id => fetch('/v1/addresse/' + address_id);
  */
 
 export const getUserCity = () => fetch('/v1/user/city/count');
+
+
+
+
+
+
+
+
+
+/**
+ * 获取用户分布信息
+ */
+
+ export const addEvidence = () => fetch('/user/addEvidence');
+
