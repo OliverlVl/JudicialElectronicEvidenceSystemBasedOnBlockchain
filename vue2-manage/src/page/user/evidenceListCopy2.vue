@@ -6,13 +6,12 @@
       <el-button
         type="primary"
         @click="addEvidence()"
-        style="margin-right: 150px"
         >新增存证</el-button
       >
       <el-input
         placeholder="请输入存证名称"
         v-model="evidence.evidenceName"
-        style="margin-left: 30px; width: 390px"
+        style="margin-left: 20%; width: 390px"
       >
       </el-input>
       <el-button type="primary" @click="getEvidenceData()">搜索</el-button>
@@ -45,6 +44,11 @@
             </el-form>
           </template>
         </el-table-column>
+        <el-table-column
+          type="index"
+          label="序号"
+          width="100"
+        ></el-table-column>
         <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
         <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
         <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
@@ -134,43 +138,17 @@
       style="width: 100%"
     >
       <el-form ref="evidence" :model="evidence" label-width="200px">
-        <el-form-item label="存证时间">
-          <el-date-picker
-            v-model="evidenceTime"
-            type="datetimerange"
-            align="left"
-            unlink-panels
-            placeholder="开始时间-结束时间"
-            range-separator="至"
-            :picker-options="pickerOptions"
-            @change="selectEvidenceTime"
-            style="width: 50%"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="上链时间">
-          <el-date-picker
-            v-model="blockchainTime"
-            type="datetimerange"
-            align="left"
-            unlink-panels
-            placeholder="开始时间-结束时间"
-            range-separator="至"
-            :picker-options="pickerOptions"
-            @change="selectBlockchainTime"
-            style="width: 50%"
-          ></el-date-picker>
-        </el-form-item>
         <el-form-item label="存证名称">
           <el-input
             v-model="evidence.evidenceName"
             placeholder="请输入存证名称"
-            style="width: 50%"
+            style="width: 30%"
           ></el-input>
         </el-form-item>
         <el-form-item label="存证类型" prop="evidenceType">
           <el-select
             v-model="evidence.evidenceType"
-            style="width: 50%"
+            style="width: 30%"
             placeholder="请选择存证类型"
           >
             <el-option
@@ -181,6 +159,35 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="存证时间">
+          <el-date-picker
+            v-model="evidenceTime"
+            type="datetimerange"
+            align="left"
+            unlink-panels
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            range-separator="至"
+            :picker-options="pickerOptions"
+            @change="selectEvidenceTime"
+            style="width: 55%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="上链时间">
+          <el-date-picker
+            v-model="blockchainTime"
+            type="datetimerange"
+            align="left"
+            unlink-panels
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            range-separator="至"
+            :picker-options="pickerOptions"
+            @change="selectBlockchainTime"
+            style="width: 55%"
+          ></el-date-picker>
+        </el-form-item>
+        
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -194,6 +201,7 @@
 import headTop from "../../components/headTop";
 // import { baseUrl, baseImgPath } from "@/config/env";
 import {
+  getEvidenceType,
   orgaQuery,
   noTypeQuery,
   notarReq,
@@ -210,10 +218,10 @@ export default {
         userId: sessionStorage.getItem("userID"),
         evidenceName: "",
         evidenceType: "",
-        evidenceTimeStart: "none",
-        evidenceTimeEnd: "none",
-        blockchainTimeStart: "none",
-        blockchainTimeEnd: "none",
+        // evidenceTimeStart: "none",
+        // evidenceTimeEnd: "none",
+        // blockchainTimeStart: "none",
+        // blockchainTimeEnd: "none",
         notarizationStatus: 0,
       },
       // 存证类型
@@ -287,7 +295,6 @@ export default {
         },
         {},
         {},
-        {},
       ],
       // 获取数据
       pageTotal: 0,
@@ -313,12 +320,32 @@ export default {
     // this.getEvidenceData();
     this.getNotarizationType();
     this.getAgent();
+    this.getEvidenceType();
   },
   computed: {},
   components: {
     headTop,
   },
   methods: {
+    //获取存证类型
+    getEvidenceType() {
+      try {
+        getEvidenceType().then((result) => {
+          if (result.status == true) {
+            //成功
+            console.log(result.data);
+            result.data.forEach((item) => {
+              this.evidenceType.push(item);
+            });
+          } else {
+            //失败
+            console.log("获取失败");
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
     // 新增存证路由跳转
     addEvidence() {
       this.$router.push("/addEvidence");
