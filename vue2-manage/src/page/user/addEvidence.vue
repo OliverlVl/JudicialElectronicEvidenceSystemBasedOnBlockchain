@@ -28,7 +28,7 @@
             <el-input
               v-model="formData.evidenceName"
               placeholder="请输入存证名称"
-              style="width: 100%"
+              style="width: 50%"
             ></el-input>
           </el-form-item>
           <el-form-item label="上传文件">

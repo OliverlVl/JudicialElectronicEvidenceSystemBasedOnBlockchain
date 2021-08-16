@@ -48,49 +48,13 @@ export const noTypeQuery = data => fetch('/noTypeQuery', data, 'POST');
  */
 export const notarPay = data => fetch('/user/notarPay', data, 'POST');
 
-/**
- * 存证列表
+ /**
+ * 用户公证申请记录查询
  */
-export const storageEvidenceList = data => fetch('/storageEvidenceList', data, 'POST');
-
-/**
- * 取证列表
- */
-export const getEvidenceList = data => fetch('/getEvidenceList', data);
+  export const userNotarRecord = data => fetch('/user/notarRecord', data, 'POST');
 
 
-/**
- * 申请公证
- */
 
-export const notarizationStatus = data => fetch('/notarizationStatus',data,'POST');
-
-/**
- * 证据共享
- */
-
-export const evidenceShare = data => fetch('/evidenceShare',data,'POST');
-
-/**
- * 证据共享详情
- */
-export const evidenceShareDetail = data => fetch('/evidenceShareDetail',data);
-
-
-/**
- * 公证事项选择列表
- */
-export const notarizationList = data => fetch('/notarizationList',data);
-
-/**
- * 我的预约列表
- */
-export const reservationList = data => fetch('/reservationList',data);
-
-/**
- * 我的预约-撤销
- */
-export const delReservation = data => fetch('/delReservation',data, 'POST');
 
 
 /**
