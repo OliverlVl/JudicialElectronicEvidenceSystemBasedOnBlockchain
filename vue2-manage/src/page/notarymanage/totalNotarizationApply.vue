@@ -362,7 +362,7 @@ export default {
           notaryNameWildcard: "none",
         };
         await notarmanageRecord(query).then((result) => {
-          if (result.state) {
+          if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);
@@ -373,7 +373,7 @@ export default {
         });
         query.notarizationStatus = "4";
         await notarmanageRecord(query).then((result) => {
-          if (result.state) {
+          if (result.status) {
             result.data.forEach((item) => {
               this.tableData.push(item);
             });
@@ -384,7 +384,7 @@ export default {
         });
         //获取存证类型
         await eviTypeQuery().then((typeres) => {
-          if (typeres.state) {
+          if (typeres.status) {
             typeres.data.forEach((item) => {
               this.evidence_type.push(item);
             });
@@ -392,7 +392,7 @@ export default {
         });
         //获取公证类型
         await noTypeQuery().then((typeres) => {
-          if (typeres.state) {
+          if (typeres.status) {
             typeres.data.forEach((item) => {
               this.notarization_type.push(item);
             });
@@ -412,8 +412,8 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
-        await evidenceQuery(this.notarization).then((result) => {
-          if (result.state) {
+        await notarmanageRecord(this.notarization).then((result) => {
+          if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);

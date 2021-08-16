@@ -1,310 +1,311 @@
 <template>
-<div>
+  <div class="fillcontain">
+    <head-top></head-top>
+    <div class="head">信息修改</div>
 
-    <div class="fillcontain" ref="fillcontain">
-        <head-top></head-top>
-        <div class="info_container" ref="info_container" style="margin-top:30px">
-            <el-row class="info_row row" :gutter="10">
-            <el-col :span="8">
-            <div class="area">
-                <p class="title">修改信息</p>
-                <el-form class="form"  :model="infoForm" :rules="infoRules" ref="infoForm" label-width="80px">
-                    <el-form-item label="姓名">
-                        <el-input v-model="infoForm.username"  size="mini" disabled placeholder="请输入姓名"></el-input>
-                    </el-form-item>
-                    <el-form-item label="昵称" prop="nickname">
-                        <el-input v-model="infoForm.nickname" size="mini" placeholder="请输入昵称"></el-input>
-                    </el-form-item>
-                    <el-form-item label="投资年限" prop="touziyear">
-                        <el-select v-model="infoForm.touziyear" size="mini" placeholder="请选择投资年限" >
-                            <el-option label="1年" value="1"></el-option>
-                            <el-option label="2年" value="2"></el-option>
-                            <el-option label="3年" value="3"></el-option>
-                            <el-option label="4年" value="4"></el-option>
-                            <el-option label="5年" value="5"></el-option>
-                            <el-option label="6年" value="6"></el-option>
-                            <el-option label="7年" value="7"></el-option>
-                            <el-option label="8年" value="8"></el-option>
-                            <el-option label="9年" value="9"></el-option>
-                            <el-option label="10年" value="10"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="绑定邮箱" prop="email">
-                        <el-input v-model="infoForm.email" size="mini" placeholder="请输入绑定邮箱"></el-input>
-                    </el-form-item>
-                    <el-form-item label="绑定手机" prop="telphone">
-                        <el-input v-model="infoForm.telphone" size="mini" placeholder="请输入绑定手机"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="submitForm('infoForm')">提交</el-button>
-                        <el-button @click="resetForm('infoForm')">重置</el-button>
-                    </el-form-item>
-                </el-form>
-            </div>
-            </el-col>
-
-            <el-col :span="8">
-                <div class="area">
-                    <div class="pwdarea">
-                        <p class="title">修改密码</p>
-                            <el-form class="form"  :model="pwdForm" :rules="pwdRules" ref="pwdForm" label-width="100px">
-                            <el-form-item label="原密码" prop="password">
-                                <el-input type="password" v-model="pwdForm.password" auto-complete="off" size="mini" placeholder="请输入原密码"></el-input>
-                            </el-form-item>
-                            <el-form-item label="新密码" prop="newpassword">
-                                <el-input type="password" v-model="pwdForm.newpassword" auto-complete="off" size="mini" placeholder="请输入新密码"></el-input>
-                            </el-form-item>
-                            <el-form-item label="确认新密码" prop="surepassword">
-                                <el-input type="password" v-model="pwdForm.surepassword" auto-complete="off" size="mini" placeholder="请输入确认新密码"></el-input>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" @click="submitForm('pwdForm')">提交</el-button>
-                                <el-button @click="resetForm('pwdForm')">重置</el-button>
-                            </el-form-item>
-                            </el-form>
-                    </div>
-                </div>
-            </el-col>
-
-            <el-col :span="8">
-                <div class="area">
-                    <div class="phonearea">
-                            <p class="title">手机服务</p>
-                            <el-form class="form"  :model="phoneForm" :rules="phoneRules" ref="phoneForm" label-width="110px">
-                                <el-form-item label="当前绑定手机" prop="phone">
-                                    <el-input v-model="phoneForm.phone" size="mini" placeholder=""></el-input>
-                                </el-form-item>
-                                <el-form-item label="基础短信服务" prop="baseType">
-                                    <el-checkbox-group v-model="phoneForm.baseType" class="phoneGroup">
-                                        <el-checkbox label="网站密码找回"   name="baseType"></el-checkbox>
-                                        <el-checkbox label="提现申请短信验证"  name="baseType"></el-checkbox>
-                                        <el-checkbox label="提现申请提醒"   name="baseType"></el-checkbox>
-                                    </el-checkbox-group>
-                                </el-form-item>
-                                <el-form-item label="可选短信服务" prop="changeType">
-                                    <el-checkbox-group v-model="phoneForm.changeType" class="phoneGroup">
-                                        <el-checkbox label="投标通知" name="changeType"></el-checkbox>
-                                        <el-checkbox label="满标/流标/撤销通知" name="changeType"></el-checkbox>
-                                        <el-checkbox label="回款通知" name="changeType"></el-checkbox>
-                                        <el-checkbox label="本息保障通知" name="changeType"></el-checkbox>
-                                        <el-checkbox label="优质标提醒通知" name="changeType"></el-checkbox>
-                                    </el-checkbox-group>
-                                </el-form-item>
-                        
-                            <el-form-item>
-                                <el-button type="primary" @click="submitForm('phoneForm')">提交</el-button>
-                                <el-button @click="resetForm('phoneForm')">重置</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </div>
-                </div>
-            </el-col>
-            </el-row>
-        </div>
+    <div class="table_container">
+      &emsp; <span style="margin-left: 25%">姓名:</span> &emsp;
+      <el-input
+        v-model="initInfor.notaryName"
+        placeholder="请输入手机号"
+        style="width: 440px"
+        :disabled="true"
+      ></el-input>
     </div>
-</div>
+
+    <div class="table_container">
+      &emsp; <span style="margin-left: 25%">编号:</span> &emsp;
+      <el-input
+        v-model="initInfor.notaryId"
+        placeholder="请输入手机号"
+        style="width: 440px"
+        :disabled="true"
+      ></el-input>
+    </div>
+
+    <div class="table_container">
+      &emsp; <span style="margin-left: 25%">工号:</span> &emsp;
+      <el-input
+        v-model="initInfor.jobNumber"
+        placeholder="请输入手机号"
+        style="width: 440px"
+        :disabled="true"
+      ></el-input>
+    </div>
+
+    <div class="table_container">
+      &emsp; <span style="margin-left: 21%">公证机构ID：</span> &emsp;
+      <el-input
+        v-model="initInfor.organizationId"
+        placeholder="请输入邮箱"
+        style="width: 440px; margin-left: -1%"
+        :disabled="true"
+      ></el-input>
+    </div>
+
+    <div class="table_container">
+      &emsp; <span style="margin-left: 23.5%">手机号:</span> &emsp;
+      <el-input
+        v-model="initInfor.phoneNumber"
+        placeholder="请输入手机号"
+        style="width: 440px; margin-left: 0.3%"
+      ></el-input>
+    </div>
+
+    <div class="table_container">
+      &emsp; <span style="margin-left: 25%">邮箱:</span> &emsp;
+      <el-input
+        v-model="initInfor.email"
+        placeholder="请输入邮箱"
+        style="width: 440px"
+      ></el-input>
+    </div>
+
+    <div class="table_container">
+      &emsp; <span style="margin-left: 22.5%">公证类型：</span> &emsp;
+      <el-select
+        v-model="initInfor.notarizationType"
+        placeholder="请选择"
+        filterable
+        style="margin-left: -1.1%"
+      >
+        <el-option
+          v-for="item in notarization_type"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
+      </el-select>
+      <el-button @click="tryy()">取 消</el-button>
+    </div>
+
+    <div class="table_container" style="margin-left: 35%">
+      <el-button type="primary" @click="changeVisible = true"
+        >修改密码</el-button
+      >
+      <el-button type="primary" @click="SubmitInfo()">提交</el-button>
+    </div>
+    <el-dialog
+      title="修改密码"
+      :visible.sync="changeVisible"
+      style="width: 100%"
+    >
+      <el-form label-width="100px">
+        <el-form-item label="旧密码:" style="margin-left:25%">
+          <el-input
+            v-model="oldPass"
+            placeholder="请输入旧密码"
+            style="width: 240px"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="新密码:" style="margin-left:25%">
+          <el-input
+            v-model="this.newPass"
+            placeholder="请输入新密码"
+            style="width: 240px"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+          <el-button @click="changeVisible = false">取 消</el-button>
+          <el-button @click="ChangePass(); changeVisible = false;" type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-//    import * as mutils from '@/utils/mUtils'
 import headTop from "../../components/headTop";
-    export default {
-        data(){
-             // 附带callback(),是在明确通过验证的情况下去掉输入框上的loading
-            let validateEmail = (rule, value, callback) => {
-                if(value == ''){
-                    callback(new Error('请输入邮箱~'));
-                    return;
-                }
-                let emailRegex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                if (!emailRegex.test(value)) {
-                    callback(new Error('邮箱格式不正确！'))
-                } else {
-                    callback();
-                }
-            };
-            let validatePhone = (rule, value, callback) => {
-                if(value == ''){
-                    callback(new Error('请输入手机号码~'));
-                }{
-                    let phoneRegex = /^1[34578]\d{9}$/;
-                    if (!phoneRegex.test(value)) {
-                        callback(new Error('手机号码格式不正确！'))
-                    } else {
-                        callback();
-                    }
-                }
-            };
-            // validateField:对部分表单字段进行校验的方法
-            let validateNewpassword = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入新密码'));
-                } else {
-                    if (this.pwdForm.surepassword !== '') {
-                        this.$refs.pwdForm.validateField('surepassword');
-                    }
-                    callback();
-                }
-            };
-            let validateSurepassword = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入确认密码'));
-                } else if (value !== this.pwdForm.newpassword) {
-                    callback(new Error('两次输入密码不一致!'));
-                } else {
-                   callback();
-                }
-            };
-            return {
-               infoForm:{
-                   username:'',
-                   nickname:'',
-                   touziyear:'',
-                   email:'',
-                   telphone:''
-               },
-               pwdForm:{
-                   password:'',
-                   newpassword:'',
-                   surepassword:''
-               },
-               phoneForm:{
-                   phone:'',
-                   baseType:[],
-                   changeType:[]
-               },
-               infoRules: {
-                    nickname: [
-                        { required: true, message: '请输入昵称', trigger: 'blur' },
-                        { min: 2, max: 8, message: '长度在 2 到 8 个字符', trigger: 'blur' }
-                    ],
-                    touziyear: [
-                        { required: true, message: '请选择投资年限', trigger: 'change' }
-                    ],
-                    email: [
-                        {required: true,validator: validateEmail,trigger: 'blur'}
-                    ],
-                    telphone: [
-                        {required: true,validator: validatePhone, trigger: 'blur' },
-                    ],
-               },
-               pwdRules: {
-                    password: [
-                        { required: true, message: '请输入原密码', trigger: 'blur' },
-                    ],
-                    newpassword: [
-                        { required: true, validator:validateNewpassword, trigger: 'blur' },
-                    ],
-                    surepassword: [
-                        { required: true, validator:validateSurepassword, trigger: 'blur' },
-                    ],
-               },
-               phoneRules:{
-                   phone: [
-                        {required: true,validator: validatePhone, trigger: 'blur' },
-                   ],
-                   baseType: [
-                        { type: 'array', required: true, message: '请至少选择一个基础短信服务', trigger: 'change' }
-                   ],
-                   changeType: [
-                        { type: 'array', required: true, message: '请至少选择一个可选短信服务', trigger: 'change' }
-                   ],
-               },
-             
-            };
-           
+import { baseUrl, baseImgPath } from "@/config/env";
+import { notaQuery, noTypeQuery, notarregist } from "@/api/getData";
+export default {
+  data() {
+    return {
+      changeVisible: false,
+      oldPass: "",
+      newPass: "",
+      info: {
+        password: "",
+        phoneNumber: "",
+        email: "",
+        notarizationType: "",
+      },
+      initInfor: {
+        notaryId: "8003117104",
+        notaryName: "张三",
+        jobNumber: "211020",
+        password: "88888888",
+        phoneNumber: "156*******",
+        idCard: "35************",
+        email: "29********@qq.com",
+        sex: "男",
+        organizationId: "1520",
+        notarizationType: "none",
+      },
+      notarization_type: [
+        {
+          label: "不限",
+          value: "none",
+        },
+      ],
+    };
+  },
+  created() {
+    this.decryptFlag = 1;
+    this.notary_id = localStorage.getItem("notaryId");
+    //this.initData();
+  },
+  computed: {},
+  components: {
+    headTop,
+  },
+  methods: {
+    // 初始化数据
+    async initData() {
+      try {
+        const query = {
+          notaryId: this.notary_id,
+        };
 
-        },
-        created(){
-           
-        },
-        components: {
-    		headTop,
-    	},
-      	mounted() {
-            // mutils.setContentHeight(this,this.$refs.fillcontain,170);
-	    },
-        methods: {
-            showMessage(type,message){
-                this.$message({
-                    type: type,
-                    message: message
-                });
-            },
-            showUsername(){
-                let userinfo = mutils.getStore('userinfo');
-                this.infoForm.username = userinfo.username;
-            },
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        if(formName == 'pwdForm'){
-                            this.showMessage('success','修改密码成功~');
-                        }else if(formName == 'infoForm'){ // 判断手机服务是否为空
-                            this.phoneForm.phone = this.infoForm.telphone;
-                            for(let key in this.phoneForm){
-                                if(this.phoneForm[key] == ''){
-                                    this.showMessage('warning','请您选择手机服务~');
-                                    return;
-                                }
-                            }
-                        }else if(formName == 'phoneForm'){// 判断修改信息是否为空
-                            this.infoForm.telphone = this.phoneForm.phone;
-                            for(let key in this.infoForm){
-                                if(this.infoForm[key] == ''){
-                                    this.showMessage('warning','请您修改相关信息~');
-                                    return;
-                                }
-                            }
-                        }
-                        //保存修改的相关信息
-						let userinfo = this.infoForm;
-                        let phoneinfo = this.phoneForm;
-						let userData = Object.assign(userinfo, phoneinfo);
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
+        await notaQuery(query).then((result) => {
+          if (result.status) {
+            this.initInfor = {};
+            this.initInfor = result.data;
+          } else {
+            throw new Error("获取数据失败");
+          }
+        });
+        //获取公证类型
+        await noTypeQuery().then((typeres) => {
+          if (typeres.status) {
+            typeres.data.forEach((item) => {
+              this.notarization_type.push(item);
+            });
+          }
+        });
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+    // 处理导航页
+    handlePageChange(val) {
+      console.log(val);
+      this.pageIndex = val;
+      this.initData();
+    },
+
+    // 提交
+    async SubmitInfo() {
+      try {
+        const submitInfo = {
+          phoneNumber: this.initInfor.phoneNumber,
+          email: this.initInfor.email,
+          notarizationType: this.initInfor.notarizationType,
+        };
+        await notarregist(submitInfo).then((result) => {
+          if (result.status) {
+            alert("修改成功");
+          } else {
+            throw new Error("获取数据失败");
+          }
+        });
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+    async ChangePass() {
+      try{
+        if (this.oldPass != this.initInfor.password){
+          alert("原密码输入错误");
         }
+        const query = {
+          password: this.newPass,
+        }
+        await notarregist(query).then((result) => {
+          if (result.status) {
+            alert("修改成功");
+          } else {
+            throw new Error("获取数据失败");
+          }
+        });
+      }catch(e){
+        throw new Error(e.message)
+      }
+    },
+    tryy(){
+      alert("1");
     }
+  },
+};
 </script>
 
-<style lang="less" scoped>
-@import '../../style/mixin';
-    .info_container{
-       padding: 20px;
-       background: #fff;
-       box-sizing: border-box;
-       overflow: auto;
-    }
-     .title{
-        text-align:center;
-        width:100%;
-        height:30px;
-        line-height:30px;
-        cursor: pointer;
-        background-color: #3bc5ff;
-        border:1px solid #3bc5ff;
-        color: white;
-        display: block;
-    }
-   .info_row{
-        .area{
-           border:1px solid #dfdfdf;
-           height:100%;
-           font-size:14px;
-           padding:10px;
-           .form{
-               width:90%;
-               margin-top:20px;
-           }
-        }
-   }
+<style lang="less">
+@import "../../style/mixin";
+.head {
+  height: 10%;
+  background-color: lightblue;
+  text-align: center;
+  width: 100%;
+  font-size: 30px;
+}
+.search_container {
+  padding: 20px;
+}
+.el-select .el-input {
+  width: 130px;
+}
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
+}
+.demo-table-expand {
+  font-size: 0;
+}
+.demo-table-expand label {
+  width: 120px;
+  color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
+.table_container {
+  padding: 10px;
+}
+.Pagination {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #20a0ff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+}
+.avatar {
+  width: 120px;
+  height: 120px;
+  display: block;
+}
+
+.a-style {
+  color: #0500ee;
+  cursor: pointer;
+  text-decoration: underline;
+}
 </style>
-
-

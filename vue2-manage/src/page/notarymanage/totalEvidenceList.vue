@@ -280,7 +280,7 @@ export default {
       };
       try {
         await evidenceQuery(query).then((result) => {
-          if (result.state) {
+          if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);
@@ -292,7 +292,7 @@ export default {
         });
         //获取存证类型
         await eviTypeQuery().then((typeres) => {
-          if (typeres.state) {
+          if (typeres.status) {
             typeres.data.forEach((item) => {
               this.evidence_type.push(item);
             });
@@ -323,7 +323,7 @@ export default {
       try {
         this.dealData();
         await evidenceQuery(this.evidence).then((result) => {
-          if (result.state) {
+          if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);

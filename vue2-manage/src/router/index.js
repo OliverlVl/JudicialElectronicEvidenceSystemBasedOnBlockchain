@@ -24,6 +24,7 @@ const manageNotarization = r => require.ensure([], () => r(require('@/page/notar
 const haveDeal = r => require.ensure([], () => r(require('@/page//notary/haveDeal')), 'haveDeal');//公证中心-已处理列表
 const myInfoReset = r => require.ensure([], () => r(require('@/page/notary/myInfoReset')), 'myInfoReset');//个人信息-信息修改
 const notDeal2 = r => require.ensure([], () => r(require('@/page/notary/notDeal2')), 'notDeal2');//公证中心-待处理列表
+const bookDeal = r => require.ensure([], () => r(require('@/page/notary/bookDeal')), 'bookDeal');
 
 // 公证管理员
 const notarizationManage = r => require.ensure([], () => r(require('@/page/notarymanage/notarizationManage')), 'notarizationManage');//首页
@@ -31,6 +32,7 @@ const totalNotarization = r => require.ensure([], () => r(require('@/page/notary
 const totalNotarizationApply = r => require.ensure([], () => r(require('@/page/notarymanage/totalNotarizationApply')), 'totalNotarizationApply');//公证申办记录
 // const totalFee = r => require.ensure([], () => r(require('@/page/notarymanage/totalFee')), 'totalFee');//公证缴费记录
 const totalUser = r => require.ensure([], () => r(require('@/page/notarymanage/totalUser')), 'totalUser');//公证员列表（空白）
+const totalNotary = r => require.ensure([], () => r(require('@/page/notarymanage/totalNotary')), 'totalNotary');//公证员列表（空白）
 const totalEvidenceList = r => require.ensure([], () => r(require('@/page/notarymanage/totalEvidenceList')), 'totalEvidenceList');//证据列表
 
 
@@ -109,6 +111,10 @@ const routes = [
 			path: '/notDeal2',
 			component: notDeal2,
 			meta: ['公证中心', '待处理列表'],
+		},{
+			path: '/bookDeal',
+			component: bookDeal,
+			meta: ['公证中心', '可申请列表'],
 		}]
 	},
 	{
@@ -122,14 +128,19 @@ const routes = [
 		},{
 			path: '/totalNotarization',
 			component: totalNotarization,
-			meta: ['公证管理', '公证事项列表'],
+			meta: ['公证管理', '待处理公证列表'],
 		},{
 			path: '/totalNotarizationApply',
 			component: totalNotarizationApply,
-			meta: ['公证管理', '公证申请列表'],
+			meta: ['公证管理', '已处理公证列表'],
 		},{
 			path: '/totalUser',
 			component: totalUser,
+			meta: ['人员管理', '用户列表'],
+		},
+		{
+			path: '/totalNotary',
+			component: totalNotary,
 			meta: ['人员管理', '公证员列表'],
 		},{
 			path: '/totalEvidenceList',

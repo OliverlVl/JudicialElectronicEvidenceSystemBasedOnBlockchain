@@ -15,7 +15,8 @@
 					</el-submenu>
 					<el-submenu index="4">
 						<template slot="title"><i class="el-icon-setting"></i>人员管理</template>
-						<el-menu-item index="totalUser">公证员列表</el-menu-item>
+						<el-menu-item index="totalUser">用户列表</el-menu-item>
+						<el-menu-item index="totalNotary">公证员列表</el-menu-item>
 					</el-submenu>
 					<el-submenu index="5">
 						<template slot="title"><i class="el-icon-warning"></i>系统说明</template>

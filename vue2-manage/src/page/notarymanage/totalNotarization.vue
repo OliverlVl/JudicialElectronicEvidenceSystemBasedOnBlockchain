@@ -164,7 +164,14 @@
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
-        <el-button @click="handleSearch(); searchVisible = false" type="primary">确 定</el-button>
+        <el-button
+          @click="
+            handleSearch();
+            searchVisible = false;
+          "
+          type="primary"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
 
@@ -207,8 +214,14 @@
         <el-table-column label="公证员" prop="notaryId"></el-table-column>
         <el-table-column label="申请人" prop="userId"></el-table-column>
         <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
-        <el-table-column label="公证类型" prop="notarizationType"></el-table-column>
-        <el-table-column label="公证申请时间" prop="notarizationStartTime"></el-table-column>
+        <el-table-column
+          label="公证类型"
+          prop="notarizationType"
+        ></el-table-column>
+        <el-table-column
+          label="公证申请时间"
+          prop="notarizationStartTime"
+        ></el-table-column>
       </el-table>
       <!-- 分页-->
       <div class="pagination">
@@ -228,11 +241,7 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { 
-  notarmanageRecord,
-  eviTypeQuery,
-  noTypeQuery,
- } from "@/api/getData";
+import { notarmanageRecord, eviTypeQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
@@ -351,7 +360,7 @@ export default {
           notaryNameWildcard: "none",
         };
         await notarmanageRecord(query).then((result) => {
-          if (result.state) {
+          if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);
@@ -362,7 +371,7 @@ export default {
         });
         query.notarizationStatus = "2";
         await notarmanageRecord(query).then((result) => {
-          if (result.state) {
+          if (result.status) {
             result.data.forEach((item) => {
               this.tableData.push(item);
             });
@@ -373,7 +382,7 @@ export default {
         });
         //获取存证类型
         await eviTypeQuery().then((typeres) => {
-          if (typeres.state) {
+          if (typeres.status) {
             typeres.data.forEach((item) => {
               this.evidence_type.push(item);
             });
@@ -381,7 +390,7 @@ export default {
         });
         //获取公证类型
         await noTypeQuery().then((typeres) => {
-          if (typeres.state) {
+          if (typeres.status) {
             typeres.data.forEach((item) => {
               this.notarization_type.push(item);
             });
@@ -401,8 +410,8 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
-        await evidenceQuery(this.notarization).then((result) => {
-          if (result.state) {
+        await notarmanageRecord(this.notarization).then((result) => {
+          if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);
@@ -435,61 +444,63 @@ export default {
           this.notarization.evidenceNameWildcard = "none";
         }
         //公证类型
-      if (this.notarization.notarizationType == "") {
-        this.notarization.notarizationType = "none";
-      }
-      //支付状态
-      if (this.notarization.paymentStatus == "") {
-        this.notarization.paymentStatus = "none";
-      }
-      //存证类型
-      if (this.notarization.evidenceType == "") {
-        this.notarization.evidenceType = "none";
-      }
-      //公证员
-      if (this.notarization.notaryId == "") {
-        this.notarization.notaryId = "none";
-      }//公证员编号
-      if (this.notarization.notaryNameWildcard == "") {
-        this.notarization.notaryNameWildcard = "none";
-      }
-      //公证金额
-      if(this.moneyState == "0"){
-        this.notarization.notarizationMoneyUpper = 100;
-        this.notarization.notarizationMoneyFloor = -1;
-      }else if(this.moneyState == "1"){
-        this.notarization.notarizationMoneyUpper = 300;
-        this.notarization.notarizationMoneyFloor = 100;
-      }else if(this.moneyState == "2"){
-        this.notarization.notarizationMoneyUpper = -1;
-        this.notarization.notarizationMoneyFloor = 300;
-      }else{
-        this.notarization.notarizationMoneyUpper = -1;
-        this.notarization.notarizationMoneyFloor = -1;
-      }
-      if(this.timeValue1 != ""){
-        this.notarization.notarizationStartTimeStart = this.timeValue1.getTime();
-      }
-      if(this.timeValue2 != ""){
-        this.notarization.notarizationStartTimeEnd = this.timeValue2.getTime();
-      }
-      //加解密
-      if (this.decrypt_flag) {
-        this.notarization.decryptFlag = 1;
-      } else {
-        this.notarization.decryptFlag = 0;
-      }
+        if (this.notarization.notarizationType == "") {
+          this.notarization.notarizationType = "none";
+        }
+        //支付状态
+        if (this.notarization.paymentStatus == "") {
+          this.notarization.paymentStatus = "none";
+        }
+        //存证类型
+        if (this.notarization.evidenceType == "") {
+          this.notarization.evidenceType = "none";
+        }
+        //公证员
+        if (this.notarization.notaryId == "") {
+          this.notarization.notaryId = "none";
+        } //公证员编号
+        if (this.notarization.notaryNameWildcard == "") {
+          this.notarization.notaryNameWildcard = "none";
+        }
+        //公证金额
+        if (this.moneyState == "0") {
+          this.notarization.notarizationMoneyUpper = 100;
+          this.notarization.notarizationMoneyFloor = -1;
+        } else if (this.moneyState == "1") {
+          this.notarization.notarizationMoneyUpper = 300;
+          this.notarization.notarizationMoneyFloor = 100;
+        } else if (this.moneyState == "2") {
+          this.notarization.notarizationMoneyUpper = -1;
+          this.notarization.notarizationMoneyFloor = 300;
+        } else {
+          this.notarization.notarizationMoneyUpper = -1;
+          this.notarization.notarizationMoneyFloor = -1;
+        }
+        if (this.timeValue1 != "") {
+          this.notarization.notarizationStartTimeStart =
+            this.timeValue1.getTime();
+        }
+        if (this.timeValue2 != "") {
+          this.notarization.notarizationStartTimeEnd =
+            this.timeValue2.getTime();
+        }
+        //加解密
+        if (this.decrypt_flag) {
+          this.notarization.decryptFlag = 1;
+        } else {
+          this.notarization.decryptFlag = 0;
+        }
       } catch (error) {
         throw new Error(error.message);
       }
-    },/*
+    } /*
     tryy() {
       this.dealData();
       alert("公证开始时间1:"+this.notarization.notarizationStartTimeStart+"\n"
       +"公证开始时间2:"+this.notarization.notarizationStartTimeEnd+"\n"
       +"公证结束时间1:"+this.notarization.notarizationEndTimeStart+"\n"
       +"公证结束时间2:"+this.notarization.notarizationEndTimeEnd+"\n");
-    },*/
+    },*/,
   },
 };
 </script>

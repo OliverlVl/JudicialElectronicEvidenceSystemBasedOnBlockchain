@@ -205,6 +205,72 @@ export const orgQuery = data => fetch('/orgQuery',data, 'POST');
 
 
 
+/**
+* 	公证员信息修改
+*/
+export const notarregist = data => fetch('/notar/regist',data, 'POST');
+/**
+* 	公证员信息修改
+*/
+export const watchFile = data => fetch('/user/watchFile',data, 'POST');
+/**
+* 	用户信息查询
+*/
+export const userQuery = data => fetch('/aut/userQuery',data, 'POST');
+/**
+* 	公证员信息查询
+*/
+export const notaQuery = data => fetch('/aut/notaQuery',data, 'POST');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
