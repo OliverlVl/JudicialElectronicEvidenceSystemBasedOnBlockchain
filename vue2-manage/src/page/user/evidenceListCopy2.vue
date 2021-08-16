@@ -12,9 +12,11 @@
         placeholder="请输入存证名称"
         v-model="evidence.evidenceName"
         style="margin-left: 20%; width: 390px"
+        clearable
       >
+      <el-button slot="append" icon="el-icon-search" @click="getEvidenceData()"></el-button>
       </el-input>
-      <el-button type="primary" @click="getEvidenceData()">搜索</el-button>
+      
       <!-- <el-button type="primary" @click="handleSearch()">搜索</el-button> -->
       <el-button type="primary" @click="searchVisible = true">
         高级搜索
@@ -143,6 +145,7 @@
             v-model="evidence.evidenceName"
             placeholder="请输入存证名称"
             style="width: 30%"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="存证类型" prop="evidenceType">
@@ -488,7 +491,7 @@ export default {
         // 为空时后端所需的参数
         this.evidence.evidenceName = "none";
       }
-      if ((this.evidence.evidenceType = "")) {
+      if ((this.evidence.evidenceType == "")) {
         // 为空时后端所需的参数
         this.evidence.evidenceType = "none";
       }

@@ -2,15 +2,16 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="search_container">
-      
-     <el-input
+      <el-input
         placeholder="请输入存证名称"
         v-model="notarization.evidenceName"
         style="margin-left: 30%; width: 390px"
+        clearable
       >
+      <el-button slot="append" icon="el-icon-search" @click="getNotarizationData()"></el-button>
       </el-input>
-      <el-button type="primary" @click="handleSearch()">搜索</el-button>
-  
+
+
       <el-button type="primary" @click="searchVisible = true">
         高级搜索
       </el-button>
@@ -47,9 +48,7 @@
               <el-form-item label="公证申请区块链交易ID">
                 <span>{{ props.row.notarizationBlockchainIdStart }}</span>
               </el-form-item>
-              <el-form-item label="公证状态" class="notarizationStatus">
-                <span>{{ props.row.notarizationStatus }}</span>
-              </el-form-item>
+
               <el-form-item label="公证完成区块链交易ID">
                 <span>{{ props.row.notarizationBlockchainIdEnd }}</span>
               </el-form-item>
@@ -69,8 +68,9 @@
           </template>
         </el-table-column>
         <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
-        <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
         <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
+        <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
+
         <el-table-column
           label="公证类型"
           prop="notarizationType"
@@ -106,6 +106,7 @@
             v-model="notarization.evidenceName"
             placeholder="请输入存证名称"
             style="width: 30%"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="存证类型" prop="evidenceType">
@@ -218,11 +219,10 @@
 <script>
 import headTop from "../../components/headTop";
 import {
-  notarizationList,
-  reservationList,
-  delReservation,
-  agentList,
-  notarizationApplyList,
+  orgaQuery,
+  getEvidenceType,
+  noTypeQuery,
+  userNotarRecord,
 } from "@/api/getData";
 export default {
   data() {
@@ -241,6 +241,8 @@ export default {
         // 公证完成时间
         // 公证状态
         notarizationStatus: "",
+        // 公证机构
+        organizationId: "",
       },
       //
       decrypt_flag: true,
@@ -376,7 +378,8 @@ export default {
     };
   },
   created() {
-    this.initData();
+    // 获取数据
+    // this.getNotarizationData();
     this.getAgent();
     this.getEvidenceType();
     this.getNotarizationType();
@@ -445,6 +448,7 @@ export default {
         console.log(e);
       }
     },
+
     // 公证申请时间赋值
     selectNotarizationStartTime() {
       let start = this.notarizationStartTime[0];
@@ -462,131 +466,58 @@ export default {
       this.notarization.notarizationEndTimeEnd = end.getTime();
     },
 
-    // 获取公证机构列表
-    async getAgent() {
-      const result = await agentList();
-      if (result.error_code == 0) {
-        this.options_agent = [];
-        result.data.forEach((item, index) => {
-          let tableData = {};
-          (tableData.value = result.data[index].id),
-            (tableData.label = result.data[index].agent),
-            this.options_agent.push(tableData);
-        });
-      } else if (result.error_code != 0) {
-        throw new Error("获取数据失败");
+    // 获取数据
+    async getNotarizationData() {
+      // 关闭弹窗
+      this.searchVisible = false;
+      // 判断
+      if (this.notarization.evidenceName == "") {
+        this.notarization.evidenceName = "none";
       }
-    },
-    // 初始化数据
-    async initData() {
+      if (this.notarization.evidenceType == "") {
+        this.notarization.evidenceType = "none";
+      }
+      if (this.notarization.notarizationType == "") {
+        this.notarization.notarizationType = "none";
+      }
+      if (this.notarization.notarizationStatus == "") {
+        this.notarization.notarizationStatus = "none";
+      }
+      if (this.notarization.organizationId == "") {
+        this.notarization.organizationId = "none";
+      }
+      if (this.decrypt_flag == false) {
+        this.notarization.decryptFlag = 0;
+      }
+      // 请求数据
       try {
-        const query = {
-          telephone: this.telephone,
-          limit: this.pageSize,
-          page: this.pageIndex,
-        };
-        await notarizationApplyList(query).then((result) => {
-          if (result.error_code == 0) {
+        await userNotarRecord(this.notarization).then((result) => {
+          if (result.status == true) {
             this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
-              let tableData = {};
-
-              switch (result.data[index].status) {
-                case 1:
-                  tableData.reservation_status = "预约成功";
-                  break;
-                case 2:
-                  tableData.reservation_status = "预约失败";
-                  break;
-                case 3:
-                  tableData.reservation_status = "处理完毕";
-                  break;
-                case 4:
-                  tableData.reservation_status = "预约处理中";
-                  break;
-                case 5:
-                  tableData.reservation_status = "预约已撤销";
-                  break;
-              }
-              (tableData.id = result.data[index].id),
-                (tableData.notarization_name =
-                  result.data[index].notarization_name),
-                (tableData.notarization_name =
-                  result.data[index].law_notarization.notarization_name),
-                (tableData.reservation_time =
-                  result.data[index].reservation_from +
-                  "~" +
-                  result.data[index].reservation_to),
-                (tableData.apply_time = result.data[index].created_at),
-                this.tableData.push(tableData);
+            result.data.forEach((item) => {
+              this.tableData.push(item);
             });
-          } else if (result.error_code != 0) {
-            throw new Error("获取数据失败");
+            this.pageTotal = this.tableData.length;
+          } else {
+            console.log("获取数据失败");
           }
         });
       } catch (error) {
         throw new Error(error.message);
       }
+      this.notarization.evidenceName = "";
+      this.notarization.evidenceType = "";
+      this.notarization.notarizationType = "";
+      this.notarization.decryptFlag = "";
+      this.notarization.notarizationStatus = "";
+      this.notarization.organizationId = "";
     },
+
     // 处理导航页
     handlePageChange(val) {
       console.log(val);
       this.pageIndex = val;
-      this.initData();
-    },
-
-    // 搜索
-    async handleSearch() {
-      const query = {
-        start_time: this.start_time,
-        end_time: this.end_time,
-        notarization_id: this.value_apply,
-      };
-      //   console.log(query);
-      try {
-        await reservationList(query).then((result) => {
-          if (result.error_code == 0) {
-            this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
-              let tableData = {};
-              switch (result.data[index].status) {
-                case 1:
-                  tableData.reservation_status = "预约成功";
-                  break;
-                case 2:
-                  tableData.reservation_status = "预约失败";
-                  break;
-                case 3:
-                  tableData.reservation_status = "处理完毕";
-                  break;
-                case 4:
-                  tableData.reservation_status = "预约处理中";
-                  break;
-                case 5:
-                  tableData.reservation_status = "预约已撤销";
-                  break;
-              }
-              (tableData.id = result.data[index].id),
-                (tableData.notarization_name =
-                  result.data[index].notarization_name),
-                (tableData.notarization_id =
-                  result.data[index].notarization_id),
-                (tableData.reservation_time =
-                  result.data[index].reservation_from +
-                  "~" +
-                  result.data[index].reservation_to),
-                (tableData.apply_time = result.data[index].created_at),
-                this.tableData.push(tableData);
-            });
-          } else if (result.error_code != 0) {
-            throw new Error("获取数据失败");
-          }
-        });
-      } catch (error) {
-        throw new Error(error.message);
-      }
+      // this.initData();
     },
   },
 };
@@ -608,9 +539,6 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-}
-.notarizationStatus {
-  color: red;
 }
 .table_container {
   padding: 20px;
