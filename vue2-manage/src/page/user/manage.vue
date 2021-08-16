@@ -6,8 +6,8 @@
           :default-active="defaultActive"
           style="min-height: 100%"
           background-color="#545c64"
-		  text-color="#fff"
-		  active-text-color="#ffd04b"
+          text-color="#fff"
+          active-text-color="#ffd04b"
           router
         >
           <el-menu-item index="manage"
