@@ -41,11 +41,11 @@
               ><i class="el-icon-setting"></i>个人中心</template
             >
             <!-- <el-menu-item index="adminSet">用户设置</el-menu-item> -->
-            <el-menu-item index="integralShop">积分商店</el-menu-item>
-            <el-menu-item index="infoReset">信息修改</el-menu-item>
+            <el-menu-item index="capacityPackage">容量套餐</el-menu-item>
+            <el-menu-item index="wallet">钱包</el-menu-item>
             <!-- <el-menu-item index="moneyList">收支记录</el-menu-item> -->
             <el-menu-item index="moneyListCopy">交易记录</el-menu-item>
-            <el-menu-item index="infoShow">个人信息</el-menu-item>
+            <el-menu-item index="userInfoReset">个人信息</el-menu-item>
           </el-submenu>
           <el-submenu index="5">
             <template slot="title"

@@ -2,13 +2,14 @@
   <div>
     <head-top></head-top>
     <el-row style="margin-top: 20px">
-      <el-col :span="12" :offset="4">
+      <el-col :span="12" :offset="2">
         <el-form
           :model="formData"
           :rules="rules"
           ref="formData"
           label-width="200px"
           class="demo-formData"
+          
         >
           <el-form-item label="存证类型" prop="evidenceType">
             <el-select
@@ -164,7 +165,7 @@ export default {
 <style lang="less">
 @import "../../style/mixin";
 .button_submit {
-  text-align: center;
+  margin-left: 100px;
 }
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;

@@ -10,8 +10,6 @@
       >
       <el-button slot="append" icon="el-icon-search" @click="getNotarizationData()"></el-button>
       </el-input>
-
-
       <el-button type="primary" @click="searchVisible = true">
         高级搜索
       </el-button>

@@ -10,11 +10,9 @@ const manage = r => require.ensure([], () => r(require('@/page/user/manage')), '
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');//统计
 const explain = r => require.ensure([], () => r(require('@/page/user/explain')), 'explain');//说明
 const addEvidence = r => require.ensure([], () => r(require('@/page/user/addEvidence')), 'addEvidence'); //存证服务-新增存证
-const infoReset = r => require.ensure([], () => r(require('@/page/user/infoReset')), 'infoReset');//个人中心-信息修改
-const infoShow = r => require.ensure([], () => r(require('@/page/user/infoShow')), 'infoShow');//个人中心-个人信息（首页）
-const moneyList = r => require.ensure([], () => r(require('@/page/user/moneyList')), 'moneyList');//个人中心-收支记录
-const integralShop = r => require.ensure([], () => r(require('@/page/user/integralShop')), 'integralShop');//个人中心-积分商城
-
+const userInfoReset = r => require.ensure([], () => r(require('@/page/user/userInfoReset')), 'userInfoReset');//个人中心-信息修改
+const capacityPackage = r => require.ensure([], () => r(require('@/page/user/capacityPackage')), 'capacityPackage');//个人中心-容量套餐
+const wallet = r => require.ensure([], () => r(require('@/page/user/wallet')), 'wallet');//个人中心-钱包
 const notarizationListCopy = r => require.ensure([], () => r(require('@/page/user/notarizationListCopy')), 'notarizationListCopy');//公证服务-我的申办
 const moneyListCopy = r => require.ensure([], () => r(require('@/page/user/moneyListCopy')), 'moneyListCopy');//个人中心-交易记录
 const evidenceListCopy2 = r => require.ensure([], () => r(require('@/page/user/evidenceListCopy2')), 'evidenceListCopy2');//存证服务-存证列表
@@ -66,25 +64,21 @@ const routes = [
 			component: notarizationListCopy,
 			meta: ['公证服务', '公证列表'],
 		},{
-			path: '/infoReset',
-			component: infoReset,
-			meta: ['个人中心', '信息修改'],
+			path: '/capacityPackage',
+			component: capacityPackage,
+			meta: ['个人中心', '容量套餐'],
 		},{
-			path: '/infoShow',
-			component: infoShow,
-			meta: ['个人中心', '个人信息'],
-		},{
-			path: '/moneyList',
-			component: moneyList,
-			meta: ['个人中心', '收支记录'],
+			path: '/wallet',
+			component: wallet,
+			meta: ['个人中心', '钱包'],
 		},{
 			path: '/moneyListCopy',
 			component: moneyListCopy,
 			meta: ['个人中心', '交易记录'],
 		},{
-			path: '/integralShop',
-			component: integralShop,
-			meta: ['个人中心', '积分商店'],
+			path: '/userInfoReset',
+			component: userInfoReset,
+			meta: ['个人中心', '信息修改'],
 		},{
 			path: '/explain',
 			component: explain,
