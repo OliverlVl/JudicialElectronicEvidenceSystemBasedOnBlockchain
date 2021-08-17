@@ -2,39 +2,17 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="search_container">
-      &emsp; <span>证据名称:</span> &emsp;
       <el-input
         v-model="notarization.evidenceNameWildcard"
         placeholder="请输入证据名称"
-        style="width: 440px"
-      ></el-input>
-      &emsp; <span>申请人:</span> &emsp;
-      <el-input
-        v-model="notarization.usernameWildcard"
-        placeholder="请输入证据名称"
-        style="width: 440px"
-      ></el-input>
-    </div>
-    <div class="search_container">
-      &emsp; <span>公证员:</span> &emsp;&emsp;
-      <el-input
-        v-model="notarization.notaryNameWildcard"
-        placeholder="请输入证据名称"
-        style="width: 440px"
-      ></el-input>
-      <el-switch
-        v-model="decrypt_flag"
-        on-text="解密"
-        off-text="加密"
-        style="margin-left: 30px"
-      ></el-switch>
-
-      <el-button
-        type="primary"
-        @click="handleSearch()"
-        style="margin-left: 18px"
-        >搜索
-      </el-button>
+        style="width: 390px; margin-left: 30%"
+      >
+        <el-button
+          slot="append"
+          icon="el-icon-search"
+          @click="handleSearch()"
+        ></el-button>
+      </el-input>
 
       <el-button
         type="primary"
@@ -49,7 +27,7 @@
       :visible.sync="searchVisible"
       style="width: 100%"
     >
-      <el-form label-width="100px" inline>
+      <el-form label-width="200px">
         <el-form-item label="公证开始时间:">
           <el-date-picker
             v-model="timeValue1"
@@ -78,27 +56,19 @@
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="存证编号:">
+        <el-form-item label="申请人:">
           <el-input
-            v-model="notarization.evidenceId"
-            placeholder="请输入存证编号"
-            style="width: 230px"
-          ></el-input>
-        </el-form-item>
-
-        <el-form-item label="申请人编号:">
-          <el-input
-            v-model="notarization.userId"
-            placeholder="请输入申请人编号"
+            v-model="notarization.usernameWildcard"
+            placeholder="请输入申请人"
             style="width: 240px"
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="公证员编号:">
+        <el-form-item label="公证员:">
           <el-input
-            v-model="notarization.notaryId"
-            placeholder="请输入公证员编号"
-            style="width: 230px"
+            v-model="notarization.notaryNameWildcard"
+            placeholder="请输入公证员"
+            style="width: 240px"
           ></el-input>
         </el-form-item>
 
@@ -106,6 +76,7 @@
           <el-select
             v-model="notarization.notarizationStatus"
             placeholder="请选择"
+            style="width: 240px"
           >
             <el-option
               v-for="item in notarization_state"
@@ -121,7 +92,7 @@
           <el-select
             v-model="notarization.evidenceType"
             placeholder="请选择"
-            style="width: 230px"
+            style="width: 240px"
           >
             <el-option
               v-for="item in evidence_type"
@@ -137,6 +108,7 @@
           <el-select
             v-model="notarization.notarizationType"
             placeholder="请选择"
+            style="width: 240px"
           >
             <el-option
               v-for="item in notarization_type"
@@ -149,7 +121,11 @@
         </el-form-item>
 
         <el-form-item label="公证金额:">
-          <el-select v-model="moneyState" placeholder="请选择">
+          <el-select
+            v-model="moneyState"
+            style="width: 240px"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in money_choose"
               :key="item.value"
@@ -159,21 +135,52 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="明文/密文显示">
+          <el-switch
+            v-model="decrypt_flag"
+            active-text="明文"
+            inactive-text="密文"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
+        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
-        <el-button @click="handleSearch(); searchVisible = false" type="primary">确 定</el-button>
+        <el-button
+          @click="
+            handleSearch();
+            searchVisible = false;
+          "
+          type="primary"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
 
     <!-- 列表 -->
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
+            <el-form
+              label-position="left"
+              inline
+              class="demo-table-expand"
+              label-width="160px"
+            >
+              <el-form-item label="文件目录">
+                <span>{{ props.row.filePath }}</span>
+              </el-form-item>
+              <el-form-item label="文件大小">
+                <span>{{ props.row.fileSize }}</span>
+              </el-form-item>
               <el-form-item label="文件哈希">
                 <span>{{ props.row.fileHash }}</span>
+              </el-form-item>
+              <el-form-item label="存证类型">
+                <span>{{ props.row.evidenceType }}</span>
               </el-form-item>
               <el-form-item label="存证时间">
                 <span>{{ props.row.evidenceTime }}</span>
@@ -181,32 +188,26 @@
               <el-form-item label="上链时间">
                 <span>{{ props.row.blockchainTime }}</span>
               </el-form-item>
-              <el-form-item label="证据保存区块ID">
-                <span>{{ props.row.evidenceBlockchainId }}</span>
-              </el-form-item>
-              <el-form-item label="公证完成时间">
-                <span>{{ props.row.notarizationEndTime }}</span>
-              </el-form-item>
-              <el-form-item label="公证状态">
-                <span>{{ props.row.notarizationStatus }}</span>
-              </el-form-item>
-              <el-form-item label="存证类型">
-                <span>{{ props.row.evidenceType }}</span>
-              </el-form-item>
-              <el-form-item label="公证金额">
-                <span>{{ props.row.notarizationMoney }}</span>
-              </el-form-item>
-              <el-form-item label="公证申请区块ID">
-                <span>{{ props.row.notarizationBlockchainIdStart }}</span>
-              </el-form-item>
-              <el-form-item label="公证完成区块ID">
-                <span>{{ props.row.notarizationBlockchainIdEnd }}</span>
-              </el-form-item>
               <el-form-item label="审核信息">
                 <span>{{ props.row.notarizationInformation }}</span>
               </el-form-item>
               <el-form-item label="申请事项">
                 <span>{{ props.row.notarizationMatters }}</span>
+              </el-form-item>
+              <el-form-item label="公证完成时间">
+                <span>{{ props.row.notarizationEndTime }}</span>
+              </el-form-item>
+              <el-form-item label="公证金额">
+                <span>{{ props.row.notarizationMoney }}</span>
+              </el-form-item>
+              <el-form-item label="公证申请区块链交易ID">
+                <span>{{ props.row.notarizationBlockchainIdStart }}</span>
+              </el-form-item>
+              <el-form-item label="公证完成区块链交易ID">
+                <span>{{ props.row.notarizationBlockchainIdEnd }}</span>
+              </el-form-item>
+              <el-form-item label="存证区块链交易ID">
+                <span>{{ props.row.evidenceBlockchainId }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -214,8 +215,19 @@
         <el-table-column label="公证员" prop="notaryId"></el-table-column>
         <el-table-column label="申请人" prop="userId"></el-table-column>
         <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
-        <el-table-column label="公证类型" prop="notarizationType"></el-table-column>
-        <el-table-column label="公证申请时间" prop="notarizationStartTime"></el-table-column>
+        <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
+        <el-table-column
+          label="公证类型"
+          prop="notarizationType"
+        ></el-table-column>
+        <el-table-column
+          label="公证申请时间"
+          prop="notarizationStartTime"
+        ></el-table-column>
+        <el-table-column
+          label="公证状态"
+          prop="notarizationStatus"
+        ></el-table-column>
       </el-table>
       <!-- 分页-->
       <div class="pagination">
@@ -235,11 +247,7 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { 
-  notarmanageRecord,
-  eviTypeQuery,
-  noTypeQuery,
- } from "@/api/getData";
+import { notarmanageRecord, eviTypeQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
@@ -260,11 +268,9 @@ export default {
       decrypt_flag: true,
 
       notarization: {
-        evidenceId: "",
-        userId: "",
         usernameWildcard: "",
         evidenceNameWildcard: "",
-        notarizationStatus: "3",
+        notarizationStatus: "",
         notarizationType: "",
         evidenceType: "",
         decryptFlag: 1,
@@ -274,7 +280,6 @@ export default {
         notarizationStartTimeEnd: "none",
         notarizationEndTimeStart: "none",
         notarizationEndTimeEnd: "none",
-        notaryId: "",
         notaryNameWildcard: "",
       },
       notarization_state: [
@@ -412,31 +417,50 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
-        await notarmanageRecord(this.notarization).then((result) => {
-          if (result.status) {
-            this.tableData = [];
-            result.data.forEach((item) => {
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-          } else {
-            throw new Error("获取数据失败");
-          }
-        });
+        if (this.notarization.notarizationStatus == "none") {
+          this.notarization.notarizationStatus == "3";
+          await notarmanageRecord(this.notarization).then((result) => {
+            if (result.status) {
+              this.tableData = [];
+              result.data.forEach((item) => {
+                this.tableData.push(item);
+              });
+            } else {
+              throw new Error("获取数据失败");
+            }
+          });
+          this.notarization.notarizationStatus == "4";
+          await notarmanageRecord(this.notarization).then((result) => {
+            if (result.status) {
+              result.data.forEach((item) => {
+                this.tableData.push(item);
+              });
+              this.pageTotal = this.tableData.length;
+            } else {
+              throw new Error("获取数据失败");
+            }
+          });
+          this.notarization.notarizationStatus == "none";
+        } else {
+          await notarmanageRecord(this.notarization).then((result) => {
+            if (result.status) {
+              this.tableData = [];
+              result.data.forEach((item) => {
+                this.tableData.push(item);
+              });
+              this.pageTotal = this.tableData.length;
+            } else {
+              throw new Error("获取数据失败");
+            }
+          });
+        }
+        this.resetData();
       } catch (error) {
         throw new Error(error.message);
       }
     },
     dealData() {
       try {
-        //存证编号
-        if (this.notarization.evidenceId == "") {
-          this.notarization.evidenceId = "none";
-        }
-        //用户编号
-        if (this.notarization.userId == "") {
-          this.notarization.userId = "none";
-        }
         //用户名
         if (this.notarization.usernameWildcard == "") {
           this.notarization.usernameWildcard = "none";
@@ -446,56 +470,93 @@ export default {
           this.notarization.evidenceNameWildcard = "none";
         }
         //公证类型
-      if (this.notarization.notarizationType == "") {
-        this.notarization.notarizationType = "none";
-      }
-      //存证类型
-      if (this.notarization.evidenceType == "") {
-        this.notarization.evidenceType = "none";
-      }
-      //公证员
-      if (this.notarization.notaryId == "") {
-        this.notarization.notaryId = "none";
-      }//公证员编号
-      if (this.notarization.notaryNameWildcard == "") {
-        this.notarization.notaryNameWildcard = "none";
-      }
-      //公证金额
-      if(this.moneyState == "0"){
-        this.notarization.notarizationMoneyUpper = 100;
-        this.notarization.notarizationMoneyFloor = -1;
-      }else if(this.moneyState == "1"){
-        this.notarization.notarizationMoneyUpper = 300;
-        this.notarization.notarizationMoneyFloor = 100;
-      }else if(this.moneyState == "2"){
-        this.notarization.notarizationMoneyUpper = -1;
-        this.notarization.notarizationMoneyFloor = 300;
-      }else{
-        this.notarization.notarizationMoneyUpper = -1;
-        this.notarization.notarizationMoneyFloor = -1;
-      }
-      if(this.timeValue1 != ""){
-        this.notarization.notarizationStartTimeStart = this.timeValue1.getTime();
-      }
-      if(this.timeValue2 != ""){
-        this.notarization.notarizationStartTimeEnd = this.timeValue2.getTime();
-      }
-      if(this.timeValue3 != ""){
-        this.notarization.notarizationEndTimeStart = this.timeValue3.getTime();
-      }
-      if(this.timeValue4 != ""){
-        this.notarization.notarizationEndTimeEnd = this.timeValue4.getTime();
-      }
-      //加解密
-      if (this.decrypt_flag) {
-        this.notarization.decryptFlag = 1;
-      } else {
-        this.notarization.decryptFlag = 0;
-      }
+        if (this.notarization.notarizationType == "") {
+          this.notarization.notarizationType = "none";
+        }
+        //存证类型
+        if (this.notarization.evidenceType == "") {
+          this.notarization.evidenceType = "none";
+        }
+        //公证状态
+        if (this.notarization.notarizationStatus == "") {
+          this.notarization.notarizationStatus = "none";
+        }
+        //公证员
+        if (this.notarization.notaryNameWildcard == "") {
+          this.notarization.notaryNameWildcard = "none";
+        }
+        //公证金额
+        if (this.moneyState == "0") {
+          this.notarization.notarizationMoneyUpper = 100;
+          this.notarization.notarizationMoneyFloor = -1;
+        } else if (this.moneyState == "1") {
+          this.notarization.notarizationMoneyUpper = 300;
+          this.notarization.notarizationMoneyFloor = 100;
+        } else if (this.moneyState == "2") {
+          this.notarization.notarizationMoneyUpper = -1;
+          this.notarization.notarizationMoneyFloor = 300;
+        } else {
+          this.notarization.notarizationMoneyUpper = -1;
+          this.notarization.notarizationMoneyFloor = -1;
+        }
+        //时间
+        if (this.timeValue1 != "") {
+          this.notarization.notarizationStartTimeStart =
+            this.timeValue1.getTime();
+        }
+        if (this.timeValue2 != "") {
+          this.notarization.notarizationStartTimeEnd =
+            this.timeValue2.getTime();
+        }
+        if (this.timeValue3 != "") {
+          this.notarization.notarizationEndTimeStart =
+            this.timeValue3.getTime();
+        }
+        if (this.timeValue4 != "") {
+          this.notarization.notarizationEndTimeEnd = this.timeValue4.getTime();
+        }
+        //加解密
+        if (this.decrypt_flag) {
+          this.notarization.decryptFlag = 1;
+        } else {
+          this.notarization.decryptFlag = 0;
+        }
+        //alert(this.notarization.decryptFlag);
       } catch (error) {
         throw new Error(error.message);
       }
-    },/*
+    },
+    resetData() {
+      try {
+        //用户名
+        if (this.notarization.usernameWildcard == "none") {
+          this.notarization.usernameWildcard = "";
+        }
+        //存证名称
+        if (this.notarization.evidenceNameWildcard == "none") {
+          this.notarization.evidenceNameWildcard = "";
+        }
+        //公证类型
+        if (this.notarization.notarizationType == "none") {
+          this.notarization.notarizationType = "";
+        }
+        //存证类型
+        if (this.notarization.evidenceType == "none") {
+          this.notarization.evidenceType = "";
+        }
+        //公证员
+        if (this.notarization.notaryNameWildcard == "none") {
+          this.notarization.notaryNameWildcard = "";
+        }
+        //公证状态
+        if (this.notarization.notarizationStatus == "none") {
+          this.notarization.notarizationStatus = "";
+        }
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+    /*
     tryy() {
       this.dealData();
       alert("公证开始时间1:"+this.notarization.notarizationStartTimeStart+"\n"
@@ -514,12 +575,6 @@ export default {
   padding-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
-}
-.el-select .el-input {
-  width: 130px;
-}
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
 }
 .demo-table-expand {
   font-size: 0;

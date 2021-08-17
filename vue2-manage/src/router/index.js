@@ -114,7 +114,7 @@ const routes = [
 		},{
 			path: '/bookDeal',
 			component: bookDeal,
-			meta: ['公证中心', '可申请列表'],
+			meta: ['公证中心', '可公证列表'],
 		}]
 	},
 	{
@@ -128,11 +128,11 @@ const routes = [
 		},{
 			path: '/totalNotarization',
 			component: totalNotarization,
-			meta: ['公证管理', '待处理公证列表'],
+			meta: ['公证管理', '待处理列表'],
 		},{
 			path: '/totalNotarizationApply',
 			component: totalNotarizationApply,
-			meta: ['公证管理', '已处理公证列表'],
+			meta: ['公证管理', '已处理列表'],
 		},{
 			path: '/totalUser',
 			component: totalUser,

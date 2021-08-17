@@ -1,35 +1,33 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container" style="margin-left: 30%">
-      申请人:
+    <div class="search_container">
       <el-input
-        v-model="searchQuery.userId"
+        v-model="this.searchQuery.usernameWildcard"
         placeholder="请输入申请人"
-        style="width: 280px"
-      ></el-input>
-      <el-button type="primary" @click="handleSearch()">搜索</el-button>
+        style="width: 390px; margin-left: 30%"
+      >
+        <el-button
+          slot="append"
+          icon="el-icon-search"
+          @click="handleSearch()"
+        ></el-button>
+      </el-input>
+
       <el-button
         type="primary"
         @click="searchVisible = true"
         style="margin-left: 18px"
         >高级搜索
       </el-button>
+      <!--<el-button @click="tryy()">尝试</el-button>-->
     </div>
     <el-dialog
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
     >
-      <el-form label-width="100px">
-        <el-form-item label="申请人编号:">
-          <el-input
-            v-model="searchQuery.userId"
-            placeholder="请输入申请人编号"
-            style="width: 240px"
-          ></el-input>
-        </el-form-item>
-
+      <el-form label-width="200px">
         <el-form-item label="存证名称:">
           <el-input
             v-model="searchQuery.evidenceNameWildcard"
@@ -38,16 +36,13 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="存证编号:">
-          <el-input
-            v-model="searchQuery.evidenceId"
-            placeholder="请输入存证编号"
-            style="width: 240px"
-          ></el-input>
-        </el-form-item>
-
         <el-form-item label="存证类型:">
-          <el-select v-model="searchQuery.evidenceType" filterable placeholder="请选择">
+          <el-select
+            v-model="searchQuery.evidenceType"
+            filterable
+            style="width: 240px"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in evidence_type"
               :key="item.value"
@@ -62,6 +57,7 @@
           <el-select
             v-model="searchQuery.notarizationType"
             placeholder="请选择"
+            style="width: 240px"
             filterable
           >
             <el-option
@@ -75,7 +71,11 @@
         </el-form-item>
 
         <el-form-item label="支付状态:">
-          <el-select v-model="searchQuery.paymentStatus" placeholder="请选择">
+          <el-select
+            v-model="searchQuery.paymentStatus"
+            style="width: 240px"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in payment_type"
               :key="item.value"
@@ -87,7 +87,11 @@
         </el-form-item>
 
         <el-form-item label="公证金额:">
-          <el-select v-model="moneyState" placeholder="请选择">
+          <el-select
+            v-model="moneyState"
+            style="width: 240px"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in money_choose"
               :key="item.value"
@@ -96,6 +100,17 @@
             >
             </el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="明文/密文显示">
+          <el-switch
+            v-model="decrypt_flag"
+            active-text="明文"
+            inactive-text="密文"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -111,10 +126,18 @@
       </div>
     </el-dialog>
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData"  stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
+            <el-form
+              label-position="left"
+              inline
+              label-width="160px"
+              class="demo-table-expand"
+            >
+              <el-form-item label="文件目录">
+                <span>{{ props.row.filePath }}</span>
+              </el-form-item>
               <el-form-item label="文件大小">
                 <span>{{ props.row.fileSize }}</span>
               </el-form-item>
@@ -127,20 +150,20 @@
               <el-form-item label="上链时间">
                 <span>{{ props.row.blockchainTime }}</span>
               </el-form-item>
+              <el-form-item label="公证申请时间">
+                <span>{{ props.row.notarizationStartTime }}</span>
+              </el-form-item>
               <el-form-item label="存证区块链交易ID">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
               </el-form-item>
-              <el-form-item label="公证状态">
-                <span>{{ props.row.notarizationStatus }}</span>
+              <el-form-item label="公证申请区块链交易ID">
+                <span>{{ props.row.notarizationBlockchainIdStart }}</span>
               </el-form-item>
               <el-form-item label="公证金额">
                 <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
               <el-form-item label="交易支付状态">
                 <span>{{ props.row.transactionStatus }}</span>
-              </el-form-item>
-              <el-form-item label="公证申请时间">
-                <span>{{ props.row.notarizationStartTime }}</span>
               </el-form-item>
             </el-form>
           </template>
@@ -169,9 +192,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="search_container">
-        <el-switch v-model="decrypt" on-text="解密" off-text="加密"></el-switch>
-      </div>
       <div class="pagination">
         <el-pagination
           background
@@ -201,11 +221,11 @@ export default {
     return {
       //解密
       searchVisible: false,
-      decrypt: true,
+      decrypt_flag: true,
       decryptFlag: 1,
       moneyState: "",
       // 表格
-      tableData: [{}],
+      tableData: [{},{}],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -213,8 +233,6 @@ export default {
       //公证员ID
       notary_id: "",
       searchQuery: {
-        evidenceId: "",
-        userId: "",
         usernameWildcard: "",
         evidenceNameWildcard: "",
         notarizationStatus: "1",
@@ -282,7 +300,7 @@ export default {
     // 初始化数据
     async initData() {
       try {
-        if (this.decrypt) {
+        if (this.decrypt_flag) {
           this.decryptFlag = 1;
         } else {
           this.decryptFlag = 0;
@@ -339,7 +357,7 @@ export default {
       if (result.status) {
         alert("你已成功申请");
       } else {
-        alert("预约失败");
+        alert("申请失败");
       }
     },
     async handleSearch() {
@@ -356,20 +374,13 @@ export default {
             throw new Error("获取数据失败");
           }
         });
+        this.resetData();
       } catch (error) {
         throw new Error(error.message);
       }
     },
     dealData() {
       try {
-        //存证编号
-        if (this.searchQuery.evidenceId == "") {
-          this.searchQuery.evidenceId = "none";
-        }
-        //用户编号
-        if (this.searchQuery.userId == "") {
-          this.searchQuery.userId = "none";
-        }
         //用户名
         if (this.searchQuery.usernameWildcard == "") {
           this.searchQuery.usernameWildcard = "none";
@@ -405,10 +416,36 @@ export default {
           this.searchQuery.notarizationMoneyFloor = -1;
         }
         //加解密
-        if (this.decrypt) {
+        if (this.decrypt_flag) {
           this.searchQuery.decryptFlag = 1;
         } else {
           this.searchQuery.decryptFlag = 0;
+        }
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+    resetData() {
+      try {
+        //用户名
+        if (this.searchQuery.usernameWildcard == "none") {
+          this.searchQuery.usernameWildcard = "";
+        }
+        //存证名称
+        if (this.searchQuery.evidenceNameWildcard == "none") {
+          this.searchQuery.evidenceNameWildcard = "";
+        }
+        //公证类型
+        if (this.searchQuery.notarizationType == "none") {
+          this.searchQuery.notarizationType = "";
+        }
+        //支付状态
+        if (this.searchQuery.paymentStatus == "none") {
+          this.searchQuery.paymentStatus = "";
+        }
+        //存证类型
+        if (this.searchQuery.evidenceType == "none") {
+          this.searchQuery.evidenceType = "";
         }
       } catch (error) {
         throw new Error(error.message);
@@ -422,12 +459,6 @@ export default {
 @import "../../style/mixin";
 .search_container {
   padding: 20px;
-}
-.el-select .el-input {
-  width: 130px;
-}
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
 }
 .demo-table-expand {
   font-size: 0;

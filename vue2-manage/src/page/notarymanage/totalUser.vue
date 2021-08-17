@@ -1,14 +1,18 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container" style="margin-left: 30%">
-      用户名:
+    <div class="search_container">
       <el-input
         v-model="userInfo.usernameWildcard"
-        placeholder="请输入用户名称"
-        style="width: 280px"
-      ></el-input>
-      <el-button type="primary" @click="handleSearch()">搜索</el-button>
+        placeholder="请输入用户名"
+        style="width: 390px; margin-left: 30%"
+      >
+        <el-button
+          slot="append"
+          icon="el-icon-search"
+          @click="handleSearch()"
+        ></el-button>
+      </el-input>
       <el-button
         type="primary"
         @click="searchVisible = true"
@@ -21,12 +25,12 @@
       :visible.sync="searchVisible"
       style="width: 100%"
     >
-      <el-form label-width="100px">
+      <el-form label-width="200px">
         <el-form-item label="用户编号:">
           <el-input
             v-model="userInfo.userId"
             placeholder="请输入用户编号"
-            style="width: 50%"
+            style="width: 240px"
           ></el-input>
         </el-form-item>
 
@@ -34,7 +38,7 @@
           <el-input
             v-model="userInfo.phoneNumberWildcard"
             placeholder="请输入手机号"
-            style="width: 50%"
+            style="width: 240px"
           ></el-input>
         </el-form-item>
 
@@ -42,7 +46,7 @@
           <el-input
             v-model="userInfo.idCard"
             placeholder="请输入身份证号"
-            style="width: 50%"
+            style="width: 240px"
           ></el-input>
         </el-form-item>
 
@@ -50,12 +54,16 @@
           <el-input
             v-model="userInfo.emailWildcard"
             placeholder="请输入邮箱"
-            style="width: 50%"
+            style="width: 240px"
           ></el-input>
         </el-form-item>
 
         <el-form-item label="性别:">
-          <el-select v-model="userInfo.sex" placeholder="请选择">
+          <el-select
+            v-model="userInfo.sex"
+            style="width: 240px"
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in sex_state"
               :key="item.value"
@@ -64,6 +72,17 @@
             >
             </el-option>
           </el-select>
+        </el-form-item>
+
+        <el-form-item label="明文/密文显示">
+          <el-switch
+            v-model="decrypt_flag"
+            active-text="明文"
+            inactive-text="密文"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+          </el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -79,7 +98,7 @@
       </div>
     </el-dialog>
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -231,7 +250,7 @@ export default {
       //加解密
       if (this.decrypt_flag) {
         this.userInfo.decryptFlag = 1;
-      }else{
+      } else {
         this.userInfo.decryptFlag = 0;
       }
       //alert(this.userInfo.decryptFlag);
@@ -251,8 +270,35 @@ export default {
             throw new Error("获取数据失败");
           }
         });
+        this.resetData();
       } catch (error) {
         throw new Error(error.message);
+      }
+    },
+    dealData() {
+      //用户编号
+      if (this.userInfo.userId == "none") {
+        this.userInfo.userId = "";
+      }
+      //用户名
+      if (this.userInfo.usernameWildcard == "none") {
+        this.userInfo.usernameWildcard = "";
+      }
+      //电话号码
+      if (this.userInfo.phoneNumberWildcard == "none") {
+        this.userInfo.phoneNumberWildcard = "";
+      }
+      //身份证号
+      if (this.userInfo.idCard == "none") {
+        this.userInfo.idCard = "";
+      }
+      //邮箱
+      if (this.userInfo.emailWildcard == "none") {
+        this.userInfo.emailWildcard = "";
+      }
+      //性别
+      if (this.userInfo.sex == "none") {
+        this.userInfo.sex = "";
       }
     },
     handleDel() {
@@ -265,12 +311,6 @@ export default {
 @import "../../style/mixin";
 .search_container {
   padding: 20px;
-}
-.el-select .el-input {
-  width: 130px;
-}
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
 }
 .demo-table-expand {
   font-size: 0;
