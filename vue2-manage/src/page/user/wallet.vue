@@ -163,8 +163,8 @@
             type="datetimerange"
             align="left"
             unlink-panels
-            start-placeholder="交易开始时间"
-            end-placeholder="交易结束时间"
+            start-placeholder="提现开始时间"
+            end-placeholder="提现结束时间"
             range-separator="至"
             :picker-options="pickerOptions"
             @change="selectTransactionTime"
@@ -213,8 +213,8 @@
             type="datetimerange"
             align="left"
             unlink-panels
-            start-placeholder="交易开始时间"
-            end-placeholder="交易结束时间"
+            start-placeholder="转账开始时间"
+            end-placeholder="转账结束时间"
             range-separator="至"
             :picker-options="pickerOptions"
             @change="selectTransactionTime"
