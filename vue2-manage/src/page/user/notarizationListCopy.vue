@@ -8,7 +8,11 @@
         style="margin-left: 30%; width: 390px"
         clearable
       >
-      <el-button slot="append" icon="el-icon-search" @click="getNotarizationData()"></el-button>
+        <el-button
+          slot="append"
+          icon="el-icon-search"
+          @click="getNotarizationData()"
+        ></el-button>
       </el-input>
       <el-button type="primary" @click="searchVisible = true">
         高级搜索
@@ -308,57 +312,6 @@ export default {
       // 公证机构
       organization: [],
 
-      // 公证机构
-      value_agent: "",
-      options_agent: [],
-      // 订单状态
-      value_order: "",
-      options_order: [
-        {
-          value: "不限",
-          label: "不限",
-        },
-        {
-          value: "0",
-          label: "失败",
-        },
-        {
-          value: "1",
-          label: "成功",
-        },
-        {
-          value: "2",
-          label: "审核中",
-        },
-      ],
-      // 支付状态
-      value_pay: "",
-      options_pay: [
-        {
-          value: "0",
-          label: "不限",
-        },
-        {
-          value: "1",
-          label: "未支付",
-        },
-        {
-          value: "2",
-          label: "已支付",
-        },
-        {
-          value: "3",
-          label: "退款中",
-        },
-        {
-          value: "4",
-          label: "已退款",
-        },
-        {
-          value: "5",
-          label: "线下支付",
-        },
-      ],
       // 表格
       tableData: [
         {
@@ -506,7 +459,7 @@ export default {
       this.notarization.evidenceName = "";
       this.notarization.evidenceType = "";
       this.notarization.notarizationType = "";
-      this.notarization.decryptFlag = "";
+      this.notarization.decryptFlag = 1;
       this.notarization.notarizationStatus = "";
       this.notarization.organizationId = "";
     },

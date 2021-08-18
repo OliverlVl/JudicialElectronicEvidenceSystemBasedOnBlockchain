@@ -117,7 +117,10 @@ export const eviTypeQuery = data => fetch('/eviTypeQuery',data, 'POST');
 export const orgQuery = data => fetch('/orgQuery',data, 'POST');
 
 
-
+/**
+* 	交易记录查询
+*/
+export const transQuery = data => fetch('/user/transQuery',data, 'POST');
 
 
 

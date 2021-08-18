@@ -104,16 +104,171 @@
         <el-button type="danger" @click="transfer()">确定转账</el-button>
       </div>
     </el-dialog>
+
+    <div class="info_container">
+      <el-tabs type="border-card" @tab-click="handleClick">
+        <el-tab-pane label="充值记录">
+          <el-date-picker
+            v-model="transactionTime"
+            type="datetimerange"
+            align="left"
+            unlink-panels
+            start-placeholder="交易开始时间"
+            end-placeholder="交易结束时间"
+            range-separator="至"
+            :picker-options="pickerOptions"
+            @change="selectTransactionTime"
+            style="margin-left: 30%"
+          ></el-date-picker>
+          <el-button type="primary" @click="getTransactionData()">
+            搜索
+          </el-button>
+          <el-table :data="tableData" style="width: 100%" stripe>
+            <el-table-column
+              type="index"
+              label="序号"
+              width="100"
+            ></el-table-column>
+            <el-table-column
+              label="交易编号"
+              prop="transactionId"
+            ></el-table-column>
+            <el-table-column
+              label="交易金额"
+              prop="transactionMoney"
+            ></el-table-column>
+            <el-table-column
+              label="交易时间"
+              prop="transactionTime"
+            ></el-table-column>
+            <el-table-column
+              label="区块链ID"
+              prop="transactionBlockchainId"
+            ></el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :current-page="pageIndex"
+              :page-size="pageSize"
+              :total="pageTotal"
+              @current-change="handlePageChange"
+            ></el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="提现记录">
+          <el-date-picker
+            v-model="transactionTime"
+            type="datetimerange"
+            align="left"
+            unlink-panels
+            start-placeholder="交易开始时间"
+            end-placeholder="交易结束时间"
+            range-separator="至"
+            :picker-options="pickerOptions"
+            @change="selectTransactionTime"
+            style="margin-left: 30%"
+          ></el-date-picker>
+          <el-button type="primary" @click="getTransactionData()">
+            搜索
+          </el-button>
+          <el-table :data="tableData" style="width: 100%" stripe>
+            <el-table-column
+              type="index"
+              label="序号"
+              width="100"
+            ></el-table-column>
+            <el-table-column
+              label="交易编号"
+              prop="transactionId"
+            ></el-table-column>
+            <el-table-column
+              label="提现金额"
+              prop="transactionMoney"
+            ></el-table-column>
+            <el-table-column
+              label="提现时间"
+              prop="transactionTime"
+            ></el-table-column>
+            <el-table-column
+              label="区块链ID"
+              prop="transactionBlockchainId"
+            ></el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :current-page="pageIndex"
+              :page-size="pageSize"
+              :total="pageTotal"
+              @current-change="handlePageChange"
+            ></el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="转账记录">
+          <el-date-picker
+            v-model="transactionTime"
+            type="datetimerange"
+            align="left"
+            unlink-panels
+            start-placeholder="交易开始时间"
+            end-placeholder="交易结束时间"
+            range-separator="至"
+            :picker-options="pickerOptions"
+            @change="selectTransactionTime"
+            style="margin-left: 30%"
+          ></el-date-picker>
+          <el-button type="primary" @click="getTransactionData()">
+            搜索
+          </el-button>
+          <el-table :data="tableData" style="width: 100%" stripe>
+            <el-table-column
+              type="index"
+              label="序号"
+              width="100"
+            ></el-table-column>
+            <el-table-column
+              label="交易编号"
+              prop="transactionId"
+            ></el-table-column>
+            <el-table-column
+              label="转账金额"
+              prop="transactionMoney"
+            ></el-table-column>
+            <el-table-column
+              label="转账时间"
+              prop="transactionTime"
+            ></el-table-column>
+            <el-table-column
+              label="区块链ID"
+              prop="transactionBlockchainId"
+            ></el-table-column>
+            <el-table-column
+              label="转账对象"
+              prop="transactionPeople"
+            ></el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total, prev, pager, next"
+              :current-page="pageIndex"
+              :page-size="pageSize"
+              :total="pageTotal"
+              @current-change="handlePageChange"
+            ></el-pagination>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
 <script>
 import headTop from "@/components/headTop";
-import {
-  charge,
-  withdraw,
-  give,
-} from "@/api/getData";
+import { charge, withdraw, give } from "@/api/getData";
 export default {
   data() {
     return {
@@ -126,6 +281,62 @@ export default {
         transactionMoney: "",
         transactionPeople: "",
       },
+
+      transaction: {
+        userId: sessionStorage.getItem("userID"),
+        // 交易类型
+        transactionType: "充值",
+        decryptFlag: 1,
+      },
+
+      //时间选择器
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
+
+      transactionTime: "",
+
+      // 表格
+      tableData: [
+        {
+          transactionTime: "",
+          transactionPeople: "",
+        },
+        {},
+        {},
+      ],
+      // 获取数据
+      pageTotal: 0,
+      pageIndex: 1,
+      pageSize: 10,
     };
   },
 
@@ -133,8 +344,20 @@ export default {
   components: {
     headTop,
   },
+  created() {
+    thi.getTransactionData();
+  },
 
   methods: {
+    // 交易时间赋值
+    selectTransactionTime() {
+      let start = this.transactionTime[0];
+      let end = this.transactionTime[1];
+      this.transaction.transactionTimeStart = start.getTime();
+      this.transaction.transactionTimeEnd = end.getTime();
+      console.log();
+    },
+
     //充值
     async recharge() {
       try {
@@ -205,6 +428,48 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+
+    // tab 被选中时触发
+    handleClick(tab, event) {
+      console.log(tab, event);
+      if (tab.label == "充值记录") {
+        this.transaction.transactionType = "充值";
+        this.getTransactionData();
+      } else if (tab.label == "提现记录") {
+        this.transaction.transactionType = "提现";
+        this.getTransactionData();
+      } else if (tab.label == "转账记录") {
+        this.transaction.transactionType = "转赠";
+        this.getTransactionData();
+      }
+    },
+
+    // 获取数据
+    async getTransactionData() {
+      try {
+        // 请求数据
+        await transQuery(this.transaction).then((result) => {
+          if (result.status == true) {
+            this.tableData = [];
+            result.data.forEach((item) => {
+              this.tableData.push(item);
+            });
+            this.pageTotal = this.tableData.length;
+          } else {
+            console.log("获取数据失败");
+          }
+        });
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+
+    // 处理导航页
+    handlePageChange(val) {
+      console.log(val);
+      this.pageIndex = val;
+      // this.initData();
     },
   },
 };

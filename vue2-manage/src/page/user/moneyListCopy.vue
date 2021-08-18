@@ -1,131 +1,67 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <!-- 高级搜索-->
     <div class="search_container">
-      <el-select v-model="value_protocal" placeholder="请选择">
-        <el-option
-          v-for="item in options_protocal"
-          :key="item.value_protocal"
-          :label="item.label_protocal"
-          :value="item.value_protocal"
-        >
-        </el-option>
-      </el-select>
-      <el-button type="warning">交易时间</el-button>
-
-      <el-date-picker
-        v-model="valuedate1"
-        type="datetime"
-        placeholder="选择起始日期时间"
+      <el-select
+        v-model="transaction.transactionType"
+        style="margin-left: 30%; width: 390px"
+        placeholder="请选择交易类型"
       >
-      </el-date-picker>
-      ~
-      <el-date-picker
-        v-model="valuedate2"
-        type="datetime"
-        placeholder="选择结束日期时间"
-      >
-      </el-date-picker>
-         <el-select v-model="value_protocal2" placeholder="请选择"   style="padding-left: 30px">
         <el-option
-          v-for="item in options_protocal2"
-          :key="item.value_protocal2"
-          :label="item.label_protocal2"
-          :value="item.value_protocal2"
-        >
-        </el-option>
+          v-for="item in transactionType"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
       </el-select>
-       <el-button type="warning">交易类型</el-button>
-       <el-input
-        v-model="inputMF"
-        placeholder="请输入交易类型（默认无）"
-        style="width: 220px"
-      ></el-input>
-    </div>
-    <div class="search_container">
-      <el-select v-model="value_protocal" placeholder="请选择">
-        <el-option
-          v-for="item in options_protocal"
-          :key="item.value_protocal"
-          :label="item.label_protocal"
-          :value="item.value_protocal"
-        >
-        </el-option>
-      </el-select>
-      <el-button type="warning">交易金额</el-button>
-      <el-input
-        v-model="inputMF"
-        placeholder="请输入交易金额下限"
-        style="width: 192px"
-      ></el-input>
-      ~
-      <el-input
-        v-model="inputMF"
-        placeholder="请输入交易金额上限"
-        style="width: 195px"
-      ></el-input>
-     
-      <el-select v-model="value_protocal2" placeholder="请选择" style="padding-left: 30px"  >
-        <el-option
-          v-for="item in options_protocal2"
-          :key="item.value_protocal2"
-          :label="item.label_protocal2"
-          :value="item.value_protocal2"
-        >
-        </el-option>
-      </el-select>
-       <el-button type="warning">交易类型</el-button>
-       <el-input
-        v-model="inputMF"
-        placeholder="请输入交易类型（默认无）"
-        style="width: 220px"
-      ></el-input>
-    </div>
-    <div class="search_container">
-      <el-select v-model="value_protocal" placeholder="请选择" >
-        <el-option
-          v-for="item in options_protocal"
-          :key="item.value_protocal"
-          :label="item.label_protocal"
-          :value="item.value_protocal"
-        >
-        </el-option>
-      </el-select>
-       <el-button type="warning">交易状态</el-button>
-        <el-select v-model="value_trade" placeholder="请选择"  >
-        <el-option
-          v-for="item in options_trade"
-          :key="item.value_trade"
-          :label="item.label_trade"
-          :value="item.value_trade"
-        >
-        </el-option>
-      </el-select>
-       
-        <el-switch
-        v-model="value_crypto"
-        on-text="解密"
-        off-text="加密"
-        style="margin-left: 30px"
-      ></el-switch>
       <el-button
-        type="primary"
-        @click="handleSearch()"
-        style="margin-left: 30px"
-        >搜索</el-button
-      >
+        slot="append"
+        icon="el-icon-search"
+        @click="getTransactionData()"
+      ></el-button>
+      <el-button type="primary" @click="searchVisible = true">
+        高级搜索
+      </el-button>
     </div>
-   
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column label="交易编号" prop="id"></el-table-column>
-        <el-table-column label="交易类型" prop="type"></el-table-column>
-        <el-table-column label="交易时间" prop="time"></el-table-column>
-        <el-table-column label="交易金额" prop="money"></el-table-column>
-        <el-table-column label="账户余额" prop="left_money"></el-table-column>
-        <el-table-column label="交易状态" prop="status"></el-table-column>
+      <el-table :data="tableData" style="width: 100%" stripe>
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="上链时间">
+                <span>{{ props.row.blockchainTime }}</span>
+              </el-form-item>
+              <el-form-item label="交易对象">
+                <span>{{ props.row.transactionPeople }}</span>
+              </el-form-item>
+              <el-form-item label="购买存储空间大小">
+                <span>{{ props.row.storageSize }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="交易编号"
+          prop="transactionId"
+        ></el-table-column>
+        <el-table-column
+          label="交易金额"
+          prop="transactionMoney"
+        ></el-table-column>
+        <el-table-column
+          label="交易时间"
+          prop="transactionTime"
+        ></el-table-column>
+        <el-table-column
+          label="区块链ID"
+          prop="transactionBlockchainId"
+        ></el-table-column>
+        <el-table-column
+          label="交易类型"
+          prop="transactionType"
+        ></el-table-column>
       </el-table>
+
       <div class="pagination">
         <el-pagination
           background
@@ -137,212 +73,276 @@
         ></el-pagination>
       </div>
     </div>
+    <el-dialog
+      title="高级搜索"
+      :visible.sync="searchVisible"
+      style="width: 100%"
+    >
+      <el-form ref="transaction" :model="transaction" label-width="200px">
+        <el-form-item label="交易类型" prop="transactionType">
+          <el-select
+            v-model="transaction.transactionType"
+            style="width: 37.5%"
+            placeholder="请选择交易类型"
+          >
+            <el-option
+              v-for="item in transactionType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="交易金额">
+          <el-col :span="4">
+            <el-input v-model="transactionMoneyFloor" placeholder="最低金额">
+            </el-input>
+          </el-col>
+          <el-col class="line" :span="1" align="middle">-</el-col>
+          <el-col :span="4">
+            <el-input v-model="transactionMoneyUpper" placeholder="最高金额">
+            </el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="交易时间">
+          <el-date-picker
+            v-model="transactionTime"
+            type="datetimerange"
+            align="left"
+            unlink-panels
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            range-separator="至"
+            :picker-options="pickerOptions"
+            @change="selectTransactionTime"
+            style="width: 55%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="上链时间">
+          <el-date-picker
+            v-model="blockchainTime"
+            type="datetimerange"
+            align="left"
+            unlink-panels
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            range-separator="至"
+            :picker-options="pickerOptions"
+            @change="selectBlockchainTime"
+            style="width: 55%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="明文/密文显示">
+          <el-switch
+            v-model="decrypt_flag"
+            active-text="明文"
+            inactive-text="密文"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          >
+            ></el-switch
+          >
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="searchVisible = false">取 消</el-button>
+        <el-button type="primary" @click="getTransactionData()"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
-import {
-  notarizationList,
-  reservationList,
-  delReservation,
-  tradeList,
-} from "@/api/getData";
+import { transQuery } from "@/api/getData";
 export default {
   data() {
     return {
-      // 协议选择器
-      options_protocal: [
-        {
-          value_protocal: "选项1",
-          label_protocal: "AND",
-        },
-        {
-          value_protocal: "选项2",
-          label_protocal: "OR",
-        },
-        {
-          value_protocal: "选项3",
-          label_protocal: "NOT",
-        },
-      ],
-       options_protocal2: [
-        {
-          value_protocal2: "选项1",
-          label_protocal2: "AND",
-        },
-        {
-          value_protocal2: "选项2",
-          label_protocal2: "OR",
-        },
-        {
-          value_protocal2: "选项3",
-          label_protocal2: "NOT",
-        },
-      ],
-      value_protocal2: "OR",
-      value_protocal: "AND",
+      searchVisible: false,
+      transaction: {
+        userId: sessionStorage.getItem("userID"),
+        // 交易类型
+        transactionType: "",
+        //交易金额
+        // 加解密：1 解密 0 加密
+        decryptFlag: 1,
+        //上链时间
+        // 交易时间
+      },
+      //
+      decrypt_flag: true,
       //时间选择器
-      valuedate1:"",
-      valuedate2:"",
-      // 复合搜索框
-      input_search: "",
-      select: "",
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            },
+          },
+        ],
+      },
+      transactionTime: "",
+      blockchainTime: "",
+      transactionMoneyFloor: "",
+      transactionMoneyUpper: "",
+
+      // 交易类型
+      transactionType: [
+        {
+          value: "0",
+          label: "充值",
+        },
+        {
+          value: "1",
+          label: "转账",
+        },
+        {
+          value: "2",
+          label: "提现",
+        },
+        {
+          value: "3",
+          label: "购买存储空间",
+        },
+        {
+          value: "4",
+          label: "申请司法公证",
+        },
+      ],
+
       // 表格
-      tableData: [],
+      tableData: [
+        {
+          blockchainTime: "",
+          transactionPeople: "/",
+          storageSize: "/",
+        },
+        {},
+        {},
+      ],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      telephone: "",
-      start_time: "",
-      end_time: "",
-      // 弹窗
-      dialogVisible: false,
-      tableData3: [],
-      // 是否解密
-      value_crypto: true,
-      // 交易状态选择器
-      options_trade: [
-        {
-          value_trade: "选项1",
-          label_trade: "交易成功",
-        },
-        {
-          value_trade: "选项2",
-          label_trade: "交易失败",
-        },
-        {
-          value_trade: "选项3",
-          label_trade: "交易进行中",
-        },
-      ],
-      value_trade: "全部状态",
     };
   },
   created() {
-    this.telephone = localStorage.getItem("telephone");
-    this.initData();
+    // 获取数据
+    // this.getTransactionData();
   },
   computed: {},
   components: {
     headTop,
   },
   methods: {
-    // 初始化数据
-    async initData() {
-      try {
-        const query = {
-          telephone: this.telephone,
-          limit: this.pageSize,
-          page: this.pageIndex,
-        };
-        await tradeList(query).then((result) => {
-          if (result.error_code == 0) {
-            this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
-              let tableData = {};
+    // 交易时间赋值
+    selectTransactionTime() {
+      let start = this.transactionTime[0];
+      let end = this.transactionTime[1];
+      this.transaction.transactionTimeStart = start.getTime();
+      this.transaction.transactionTimeEnd = end.getTime();
+      console.log();
+    },
 
-              (tableData.id = result.data[index].id),
-                (tableData.type = result.data[index].type),
-                (tableData.time = result.data[index].time),
-                (tableData.money = result.data[index].money),
-                (tableData.left_money = result.data[index].left_money),
-                (tableData.status = result.data[index].status),
-                this.tableData.push(tableData);
+    // 上链时间赋值
+    selectBlockchainTime() {
+      let start = this.blockchainTime[0];
+      let end = this.blockchainTime[1];
+      this.transaction.blockchainTimeStart = start.getTime();
+      console.log(this.transaction.blockchainTimeStart);
+      this.transaction.blockchainTimeEnd = end.getTime();
+      console.log(this.transaction.blockchainTimeEnd);
+    },
+
+    // 获取数据
+    async getTransactionData() {
+      try {
+        // 关闭弹窗
+        this.searchVisible = false;
+        // 判断
+        if (this.transaction.transactionType == "") {
+          this.transaction.transactionType = "none";
+        }
+
+        if (
+          this.transactionMoneyFloor != "" &&
+          this.transactionMoneyUpper != ""
+        ) {
+          if (
+            isNaN(this.transactionMoneyFloor) ||
+            isNaN(this.transactionMoneyUpper)
+          ) {
+            this.$message({
+              type: "error",
+              message: "交易金额必须为数字",
             });
-          } else if (result.error_code != 0) {
-            throw new Error("获取数据失败");
+            return;
+          }
+          if (this.transactionMoneyFloor > this.transactionMoneyUpper) {
+            this.$message({
+              type: "error",
+              message: "最低金额需小于等于最高金额",
+            });
+            return;
+          }
+          this.transaction.transactionMoneyFloor = this.transactionMoneyFloor;
+          this.transaction.transactionMoneyUpper = this.transactionMoneyUpper;
+        }
+
+        if (this.decrypt_flag == false) {
+          this.transaction.decryptFlag = 0;
+        }
+        // 请求数据
+
+        await transQuery(this.transaction).then((result) => {
+          if (result.status == true) {
+            this.tableData = [];
+            result.data.forEach((item) => {
+              this.tableData.push(item);
+            });
+            this.pageTotal = this.tableData.length;
+          } else {
+            console.log("获取数据失败");
           }
         });
       } catch (error) {
         throw new Error(error.message);
       }
+      if (this.transaction.transactionType == "none") {
+        this.transaction.transactionType = "";
+      }
+      this.notarization.decryptFlag = 1;
     },
+
     // 处理导航页
     handlePageChange(val) {
       console.log(val);
       this.pageIndex = val;
-      this.initData();
-    },
-
-    // 时间选择
-    selectTime() {
-      let start = this.value_time[0];
-      let end = this.value_time[1];
-      this.start_time = this.fmtDate(start.getTime());
-      this.end_time = this.fmtDate(end.getTime());
-      //   console.log(end);
-      //   console.log(end.getTime());
-    },
-    // 搜索
-    async handleSearch() {
-      const query = {
-        start_time: this.start_time,
-        end_time: this.end_time,
-        notarization_id: this.value_apply,
-      };
-      //   console.log(query);
-      try {
-        await reservationList(query).then((result) => {
-          if (result.error_code == 0) {
-            this.tableData = [];
-            this.pageTotal = result.meta.total;
-            result.data.forEach((item, index) => {
-              let tableData = {};
-              switch (result.data[index].status) {
-                case 1:
-                  tableData.reservation_status = "预约成功";
-                  break;
-                case 2:
-                  tableData.reservation_status = "预约失败";
-                  break;
-                case 3:
-                  tableData.reservation_status = "处理完毕";
-                  break;
-                case 4:
-                  tableData.reservation_status = "预约处理中";
-                  break;
-                case 5:
-                  tableData.reservation_status = "预约已撤销";
-                  break;
-              }
-              (tableData.id = result.data[index].id),
-                (tableData.notarization_name =
-                  result.data[index].notarization_name),
-                (tableData.notarization_id =
-                  result.data[index].notarization_id),
-                (tableData.reservation_time =
-                  result.data[index].reservation_from +
-                  "~" +
-                  result.data[index].reservation_to),
-                (tableData.apply_time = result.data[index].created_at),
-                this.tableData.push(tableData);
-            });
-          } else if (result.error_code != 0) {
-            throw new Error("获取数据失败");
-          }
-        });
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
-    //时间戳转日期
-    fmtDate(timestamp) {
-      if (timestamp) {
-        var time = new Date(timestamp);
-        var y = time.getFullYear(); //getFullYear方法以四位数字返回年份
-        var M = time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-        var d = time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-        var h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-        var m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-        var s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
-        return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
-      } else {
-        return "";
-      }
+      // this.initData();
     },
   },
 };
@@ -351,22 +351,13 @@ export default {
 <style lang="less">
 @import "../../style/mixin";
 .search_container {
-  // padding: 10px;
-  padding-left: 20px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-.el-select .el-input {
-  width: 130px;
-}
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
+  padding: 20px;
 }
 .demo-table-expand {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 120px;
+  width: 25%;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
