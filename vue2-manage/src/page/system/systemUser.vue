@@ -111,6 +111,9 @@
               <el-form-item label="身份证号">
                 <span>{{ props.row.idCard }}</span>
               </el-form-item>
+              <el-form-item label="用户公钥">
+                <span>{{ props.row.publicKey }}</span>
+              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
@@ -149,7 +152,6 @@ export default {
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      telephone: "",
       //用户信息
       userInfo: {
         userId: "",
@@ -170,12 +172,12 @@ export default {
           value: "1",
         },
       ],
-      autManId:"",
+      manId:"",
       // 加解密
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
+    this.manId = localStorage.getItem("manId");
     this.initData();
   },
   computed: {},
@@ -298,6 +300,9 @@ export default {
     handleDel() {
       this.$message.success("审核成功");
     },
+    tryy(){
+      alert("1");
+    }
   },
 };
 </script>
@@ -317,15 +322,6 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-}
-.demo-table-expands {
-  font-size: 20px;
-  margin-bottom: 0%;
-}
-.demo-table-expands label {
-  width: 120px;
-  color: #000000;
-  font-size: 15px;
 }
 .table_container {
   padding: 20px;

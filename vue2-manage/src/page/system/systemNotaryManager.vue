@@ -3,8 +3,8 @@
     <head-top></head-top>
     <div class="search_container">
       <el-input
-        v-model="userInfo.usernameWildcard"
-        placeholder="请输入用户名"
+        v-model="autMInfo.autNameWildcard"
+        placeholder="请输入机构管理员名称"
         style="width: 390px; margin-left: 30%"
       >
         <el-button
@@ -26,17 +26,17 @@
       style="width: 100%"
     >
       <el-form label-width="200px">
-        <el-form-item label="用户编号:">
+        <el-form-item label="机构管理员编号:">
           <el-input
-            v-model="userInfo.userId"
-            placeholder="请输入用户编号"
+            v-model="autMInfo.autManId"
+            placeholder="请输入公证员编号"
             style="width: 240px"
           ></el-input>
         </el-form-item>
 
         <el-form-item label="手机号:">
           <el-input
-            v-model="userInfo.phoneNumberWildcard"
+            v-model="autMInfo.phoneNumberWildcard"
             placeholder="请输入手机号"
             style="width: 240px"
           ></el-input>
@@ -44,7 +44,7 @@
 
         <el-form-item label="身份证号:">
           <el-input
-            v-model="userInfo.idCard"
+            v-model="autMInfo.idCard"
             placeholder="请输入身份证号"
             style="width: 240px"
           ></el-input>
@@ -52,15 +52,31 @@
 
         <el-form-item label="邮箱:">
           <el-input
-            v-model="userInfo.emailWildcard"
+            v-model="autMInfo.emailWildcard"
             placeholder="请输入邮箱"
             style="width: 240px"
           ></el-input>
         </el-form-item>
 
+        <el-form-item label="机构:">
+          <el-select
+            v-model="autMInfo.organizationId"
+            style="width: 240px"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in org_info"
+              :key="item.organization_id"
+              :label="organization_name"
+              :value="item.organization_id"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="性别:">
           <el-select
-            v-model="userInfo.sex"
+            v-model="autMInfo.sex"
             style="width: 240px"
             placeholder="请选择"
           >
@@ -102,11 +118,8 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="存储空间">
-                <span>{{ props.row.storageSpace }}</span>
-              </el-form-item>
-              <el-form-item label="已用空间">
-                <span>{{ props.row.hasUsedStorage }}</span>
+              <el-form-item label="机构ID">
+                <span>{{ props.row.organizationId }}</span>
               </el-form-item>
               <el-form-item label="身份证号">
                 <span>{{ props.row.idCard }}</span>
@@ -114,8 +127,8 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="用户ID" prop="userId"></el-table-column>
-        <el-table-column label="用户名" prop="username"></el-table-column>
+        <el-table-column label="机构管理员编号" prop="autManId"></el-table-column>
+        <el-table-column label="机构管理员" prop="autNameWildcard"></el-table-column>
         <el-table-column label="手机号" prop="phoneNumber"></el-table-column>
         <el-table-column label="性别" prop="sex"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
@@ -137,10 +150,11 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { userQuery } from "@/api/getData";
+import { notaQuery, orgaQuery } from "@/api/getData";
 export default {
   data() {
     return {
+      manId:"",
       searchVisible: false,
       decrypt_flag: true,
       // 表格
@@ -149,15 +163,15 @@ export default {
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      telephone: "",
       //用户信息
-      userInfo: {
-        userId: "",
-        usernameWildcard: "",
+      autMInfo: {
+        autManId: "",
+        autNameWildcard: "",
         phoneNumberWildcard: "",
         idCard: "",
         emailWildcard: "",
         sex: "",
+        organizationId: "",
         decryptFlag: 1,
       },
       sex_state: [
@@ -170,12 +184,11 @@ export default {
           value: "1",
         },
       ],
-      autManId:"",
-      // 加解密
+      org_info:[],
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
+    this.manId = localStorage.getItem("manId");
     this.initData();
   },
   computed: {},
@@ -187,15 +200,16 @@ export default {
     async initData() {
       try {
         const query = {
-          userId: "none",
-          usernameWildcard: "none",
+          autManId: "none",
+          autNameWildcard: "none",
           phoneNumberWildcard: "none",
           idCard: "none",
           emailWildcard: "none",
           sex: "none",
+          organizationId: "none",
           decryptFlag: 1,
         };
-        await userQuery(query).then((result) => {
+        await notaQuery(query).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -204,6 +218,14 @@ export default {
             this.pageTotal = this.tableData.length;
           } else {
             throw new Error("获取数据失败");
+          }
+        });
+        //获取机构
+        await orgaQuery().then((typeres) => {
+          if (typeres.status) {
+            typeres.data.forEach((item) => {
+              this.org_info.push(item);
+            });
           }
         });
       } catch (error) {
@@ -218,42 +240,46 @@ export default {
     },
     dealData() {
       //用户编号
-      if (this.userInfo.userId == "") {
-        this.userInfo.userId = "none";
+      if (this.autMInfo.autManId == "") {
+        this.autMInfo.autManId = "none";
       }
       //用户名
-      if (this.userInfo.usernameWildcard == "") {
-        this.userInfo.usernameWildcard = "none";
+      if (this.autMInfo.autNameWildcard == "") {
+        this.autMInfo.autNameWildcard = "none";
       }
       //电话号码
-      if (this.userInfo.phoneNumberWildcard == "") {
-        this.userInfo.phoneNumberWildcard = "none";
+      if (this.autMInfo.phoneNumberWildcard == "") {
+        this.autMInfo.phoneNumberWildcard = "none";
       }
       //身份证号
-      if (this.userInfo.idCard == "") {
-        this.userInfo.idCard = "none";
+      if (this.autMInfo.idCard == "") {
+        this.autMInfo.idCard = "none";
       }
       //邮箱
-      if (this.userInfo.emailWildcard == "") {
-        this.userInfo.emailWildcard = "none";
+      if (this.autMInfo.emailWildcard == "") {
+        this.autMInfo.emailWildcard = "none";
       }
       //性别
-      if (this.userInfo.sex == "") {
-        this.userInfo.sex = "none";
+      if (this.autMInfo.sex == "") {
+        this.autMInfo.sex = "none";
+      }
+      //机构
+      if (this.autMInfo.organizationId == "") {
+        this.autMInfo.organizationId = "none";
       }
       //加解密
       if (this.decrypt_flag) {
-        this.userInfo.decryptFlag = 1;
+        this.autMInfo.decryptFlag = 1;
       } else {
-        this.userInfo.decryptFlag = 0;
+        this.autMInfo.decryptFlag = 0;
       }
-      //alert(this.userInfo.decryptFlag);
+      //alert(this.autMInfo.decryptFlag);
     },
     // 搜索
     async handleSearch() {
       try {
         this.dealData();
-        await userQuery(this.userInfo).then((result) => {
+        await userQuery(this.autMInfo).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -271,28 +297,32 @@ export default {
     },
     resetData() {
       //用户编号
-      if (this.userInfo.userId == "none") {
-        this.userInfo.userId = "";
+      if (this.autMInfo.autManId == "none") {
+        this.autMInfo.autManId = "";
       }
       //用户名
-      if (this.userInfo.usernameWildcard == "none") {
-        this.userInfo.usernameWildcard = "";
+      if (this.autMInfo.autNameWildcard == "none") {
+        this.autMInfo.autNameWildcard = "";
       }
       //电话号码
-      if (this.userInfo.phoneNumberWildcard == "none") {
-        this.userInfo.phoneNumberWildcard = "";
+      if (this.autMInfo.phoneNumberWildcard == "none") {
+        this.autMInfo.phoneNumberWildcard = "";
       }
       //身份证号
-      if (this.userInfo.idCard == "none") {
-        this.userInfo.idCard = "";
+      if (this.autMInfo.idCard == "none") {
+        this.autMInfo.idCard = "";
       }
       //邮箱
-      if (this.userInfo.emailWildcard == "none") {
-        this.userInfo.emailWildcard = "";
+      if (this.autMInfo.emailWildcard == "none") {
+        this.autMInfo.emailWildcard = "";
       }
       //性别
-      if (this.userInfo.sex == "none") {
-        this.userInfo.sex = "";
+      if (this.autMInfo.sex == "none") {
+        this.autMInfo.sex = "";
+      }
+      //机构
+      if (this.autMInfo.organizationId == "none") {
+        this.autMInfo.organizationId = "";
       }
     },
     handleDel() {
@@ -317,15 +347,6 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-}
-.demo-table-expands {
-  font-size: 20px;
-  margin-bottom: 0%;
-}
-.demo-table-expands label {
-  width: 120px;
-  color: #000000;
-  font-size: 15px;
 }
 .table_container {
   padding: 20px;

@@ -42,20 +42,6 @@
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="公证结束时间:">
-          <el-date-picker
-            v-model="timeValue3"
-            type="datetime"
-            placeholder="选择起始日期时间"
-          ></el-date-picker>
-          ~
-          <el-date-picker
-            v-model="timeValue4"
-            type="datetime"
-            placeholder="选择结束日期时间"
-          ></el-date-picker>
-        </el-form-item>
-
         <el-form-item label="申请人:">
           <el-input
             v-model="notarization.usernameWildcard"
@@ -91,8 +77,8 @@
         <el-form-item label="存证类型:">
           <el-select
             v-model="notarization.evidenceType"
-            placeholder="请选择"
             style="width: 240px"
+            placeholder="请选择"
           >
             <el-option
               v-for="item in evidence_type"
@@ -112,6 +98,22 @@
           >
             <el-option
               v-for="item in notarization_type"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="支付状态:">
+          <el-select
+            v-model="notarization.paymentStatus"
+            placeholder="请选择"
+            style="width: 240px"
+          >
+            <el-option
+              v-for="item in payment_type"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -194,9 +196,6 @@
               <el-form-item label="申请事项">
                 <span>{{ props.row.notarizationMatters }}</span>
               </el-form-item>
-              <el-form-item label="公证完成时间">
-                <span>{{ props.row.notarizationEndTime }}</span>
-              </el-form-item>
               <el-form-item label="公证金额">
                 <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
@@ -255,8 +254,6 @@ export default {
       //时间选择器
       timeValue1: "",
       timeValue2: "",
-      timeValue3: "",
-      timeValue4: "",
       moneyState: "",
       // 表格
       tableData: [{}],
@@ -272,24 +269,23 @@ export default {
         evidenceNameWildcard: "",
         notarizationStatus: "",
         notarizationType: "",
+        paymentStatus: "",
         evidenceType: "",
         decryptFlag: 1,
         notarizationMoneyUpper: -1,
         notarizationMoneyFloor: -1,
         notarizationStartTimeStart: "none",
         notarizationStartTimeEnd: "none",
-        notarizationEndTimeStart: "none",
-        notarizationEndTimeEnd: "none",
         notaryNameWildcard: "",
       },
       notarization_state: [
         {
-          state_value: "3",
-          state_label: "公证成功",
+          state_value: "1",
+          state_label: "等待公证",
         },
         {
-          state_value: "4",
-          state_label: "公证失败",
+          state_value: "2",
+          state_label: "公证审核中",
         },
       ],
       //存证类型选择器
@@ -315,6 +311,10 @@ export default {
           label: "已支付",
           value: "1",
         },
+        {
+          label: "不限",
+          value: "none",
+        },
       ],
       money_choose: [
         {
@@ -334,11 +334,11 @@ export default {
           value: "none",
         },
       ],
-      autManId:"",
+      manId:"",
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
+    this.manId = localStorage.getItem("manId");
     this.initData();
   },
   computed: {},
@@ -350,21 +350,17 @@ export default {
     async initData() {
       try {
         const query = {
-          evidenceId: "none",
-          userId: "none",
           usernameWildcard: "none",
           evidenceNameWildcard: "none",
-          notarizationStatus: "3",
+          notarizationStatus: "1",
           notarizationType: "none",
+          paymentStatus: "none",
           evidenceType: "none",
           decryptFlag: 1,
           notarizationMoneyUpper: -1,
           notarizationMoneyFloor: -1,
           notarizationStartTimeStart: "none",
           notarizationStartTimeEnd: "none",
-          notarizationEndTimeStart: "none",
-          notarizationEndTimeEnd: "none",
-          notaryId: "none",
           notaryNameWildcard: "none",
         };
         await notarmanageRecord(query).then((result) => {
@@ -377,7 +373,7 @@ export default {
             throw new Error("获取数据失败");
           }
         });
-        query.notarizationStatus = "4";
+        query.notarizationStatus = "2";
         await notarmanageRecord(query).then((result) => {
           if (result.status) {
             result.data.forEach((item) => {
@@ -419,7 +415,7 @@ export default {
       try {
         this.dealData();
         if (this.notarization.notarizationStatus == "none") {
-          this.notarization.notarizationStatus == "3";
+          this.notarization.notarizationStatus == "1";
           await notarmanageRecord(this.notarization).then((result) => {
             if (result.status) {
               this.tableData = [];
@@ -430,7 +426,7 @@ export default {
               throw new Error("获取数据失败");
             }
           });
-          this.notarization.notarizationStatus == "4";
+          this.notarization.notarizationStatus == "2";
           await notarmanageRecord(this.notarization).then((result) => {
             if (result.status) {
               result.data.forEach((item) => {
@@ -474,13 +470,17 @@ export default {
         if (this.notarization.notarizationType == "") {
           this.notarization.notarizationType = "none";
         }
-        //存证类型
-        if (this.notarization.evidenceType == "") {
-          this.notarization.evidenceType = "none";
+        //支付状态
+        if (this.notarization.paymentStatus == "") {
+          this.notarization.paymentStatus = "none";
         }
         //公证状态
         if (this.notarization.notarizationStatus == "") {
           this.notarization.notarizationStatus = "none";
+        }
+        //存证类型
+        if (this.notarization.evidenceType == "") {
+          this.notarization.evidenceType = "none";
         }
         //公证员
         if (this.notarization.notaryNameWildcard == "") {
@@ -509,20 +509,12 @@ export default {
           this.notarization.notarizationStartTimeEnd =
             this.timeValue2.getTime();
         }
-        if (this.timeValue3 != "") {
-          this.notarization.notarizationEndTimeStart =
-            this.timeValue3.getTime();
-        }
-        if (this.timeValue4 != "") {
-          this.notarization.notarizationEndTimeEnd = this.timeValue4.getTime();
-        }
         //加解密
         if (this.decrypt_flag) {
           this.notarization.decryptFlag = 1;
         } else {
           this.notarization.decryptFlag = 0;
         }
-        //alert(this.notarization.decryptFlag);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -541,6 +533,10 @@ export default {
         if (this.notarization.notarizationType == "none") {
           this.notarization.notarizationType = "";
         }
+        //支付状态
+        if (this.notarization.paymentStatus == "none") {
+          this.notarization.paymentStatus = "";
+        }
         //存证类型
         if (this.notarization.evidenceType == "none") {
           this.notarization.evidenceType = "";
@@ -557,14 +553,6 @@ export default {
         throw new Error(error.message);
       }
     },
-    /*
-    tryy() {
-      this.dealData();
-      alert("公证开始时间1:"+this.notarization.notarizationStartTimeStart+"\n"
-      +"公证开始时间2:"+this.notarization.notarizationStartTimeEnd+"\n"
-      +"公证结束时间1:"+this.notarization.notarizationEndTimeStart+"\n"
-      +"公证结束时间2:"+this.notarization.notarizationEndTimeEnd+"\n");
-    },*/
   },
 };
 </script>
@@ -588,15 +576,6 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-}
-.demo-table-expands {
-  font-size: 20px;
-  margin-bottom: 0%;
-}
-.demo-table-expands label {
-  width: 120px;
-  color: #000000;
-  font-size: 15px;
 }
 .table_container {
   padding: 20px;

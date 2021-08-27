@@ -31,7 +31,7 @@ export const userEvidenceQuery = data => fetch('/user/evidenceQuery', data, 'POS
 /**
  * 公证机构查询
  */
- export const orgaQuery = data => fetch('/aut /orgaQuery', data, 'POST');
+ export const orgaQuery = data => fetch('/aut/orgaQuery', data, 'POST');
 
  /**
  * 公证类型查询
@@ -115,12 +115,35 @@ export const eviTypeQuery = data => fetch('/eviTypeQuery',data, 'POST');
 * 	公证机构查询
 */
 export const orgQuery = data => fetch('/orgQuery',data, 'POST');
-
-
 /**
 * 	交易记录查询
 */
 export const transQuery = data => fetch('/user/transQuery',data, 'POST');
+
+/**
+* 	机构统计生成
+*/
+export const orgStasGen = data => fetch('/aut/orgStasGen',data, 'POST');
+/**
+* 	机构统计查询
+*/
+export const orgStasQue = data => fetch('/aut/orgStasQue',data, 'POST');
+/**
+* 	公证员统计生成
+*/
+export const notaStasGen = data => fetch('/aut/notaStasGen',data, 'POST');
+/**
+* 	公证员统计查询
+*/
+export const notaStasQue = data => fetch('/aut/notaStasQue',data, 'POST');
+/**
+* 	公证员排名查询
+*/
+export const rankStasQue = data => fetch('/aut/rankStasQue',data, 'POST');
+/**
+* 	公证费用查询
+*/
+export const notPayQuery = data => fetch('/notPayQuery',data, 'POST');
 
 
 
@@ -162,6 +185,10 @@ export const userQuery = data => fetch('/aut/userQuery',data, 'POST');
 * 	公证员信息查询
 */
 export const notaQuery = data => fetch('/aut/notaQuery',data, 'POST');
+/**
+* 	机构管理员信息查询
+*/
+export const autmanQuery = data => fetch('/aut/autmanQuery',data, 'POST');
 
 
 

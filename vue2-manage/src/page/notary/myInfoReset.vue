@@ -150,6 +150,7 @@ export default {
           value: "none",
         },
       ],
+      notary_id:"",
     };
   },
   created() {
@@ -252,12 +253,6 @@ export default {
 }
 .search_container {
   padding: 20px;
-}
-.el-select .el-input {
-  width: 130px;
-}
-.input-with-select .el-input-group__prepend {
-  background-color: #fff;
 }
 .demo-table-expand {
   font-size: 0;

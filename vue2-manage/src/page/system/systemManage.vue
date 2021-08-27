@@ -10,38 +10,32 @@
           active-text-color="#ffd04b"
           router
         >
-          <el-menu-item index="NMIndex"
+          <el-menu-item index="systemIndex"
             ><i class="el-icon-menu"></i>首页</el-menu-item
           >
 
           <el-submenu index="1">
             <template slot="title"
-              ><i class="el-icon-document"></i>公证管理</template
+              ><i class="el-icon-document"></i>成员管理</template
             >
-            <el-menu-item index="totalNotarization">待处理列表</el-menu-item>
-            <el-menu-item index="totalNotarizationApply">已处理列表</el-menu-item>
+            <el-menu-item index="systemUser">用户列表</el-menu-item>
+            <el-menu-item index="systemNotary">公证员列表</el-menu-item>
+            <el-menu-item index="systemNotaryManager">机构管理员列表</el-menu-item>
           </el-submenu>
+
           <el-submenu index="3">
             <template slot="title"
-              ><i class="el-icon-date"></i>证据管理</template
+              ><i class="el-icon-date"></i>记录查询</template
             >
-            <el-menu-item index="totalEvidenceList">证据列表</el-menu-item>
-            <!-- <el-menu-item index="materialCopy">我的材料</el-menu-item>
-						<el-menu-item index="reservation">我的预约</el-menu-item> -->
+            <el-menu-item index="systemNotarization">公证记录</el-menu-item>
+            <el-menu-item index="systemEvidence">存证记录</el-menu-item>
+						<el-menu-item index="systemTrace">交易记录</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
             <template slot="title"
-              ><i class="el-icon-setting"></i>人员管理</template
+              ><i class="el-icon-setting"></i>个人中心</template
             >
-            <!-- <el-menu-item index="adminSet">用户设置</el-menu-item> -->
-            <el-menu-item index="totalUser">用户列表</el-menu-item>
-            <el-menu-item index="totalNotary">公证员列表</el-menu-item>
-          </el-submenu>
-          <el-submenu index="5">
-            <template slot="title"
-              ><i class="el-icon-warning"></i>系统说明</template
-            >
-            
+            <el-menu-item index="systemManageInfo">个人信息</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>

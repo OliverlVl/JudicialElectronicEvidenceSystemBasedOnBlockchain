@@ -142,16 +142,19 @@
               <el-form-item label="公证金额">
                 <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
+              <el-form-item label="公证员">
+                <span>{{ props.row.notaryId }}</span>
+              </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="证据编号" prop="evidenceId"></el-table-column>
-        <el-table-column label="证据名称" prop="evidenceName"></el-table-column>
+        <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
+        <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
         <el-table-column
           label="上链时间"
           prop="blockchainTime"
         ></el-table-column>
-        <el-table-column label="证据类型" prop="evidenceType"></el-table-column>
+        <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
         <el-table-column
           label="公证机构"
           prop="organizationName"
@@ -179,12 +182,7 @@ import { evidenceQuery, eviTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
-      searchVisible: false,
-      //时间选择器
-      timeValue1: "",
-      timeValue2: "",
-      timeValue3: "",
-      timeValue4: "",
+      manId:"",
       //公证状态选择器
       notarization_state: [
         {
@@ -253,11 +251,13 @@ export default {
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      autManId:"",
+      telephone: "",
+      start_time: "",
+      end_time: "",
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
+    this.manId = localStorage.getItem("manId");
     this.initData();
   },
   computed: {},

@@ -3,8 +3,8 @@
     <head-top></head-top>
     <div class="search_container">
       <el-input
-        v-model="userInfo.usernameWildcard"
-        placeholder="请输入用户名"
+        v-model="notaryInfo.notaryNameWildcard"
+        placeholder="请输入公证员"
         style="width: 390px; margin-left: 30%"
       >
         <el-button
@@ -26,25 +26,33 @@
       style="width: 100%"
     >
       <el-form label-width="200px">
-        <el-form-item label="用户编号:">
+        <el-form-item label="公证员编号:">
           <el-input
-            v-model="userInfo.userId"
-            placeholder="请输入用户编号"
+            v-model="notaryInfo.notaryId"
+            placeholder="请输入公证员编号"
             style="width: 240px"
           ></el-input>
         </el-form-item>
 
         <el-form-item label="手机号:">
           <el-input
-            v-model="userInfo.phoneNumberWildcard"
+            v-model="notaryInfo.phoneNumberWildcard"
             placeholder="请输入手机号"
+            style="width: 240px"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="工号:">
+          <el-input
+            v-model="notaryInfo.jobNumberWildcard"
+            placeholder="请输入工号"
             style="width: 240px"
           ></el-input>
         </el-form-item>
 
         <el-form-item label="身份证号:">
           <el-input
-            v-model="userInfo.idCard"
+            v-model="notaryInfo.idCard"
             placeholder="请输入身份证号"
             style="width: 240px"
           ></el-input>
@@ -52,7 +60,7 @@
 
         <el-form-item label="邮箱:">
           <el-input
-            v-model="userInfo.emailWildcard"
+            v-model="notaryInfo.emailWildcard"
             placeholder="请输入邮箱"
             style="width: 240px"
           ></el-input>
@@ -60,12 +68,28 @@
 
         <el-form-item label="性别:">
           <el-select
-            v-model="userInfo.sex"
+            v-model="notaryInfo.sex"
             style="width: 240px"
             placeholder="请选择"
           >
             <el-option
               v-for="item in sex_state"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="公证类型:">
+          <el-select
+            v-model="notaryInfo.notarizationType"
+            style="width: 240px"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in notarization_type"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -102,11 +126,11 @@
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="存储空间">
-                <span>{{ props.row.storageSpace }}</span>
+              <el-form-item label="工号">
+                <span>{{ props.row.jobNumber }}</span>
               </el-form-item>
-              <el-form-item label="已用空间">
-                <span>{{ props.row.hasUsedStorage }}</span>
+              <el-form-item label="公证类型">
+                <span>{{ props.row.notarizationType }}</span>
               </el-form-item>
               <el-form-item label="身份证号">
                 <span>{{ props.row.idCard }}</span>
@@ -114,8 +138,8 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="用户ID" prop="userId"></el-table-column>
-        <el-table-column label="用户名" prop="username"></el-table-column>
+        <el-table-column label="公证员编号" prop="notaryId"></el-table-column>
+        <el-table-column label="公证员" prop="notaryName"></el-table-column>
         <el-table-column label="手机号" prop="phoneNumber"></el-table-column>
         <el-table-column label="性别" prop="sex"></el-table-column>
         <el-table-column label="邮箱" prop="email"></el-table-column>
@@ -137,7 +161,7 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { userQuery } from "@/api/getData";
+import { notaQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
@@ -149,15 +173,16 @@ export default {
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      telephone: "",
       //用户信息
-      userInfo: {
-        userId: "",
-        usernameWildcard: "",
+      notaryInfo: {
+        notaryId: "",
+        notaryNameWildcard: "",
         phoneNumberWildcard: "",
+        jobNumberWildcard: "",
         idCard: "",
         emailWildcard: "",
         sex: "",
+        notarizationType: "",
         decryptFlag: 1,
       },
       sex_state: [
@@ -170,12 +195,18 @@ export default {
           value: "1",
         },
       ],
-      autManId:"",
+      notarization_type: [
+        {
+          label: "不限",
+          value: "none",
+        },
+      ],
+      manId:"",
       // 加解密
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
+    this.manId = localStorage.getItem("manId");
     this.initData();
   },
   computed: {},
@@ -187,15 +218,17 @@ export default {
     async initData() {
       try {
         const query = {
-          userId: "none",
-          usernameWildcard: "none",
+          notaryId: "none",
+          notaryNameWildcard: "none",
           phoneNumberWildcard: "none",
+          jobNumberWildcard: "none",
           idCard: "none",
           emailWildcard: "none",
           sex: "none",
+          notarizationType: "none",
           decryptFlag: 1,
         };
-        await userQuery(query).then((result) => {
+        await notaQuery(query).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -204,6 +237,14 @@ export default {
             this.pageTotal = this.tableData.length;
           } else {
             throw new Error("获取数据失败");
+          }
+        });
+        //获取公证类型
+        await noTypeQuery().then((typeres) => {
+          if (typeres.status) {
+            typeres.data.forEach((item) => {
+              this.notarization_type.push(item);
+            });
           }
         });
       } catch (error) {
@@ -218,42 +259,50 @@ export default {
     },
     dealData() {
       //用户编号
-      if (this.userInfo.userId == "") {
-        this.userInfo.userId = "none";
+      if (this.notaryInfo.notaryId == "") {
+        this.notaryInfo.notaryId = "none";
       }
       //用户名
-      if (this.userInfo.usernameWildcard == "") {
-        this.userInfo.usernameWildcard = "none";
+      if (this.notaryInfo.notaryNameWildcard == "") {
+        this.notaryInfo.notaryNameWildcard = "none";
       }
       //电话号码
-      if (this.userInfo.phoneNumberWildcard == "") {
-        this.userInfo.phoneNumberWildcard = "none";
+      if (this.notaryInfo.phoneNumberWildcard == "") {
+        this.notaryInfo.phoneNumberWildcard = "none";
+      }
+      //工号
+      if (this.notaryInfo.jobNumberWildcard == "") {
+        this.notaryInfo.jobNumberWildcard = "none";
       }
       //身份证号
-      if (this.userInfo.idCard == "") {
-        this.userInfo.idCard = "none";
+      if (this.notaryInfo.idCard == "") {
+        this.notaryInfo.idCard = "none";
       }
       //邮箱
-      if (this.userInfo.emailWildcard == "") {
-        this.userInfo.emailWildcard = "none";
+      if (this.notaryInfo.emailWildcard == "") {
+        this.notaryInfo.emailWildcard = "none";
       }
       //性别
-      if (this.userInfo.sex == "") {
-        this.userInfo.sex = "none";
+      if (this.notaryInfo.sex == "") {
+        this.notaryInfo.sex = "none";
+      }
+      //公证类型
+      if (this.notaryInfo.notarizationType == "") {
+        this.notaryInfo.notarizationType = "none";
       }
       //加解密
       if (this.decrypt_flag) {
-        this.userInfo.decryptFlag = 1;
+        this.notaryInfo.decryptFlag = 1;
       } else {
-        this.userInfo.decryptFlag = 0;
+        this.notaryInfo.decryptFlag = 0;
       }
-      //alert(this.userInfo.decryptFlag);
+      //alert(this.notaryInfo.decryptFlag);
     },
     // 搜索
     async handleSearch() {
       try {
         this.dealData();
-        await userQuery(this.userInfo).then((result) => {
+        await userQuery(this.notaryInfo).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -271,28 +320,36 @@ export default {
     },
     resetData() {
       //用户编号
-      if (this.userInfo.userId == "none") {
-        this.userInfo.userId = "";
+      if (this.notaryInfo.notaryId == "none") {
+        this.notaryInfo.notaryId = "";
       }
       //用户名
-      if (this.userInfo.usernameWildcard == "none") {
-        this.userInfo.usernameWildcard = "";
+      if (this.notaryInfo.notaryNameWildcard == "none") {
+        this.notaryInfo.notaryNameWildcard = "";
       }
       //电话号码
-      if (this.userInfo.phoneNumberWildcard == "none") {
-        this.userInfo.phoneNumberWildcard = "";
+      if (this.notaryInfo.phoneNumberWildcard == "none") {
+        this.notaryInfo.phoneNumberWildcard = "";
+      }
+      //工号
+      if (this.notaryInfo.jobNumberWildcard == "none") {
+        this.notaryInfo.jobNumberWildcard = "";
       }
       //身份证号
-      if (this.userInfo.idCard == "none") {
-        this.userInfo.idCard = "";
+      if (this.notaryInfo.idCard == "none") {
+        this.notaryInfo.idCard = "";
       }
       //邮箱
-      if (this.userInfo.emailWildcard == "none") {
-        this.userInfo.emailWildcard = "";
+      if (this.notaryInfo.emailWildcard == "none") {
+        this.notaryInfo.emailWildcard = "";
       }
       //性别
-      if (this.userInfo.sex == "none") {
-        this.userInfo.sex = "";
+      if (this.notaryInfo.sex == "none") {
+        this.notaryInfo.sex = "";
+      }
+      //公证类型
+      if (this.notaryInfo.notarizationType == "none") {
+        this.notaryInfo.notarizationType = "";
       }
     },
     handleDel() {
@@ -317,15 +374,6 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-}
-.demo-table-expands {
-  font-size: 20px;
-  margin-bottom: 0%;
-}
-.demo-table-expands label {
-  width: 120px;
-  color: #000000;
-  font-size: 15px;
 }
 .table_container {
   padding: 20px;

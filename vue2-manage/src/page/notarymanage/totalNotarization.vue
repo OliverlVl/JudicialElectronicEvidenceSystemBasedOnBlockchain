@@ -334,6 +334,7 @@ export default {
           value: "none",
         },
       ],
+      autManId:"",
     };
   },
   created() {

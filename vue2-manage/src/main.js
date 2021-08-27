@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import echarts from 'echarts'
 import App from './App'
 import router from './router'
 import store from './store/'
@@ -7,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios';
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
+Vue.prototype.$echarts = echarts;
 
 Vue.use(ElementUI);
 

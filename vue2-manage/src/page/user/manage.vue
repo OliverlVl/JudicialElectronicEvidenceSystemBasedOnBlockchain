@@ -10,7 +10,7 @@
           active-text-color="#ffd04b"
           router
         >
-          <el-menu-item index="manage"
+          <el-menu-item index="userIndex"
             ><i class="el-icon-menu"></i>首页</el-menu-item
           >
 
