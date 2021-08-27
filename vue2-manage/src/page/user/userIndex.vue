@@ -4,17 +4,17 @@
     <div style="display: flex; height: 50%; margin-top: 1.5%">
       <div style="width: 30%; margin-left: 1.5%">
         <div style="height: 35%">
-          <el-form style="padding-left: 25%">
+          <el-form style="padding-left: 25%;font-weight:bold">
             <el-form-item label="公证总次数:" class="demo-table-expands">
-              <span class="demo-table-expands">2222</span>
+              <span class="demo-table-expands">53626</span>
             </el-form-item>
             <el-form-item label="公证成功次数:" class="demo-table-expands">
               <span class="demo-table-expands" style="color: #00af17"
-                >1111</span
+                >49260</span
               >
             </el-form-item>
             <el-form-item label="公证失败次数:" class="demo-table-expands">
-              <span class="demo-table-expands" style="color: red">1111</span>
+              <span class="demo-table-expands" style="color: red">4366</span>
             </el-form-item>
           </el-form>
         </div>
@@ -60,7 +60,7 @@
           :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
         >
           <el-table-column
-            label="公证机构"
+            label="公证机构列表"
             prop="organization_name"
             align="center"
             width="330%"
@@ -97,7 +97,7 @@
           @click="addEvidence()"
           style="width: 60%; margin-bottom: 15px; height: 80px"
         >
-          <span style="font-size:25px;">我要公证</span>
+          <span style="font-size:25px;">我要存证</span>
         </el-button>
         </div>
         <div>
@@ -139,82 +139,82 @@ export default {
       noRank: [
         {
           notaryName: "张三",
-          notarizationCount: 10,
+          notarizationCount: 121,
           notaryRank: 1,
         },
         {
           notaryName: "李四",
-          notarizationCount: 10,
+          notarizationCount: 102,
           notaryRank: 2,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 101,
           notaryRank: 3,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 90,
           notaryRank: 3,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 89,
           notaryRank: 3,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 88,
           notaryRank: 3,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 88,
           notaryRank: 3,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 86,
           notaryRank: 3,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 84,
           notaryRank: 3,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 83,
           notaryRank: 3,
         },
       ],
       orgName: [
         {
-          organization_name: "111111",
+          organization_name: "公证机构1",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构2",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构3",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构4",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构5",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构6",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构7",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构8",
         },
         {
-          organization_name: "111111",
+          organization_name: "公证机构9",
         },
       ],
       notPay: [
