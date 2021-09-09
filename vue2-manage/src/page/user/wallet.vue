@@ -14,10 +14,10 @@
         <el-button type="warning" @click="rechargeVisible = true"
           >充值</el-button
         >
-        <el-button type="danger" @click="withdrawalVisibel = true"
+        <el-button type="danger" @click="withdrawalVisible = true"
           >提现</el-button
         >
-        <el-button type="success" @click="transferVisibel = true"
+        <el-button type="success" @click="transferVisible = true"
           >转账</el-button
         >
       </div>
@@ -50,7 +50,7 @@
     <!-- 提现 -->
     <el-dialog
       title="提现"
-      :visible.sync="withdrawalVisibel"
+      :visible.sync="withdrawalVisible"
       style="width: 60%; margin: 0 auto"
     >
       <el-form
@@ -68,14 +68,14 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button @click="withdrawalVisibel = false">取 消</el-button>
+        <el-button @click="withdrawalVisible = false">取 消</el-button>
         <el-button type="danger" @click="withdrawal()">确定提现</el-button>
       </div>
     </el-dialog>
     <!-- 转账 -->
     <el-dialog
       title="转账"
-      :visible.sync="transferVisibel"
+      :visible.sync="transferVisible"
       style="width: 60%; margin: 0 auto"
     >
       <el-form
@@ -100,7 +100,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button @click="transferVisibel = false">取 消</el-button>
+        <el-button @click="transferVisible = false">取 消</el-button>
         <el-button type="danger" @click="transfer()">确定转账</el-button>
       </div>
     </el-dialog>
@@ -274,8 +274,8 @@ export default {
     return {
       remains: "50",
       rechargeVisible: false,
-      withdrawalVisibel: false,
-      transferVisibel: false,
+      withdrawalVisible: false,
+      transferVisible: false,
       formData: {
         userId: sessionStorage.getItem("userId"),
         transactionMoney: "",
@@ -385,7 +385,7 @@ export default {
     //提现
     async withdrawal() {
       try {
-        this.withdrawalVisibel = false;
+        this.withdrawalVisible = false;
         withdraw(this.formData).then((result) => {
           if (result.status == true) {
             //成功
@@ -409,7 +409,7 @@ export default {
     //转账
     async transfer() {
       try {
-        this.transferVisibel = false;
+        this.transferVisible = false;
         give(this.formData).then((result) => {
           if (result.status == true) {
             //成功
