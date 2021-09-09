@@ -162,46 +162,47 @@ const routes = [
 			meta: ['首页'],
 		},]
 	},{
-		path: '/systemManage',
-		component: systemManage,
-		name: '',
-		children: [{
-			path: '',
-			component: home,
-			meta: [],
-		}, {
-			path: '/systemUser',
-			component: systemUser,
-			meta: ['成员管理', '用户列表'],
-		}, {
-			path: '/systemNotary',
-			component: systemNotary,
-			meta: ['成员管理', '公证员列表'],
-		}, {
-			path: '/systemNotaryManager',
-			component: systemNotaryManager,
-			meta: ['成员管理', '机构管理员列表'],
-		}, {
-			path: '/systemNotarization',
-			component: systemNotarization,
-			meta: ['记录查询', '公证记录'],
-		}, {
-			path: '/systemEvidence',
-			component: systemEvidence,
-			meta: ['记录查询', '存证记录'],
-		}, {
-			path: '/systemManageInfo',
-			component: systemManageInfo,
-			meta: ['个人中心', '个人信息'],
-		}, {
-			path: '/systemTrace',
-			component: systemTrace,
-			meta: ['记录查询', '交易记录'],
-		}, {
-			path: '/systemIndex',
-			component: systemIndex,
-			meta: ['首页'],
-		},]
+	path: '/systemManage',
+	component: systemManage,
+	name: '',
+	children: [{
+		path: '',
+		component: home,
+		meta: [],
+	}, {
+		path: '/systemUser',
+		component: systemUser,
+		meta: ['成员管理', '用户列表'],
+	}, {
+		path: '/systemNotary',
+		component: systemNotary,
+		meta: ['成员管理', '公证员列表'],
+	}, {
+		path: '/systemNotaryManager',
+		component: systemNotaryManager,
+		meta: ['成员管理', '机构管理员列表'],
+	}, {
+		path: '/systemNotarization',
+		component: systemNotarization,
+		meta: ['记录查询', '公证记录'],
+	},{
+		path: '/systemEvidence',
+		component: systemEvidence,
+		meta: ['记录查询', '存证记录'],
+	}, {
+		path: '/systemManageInfo',
+		component: systemManageInfo,
+		meta: ['个人中心', '个人信息'],
+	},, {
+		path: '/systemTrace',
+		component: systemTrace,
+		meta: ['记录查询', '交易记录'],
+	},{
+		path: '/systemIndex',
+		component: systemIndex,
+		meta: ['首页'],
+	},
+	]
 	},
 ]
 

@@ -1,165 +1,128 @@
 <template>
-  <div class="login_page">
-    <div class="container">
-      <div class="manage_tip">
-        <p>区块链电子存证系统</p>
-        <br />
-        <p style="font-size: 20px">Blockchain Electronic Deposit System</p>
-      </div>
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="用户" name="first">
-          <el-form :model="loginForm" :rules="rules" ref="loginForm">
-            <el-form-item prop="username">
-              <el-input
-                v-model="loginForm.username"
-                placeholder="用户名"
-              ></el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input
-                type="password"
-                placeholder="密码"
-                v-model="loginForm.password"
-              ></el-input>
-            </el-form-item>
-            <el-form-item>
+  <div class="login_page fillcontain">
+    <transition name="form-fade" mode="in-out">
+      <section class="form_contianer" v-show="showLogin">
+        <div class="manage_tip">
+          <p>司法区块链-控制台</p>
+        </div>
+        <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+          <el-tab-pane label="用户" name="first">
+            <el-form :model="loginForm" :rules="rules" ref="loginForm">
+              <el-form-item prop="telephone">
+                <el-input
+                  v-model="loginForm.telephone"
+                  placeholder="手机号"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  type="password"
+                  placeholder="密码"
+                  v-model="loginForm.password"
+                ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  type="primary"
+                  @click="submitForm('loginForm')"
+                  class="submit_btn"
+                  >登陆</el-button
+                >
+              </el-form-item>
               <el-button
-                style="width: 100%"
-                type="primary"
-                @click="submitForm('loginForm')"
-                class="submit_btn"
-                >登陆</el-button
-              >
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                style="width: 100%"
                 type="primary"
                 plain
                 class="submit_btn"
                 @click="dialogFormVisible = true"
                 >注册</el-button
               >
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="公证员" name="second">
-          <el-form :model="loginForm" :rules="rules" ref="loginForm">
-            <el-form-item prop="username">
-              <el-input
-                v-model="loginForm.username"
-                placeholder="用户名"
-              ></el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input
-                type="password"
-                placeholder="密码"
-                v-model="loginForm.password"
-              ></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                style="width: 100%"
-                type="primary"
-                @click="submitForm('loginForm')"
-                class="submit_btn"
-                >登陆</el-button
-              >
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                style="width: 100%"
-                type="primary"
-                plain
-                class="submit_btn"
-                @click="dialogFormVisible = true"
-                >注册</el-button
-              >
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="公证管理员" name="third">
-          <el-form :model="loginForm" :rules="rules" ref="loginForm">
-            <el-form-item prop="username">
-              <el-input
-                v-model="loginForm.username"
-                placeholder="用户名"
-              ></el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input
-                type="password"
-                placeholder="密码"
-                v-model="loginForm.password"
-              ></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                style="width: 100%"
-                type="primary"
-                @click="submitForm('loginForm')"
-                class="submit_btn"
-                >登陆</el-button
-              >
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                style="width: 100%"
-                type="primary"
-                plain
-                class="submit_btn"
-                @click="dialogFormVisible = true"
-                >注册</el-button
-              >
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="系统管理员" name="fourth">
-          <el-form :model="loginForm" :rules="rules" ref="loginForm">
-            <el-form-item prop="username">
-              <el-input
-                v-model="loginForm.username"
-                placeholder="用户名"
-              ></el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input
-                type="password"
-                placeholder="密码"
-                v-model="loginForm.password"
-              ></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                style="width: 100%"
-                type="primary"
-                @click="submitForm('loginForm')"
-                class="submit_btn"
-                >登陆</el-button
-              >
-            </el-form-item>
-            <el-form-item>
-              <el-button
-                style="width: 100%"
-                type="primary"
-                plain
-                class="submit_btn"
-                @click="dialogFormVisible = true"
-                >注册</el-button
-              >
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
+              <el-form-item></el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="公证员" name="second">
+            <el-form :model="loginForm" :rules="rules" ref="loginForm">
+              <el-form-item prop="telephone">
+                <el-input
+                  v-model="loginForm.telephone"
+                  placeholder="手机号"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  type="password"
+                  placeholder="密码"
+                  v-model="loginForm.password"
+                ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  type="primary"
+                  @click="submitForm1('loginForm')"
+                  class="submit_btn"
+                  >登陆</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="公证管理员" name="third">
+            <el-form :model="loginForm" :rules="rules" ref="loginForm">
+              <el-form-item prop="telephone">
+                <el-input
+                  v-model="loginForm.telephone"
+                  placeholder="手机号"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  type="password"
+                  placeholder="密码"
+                  v-model="loginForm.password"
+                ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  type="primary"
+                  @click="submitForm2('loginForm')"
+                  class="submit_btn"
+                  >登陆</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="系统管理员" name="fourth">
+            <el-form :model="loginForm" :rules="rules" ref="loginForm">
+              <el-form-item prop="telephone">
+                <el-input
+                  v-model="loginForm.telephone"
+                  placeholder="手机号"
+                ></el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  type="password"
+                  placeholder="密码"
+                  v-model="loginForm.password"
+                ></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button
+                  type="primary"
+                  @click="submitForm3('loginForm')"
+                  class="submit_btn"
+                  >登陆</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
 
-      <p class="tip">© 2021 福州大学</p>
-    </div>
-
+        <p class="tip">鄂ICP备18001612号</p>
+      </section>
+    </transition>
     <el-dialog
       title="用户注册"
       :visible.sync="dialogFormVisible"
-      style="width: 100%"
+      style="width: 60%"
     >
       <el-form :model="formRegister" :rules="rulesRegister" ref="formRegister">
         <el-form-item
@@ -208,30 +171,25 @@
 </template>
 
 <script>
-import {
-  userLogin,
-  notaryLogin,
-  autManagerLogin,
-  sysManagerLogin,
-} from "@/api/getData";
+import { userLogin, userRegister } from "@/api/getData";
+import { mapActions, mapState } from "vuex";
 
 export default {
   data() {
     return {
-      activeName: "first",
+      activeName2: "first",
       // 登录
       loginForm: {
-        username: "",
+        telephone: "",
         password: "",
       },
-      // 表单验证
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          { required: true, message: "请输入用户手机号码", trigger: "blur" },
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
-
+      showLogin: false,
       //注册
       dialogFormVisible: false,
       formRegister: {
@@ -253,92 +211,181 @@ export default {
       canClick: true, //添加canClick
     };
   },
-  mounted() {},
-  computed: {},
+  mounted() {
+    this.showLogin = true;
+    // if (!this.adminInfo.id) {
+    //   this.getAdminData();
+    // }
+  },
+  computed: {
+    // ...mapState(["adminInfo"])
+  },
   methods: {
-    // 切换tab
     handleClick(tab, event) {
       console.log(tab, event);
     },
     // ...mapActions(["getAdminData"]),
-
-    // 登录
+    //登录
     async submitForm(formName) {
-      try {
-        if (this.activeName == "first") {
-          await userLogin(this.loginForm).then((result) => {
-            if (result.status) {
-              sessionStorage.setItem("userId", result.userId);
-              this.$message({
-                type: "success",
-                message: "登入成功",
-              });
-              // 路由跳转
-              this.$router.push("/userIndex");
-            } else {
-              this.$message({
-                type: "error",
-                message: "登入失败",
-              });
-            }
-          });
-        } else if (this.activeName == "second") {
-          await notaryLogin(this.loginForm).then((result) => {
-            if (result.status) {
-              sessionStorage.setItem("userId", result.userId);
-              this.$message({
-                type: "success",
-                message: "登入成功",
-              });
-              // 路由跳转
-              this.$router.push("/notaryIndex");
-            } else {
-              this.$message({
-                type: "error",
-                message: "登入失败",
-              });
-            }
-          });
-        } else if (this.activeName == "third") {
-          await autManagerLogin(this.loginForm).then((result) => {
-            if (result.status) {
-              sessionStorage.setItem("userId", result.userId);
-              this.$message({
-                type: "success",
-                message: "登入成功",
-              });
-              // 路由跳转
-              this.$router.push("/NMIndex");
-            } else {
-              this.$message({
-                type: "error",
-                message: "登入失败",
-              });
-            }
-          });
+      this.$message({
+        type: "success",
+        message: "登录成功",
+      });
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          await userLogin({
+            telephone: this.loginForm.telephone,
+            password: this.loginForm.password,
+          })
+            .then((res) => {
+              if (res.error_code == 0) {
+                this.$message({
+                  type: "success",
+                  message: "登录成功",
+                });
+                localStorage.setItem("system_role", res.system_role);
+                localStorage.setItem("telephone", this.loginForm.telephone);
+                localStorage.setItem("password", this.loginForm.password);
+                sessionStorage.setItem("token", res.token);
+                this.$router.push("manage");
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.message,
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         } else {
-          await sysManagerLogin(this.loginForm).then((result) => {
-            if (result.status) {
-              sessionStorage.setItem("userId", result.userId);
-              this.$message({
-                type: "success",
-                message: "登入成功",
-              });
-              // 路由跳转
-              this.$router.push("/systemIndex");
-            } else {
-              this.$message({
-                type: "error",
-                message: "登入失败",
-              });
-            }
+          this.$notify.error({
+            title: "错误",
+            message: "请输入正确的用户名密码",
+            offset: 100,
           });
+          return false;
         }
-      } catch (e) {
-        console.log(e);
-      }
+      });
     },
-
+    async submitForm1(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          await userLogin({
+            telephone: this.loginForm.telephone,
+            password: this.loginForm.password,
+          })
+            .then((res) => {
+              if (res.error_code == 0) {
+                this.$message({
+                  type: "success",
+                  message: "登录成功",
+                });
+                localStorage.setItem("system_role", res.system_role);
+                localStorage.setItem("telephone", this.loginForm.telephone);
+                localStorage.setItem("password", this.loginForm.password);
+                sessionStorage.setItem("token", res.token);
+                this.$router.push("/notDeal");
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.message,
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        } else {
+          this.$notify.error({
+            title: "错误",
+            message: "请输入正确的用户名密码",
+            offset: 100,
+          });
+          return false;
+        }
+      });
+    },
+    async submitForm2(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          await userLogin({
+            telephone: this.loginForm.telephone,
+            password: this.loginForm.password,
+          })
+            .then((res) => {
+              if (res.error_code == 0) {
+                this.$message({
+                  type: "success",
+                  message: "登录成功",
+                });
+                localStorage.setItem("system_role", res.system_role);
+                localStorage.setItem("telephone", this.loginForm.telephone);
+                localStorage.setItem("password", this.loginForm.password);
+                sessionStorage.setItem("token", res.token);
+                this.$router.push("/totalNotarization");
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.message,
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        } else {
+          this.$notify.error({
+            title: "错误",
+            message: "请输入正确的用户名密码",
+            offset: 100,
+          });
+          return false;
+        }
+      });
+    },
+    async submitForm3(formName) {
+      this.$message({
+        type: "success",
+        message: "登录成功",
+      });
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          await userLogin({
+            telephone: this.loginForm.telephone,
+            password: this.loginForm.password,
+          })
+            .then((res) => {
+              if (res.error_code == 0) {
+                this.$message({
+                  type: "success",
+                  message: "登录成功",
+                });
+                localStorage.setItem("system_role", res.system_role);
+                localStorage.setItem("telephone", this.loginForm.telephone);
+                localStorage.setItem("password", this.loginForm.password);
+                sessionStorage.setItem("token", res.token);
+                this.$router.push("/notDeal");
+              } else {
+                this.$message({
+                  type: "error",
+                  message: res.message,
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        } else {
+          this.$notify.error({
+            title: "错误",
+            message: "请输入正确的用户名密码",
+            offset: 100,
+          });
+          return false;
+        }
+      });
+    },
     //计时器
     countDown() {
       if (!this.canClick) return; //改动的是这两行代码
@@ -414,42 +461,43 @@ export default {
 
 <style lang="less" scoped>
 @import "../style/mixin";
-
-// 背景样式
 .login_page {
   // background-color: #324057;
   background: url(../assets/img/login.jpg) no-repeat;
-  width: 100%;
-  height: 100%;
-  background-size: 100%;
 }
-
-// tab
-.container {
-  padding: 20px;
-  margin: 0px;
-  .wh(375px, 320px);
-  .ctp(10px, 400px);
-  background: rgb(255, 255, 255);
-  position: absolute;
-  text-align: center;
-}
-
-// titile
 .manage_tip {
   position: absolute;
   width: 100%;
-  top: -110px;
+  top: -100px;
   left: 0;
   p {
-    font-size: 40px;
-    color: rgb(255, 255, 255);
+    font-size: 29px;
+    color: #fff;
   }
 }
-
-// 底部提示
+.form_contianer {
+  .wh(320px, 260px);
+  .ctp(5px, 210px);
+  padding: 25px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #fff;
+  .submit_btn {
+    width: 100%;
+    font-size: 16px;
+  }
+}
 .tip {
   font-size: 12px;
-  color: gray;
+  color: red;
+}
+.form-fade-enter-active,
+.form-fade-leave-active {
+  transition: all 1s;
+}
+.form-fade-enter,
+.form-fade-leave-active {
+  transform: translate3d(0, -50px, 0);
+  opacity: 0;
 }
 </style>
