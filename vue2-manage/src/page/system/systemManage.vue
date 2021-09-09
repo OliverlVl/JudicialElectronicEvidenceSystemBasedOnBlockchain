@@ -19,8 +19,8 @@
               ><i class="el-icon-document"></i>成员管理</template
             >
             <el-menu-item index="systemUser">用户列表</el-menu-item>
-            <el-menu-item index="systemNotary">公证员列表</el-menu-item>
             <el-menu-item index="systemNotaryManager">机构管理员列表</el-menu-item>
+            <el-menu-item index="systemNotary">公证员列表</el-menu-item>          
           </el-submenu>
 
           <el-submenu index="3">

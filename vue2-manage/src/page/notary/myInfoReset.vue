@@ -101,7 +101,7 @@
         
       </el-form>
     </div>
-    <div style="margin-left:45; margin-top:2%"> 
+    <div style="margin-left:45%; margin-top:2%"> 
           <el-button type="primary" @click="SubmitInfo()">确定</el-button>
         </div>
 

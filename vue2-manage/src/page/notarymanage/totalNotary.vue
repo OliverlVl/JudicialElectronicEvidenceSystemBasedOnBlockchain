@@ -140,16 +140,49 @@
           </template>
         </el-table-column>
         -->
-        <el-table-column label="公证员编号" align="center" prop="notaryId"></el-table-column>
-        <el-table-column label="公证员" align="center" prop="notaryName"></el-table-column>
-        <el-table-column label="手机号" align="center" prop="phoneNumber"></el-table-column>
         <el-table-column
+          label="公证员编号"
+          align="center"
+          prop="notaryId"
+        ></el-table-column>
+        <el-table-column
+          label="公证员"
+          align="center"
+          prop="notaryName"
+        ></el-table-column>       
+        <!-- <el-table-column
           label="公证机构"
           prop="organizationId"
-          align="center" 
+          align="center"
+        ></el-table-column> -->
+        <el-table-column
+          label="公证类型"
+          width="150px"
+          align="center"
+          prop="notarizationType"
         ></el-table-column>
-        <el-table-column label="性别" align="center" prop="sex"></el-table-column>
-        <el-table-column label="邮箱" align="center" prop="email"></el-table-column>
+        <el-table-column
+          label="性别"
+          width="100px"
+          align="center"
+          prop="sex"
+        ></el-table-column>
+        <el-table-column
+          label="手机号"
+          align="center"
+          prop="phoneNumber"
+        ></el-table-column>
+        <el-table-column
+          label="身份证号"
+          width="180px"
+          align="center"
+          prop="idCard"
+        ></el-table-column>
+        <el-table-column
+          label="邮箱"
+          align="center"
+          prop="email"
+        ></el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -370,7 +403,7 @@ export default {
 .demo-table-expands label {
   width: 120px;
   color: #000000;
-  
+
   font-size: 15px;
 }
 .table_container {
@@ -412,6 +445,6 @@ export default {
 }
 
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

@@ -39,6 +39,12 @@
           </el-submenu>
           <el-submenu index="5">
             <template slot="title"
+              ><i class="el-icon-setting"></i>个人信息</template
+            >
+            <el-menu-item index="notaryManageInfo">信息修改</el-menu-item>
+          </el-submenu>
+          <el-submenu index="6">
+            <template slot="title"
               ><i class="el-icon-warning"></i>系统说明</template
             >
             

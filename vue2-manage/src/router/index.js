@@ -34,6 +34,7 @@ const totalUser = r => require.ensure([], () => r(require('@/page/notarymanage/t
 const totalNotary = r => require.ensure([], () => r(require('@/page/notarymanage/totalNotary')), 'totalNotary');//公证员列表（空白）
 const totalEvidenceList = r => require.ensure([], () => r(require('@/page/notarymanage/totalEvidenceList')), 'totalEvidenceList');//证据列表
 const NMIndex = r => require.ensure([], () => r(require('@/page/notarymanage/NMIndex')), 'NMIndex');//公证员列表（空白）
+const notaryManageInfo = r => require.ensure([], () => r(require('@/page/notarymanage/notaryManageInfo')), 'notaryManageInfo');
 
 // 系统管理员
 const systemManage = r => require.ensure([], () => r(require('@/page/system/systemManage')), 'systemManage');//首页
@@ -160,6 +161,10 @@ const routes = [
 			path: '/NMIndex',
 			component: NMIndex,
 			meta: ['首页'],
+		},{
+			path: '/notaryManageInfo',
+			component: notaryManageInfo,
+			meta: ['个人中心','信息修改'],
 		},]
 	},{
 	path: '/systemManage',

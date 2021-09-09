@@ -126,17 +126,26 @@
         <el-table-column
           label="公证员编号"
           align="center"
+          width="140px"
           prop="notaryId"
         ></el-table-column>
         <el-table-column
           label="公证员"
           align="center"
+          width="140px"
           prop="notaryName"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           label="工号"
+          width="100px"
           align="center"
           prop="jobNumber"
+        ></el-table-column> -->
+        <el-table-column
+          label="所属公证机构"
+          width="180px"
+          align="center"
+          prop="organizationId"
         ></el-table-column>
         <el-table-column
           label="公证类型"
@@ -145,28 +154,29 @@
           prop="notarizationType"
         ></el-table-column>
         <el-table-column
+          label="性别"
+          width="80px"
+          align="center"
+          prop="sex"
+        ></el-table-column>
+        <el-table-column
           label="手机号"
           align="center"
           prop="phoneNumber"
         ></el-table-column>
         <el-table-column
-          label="性别"
-          width="100px"
-          align="center"
-          prop="sex"
-        ></el-table-column>
-        <el-table-column
-          label="邮箱"
-          width="200px"
-          align="center"
-          prop="email"
-        ></el-table-column>
-        <el-table-column
           label="身份证号"
-          width="200px"
+          width="180px"
           align="center"
           prop="idCard"
         ></el-table-column>
+        <el-table-column
+          label="邮箱"
+          width="180px"
+          align="center"
+          prop="email"
+        ></el-table-column>
+        
       </el-table>
       <div class="pagination">
         <el-pagination
