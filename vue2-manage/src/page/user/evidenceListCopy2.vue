@@ -28,7 +28,7 @@
       <el-table :data="tableData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="right" inline class="demo-table-expand">
+            <el-form label-position="right" inline label-width="160px" class="demo-table-expand">
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
@@ -586,11 +586,8 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 35%;
-  color: #000000;
-  background-color: rgba(148, 224, 243, 0.15);
-  border-top: 1px solid #d9d9d9;
-  border-bottom: 1px solid #d9d9d9;
+  width: 120px;
+  color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
   margin-right: 0;
