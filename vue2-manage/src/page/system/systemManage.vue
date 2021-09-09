@@ -33,9 +33,10 @@
           </el-submenu>
           <el-submenu index="4">
             <template slot="title"
-              ><i class="el-icon-setting"></i>个人中心</template
+              ><i class="el-icon-setting"></i>信息管理</template
             >
             <el-menu-item index="systemManageInfo">个人信息</el-menu-item>
+            <el-menu-item index="systemNarizationInfo">申报材料信息</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>

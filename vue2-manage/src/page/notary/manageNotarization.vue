@@ -30,9 +30,10 @@
 					</el-submenu> -->
           <el-submenu index="3">
             <template slot="title"
-              ><i class="el-icon-date"></i>个人中心</template
+              ><i class="el-icon-date"></i>信息管理</template
             >
-            <el-menu-item index="myInfoReset">信息修改</el-menu-item>
+            <el-menu-item index="myInfoReset">个人信息</el-menu-item>
+            <el-menu-item index="notarizationInfo">申报材料信息</el-menu-item>
             <!-- <el-menu-item index="materialCopy">我的材料</el-menu-item>
 						<el-menu-item index="reservation">我的预约</el-menu-item> -->
           </el-submenu>

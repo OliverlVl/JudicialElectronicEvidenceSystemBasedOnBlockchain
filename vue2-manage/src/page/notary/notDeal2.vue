@@ -5,7 +5,7 @@
       <el-input
         v-model="this.searchQuery.usernameWildcard"
         placeholder="请输入申请人"
-        style="width: 390px; margin-left: 30%"
+        style="width: 390px; margin-left: 3%"
       >
         <el-button
           slot="append"

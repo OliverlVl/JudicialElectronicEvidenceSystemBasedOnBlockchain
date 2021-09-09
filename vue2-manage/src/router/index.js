@@ -17,6 +17,7 @@ const notarizationListCopy = r => require.ensure([], () => r(require('@/page/use
 const moneyListCopy = r => require.ensure([], () => r(require('@/page/user/moneyListCopy')), 'moneyListCopy');//个人中心-交易记录
 const evidenceListCopy2 = r => require.ensure([], () => r(require('@/page/user/evidenceListCopy2')), 'evidenceListCopy2');//存证服务-存证列表
 const userIndex = r => require.ensure([], () => r(require('@/page/user/userIndex')), 'userIndex');//个人信息
+const userNotarizationInfo = r => require.ensure([], () => r(require('@/page/user/userNotarizationInfo')), 'userNotarizationInfo');
 // 公证员
 const manageNotarization = r => require.ensure([], () => r(require('@/page/notary/manageNotarization')), 'manageNotarization'); //首页
 const haveDeal = r => require.ensure([], () => r(require('@/page//notary/haveDeal')), 'haveDeal');//公证中心-已处理列表
@@ -24,6 +25,7 @@ const myInfoReset = r => require.ensure([], () => r(require('@/page/notary/myInf
 const notDeal2 = r => require.ensure([], () => r(require('@/page/notary/notDeal2')), 'notDeal2');//公证中心-待处理列表
 const bookDeal = r => require.ensure([], () => r(require('@/page/notary/bookDeal')), 'bookDeal');
 const notaryIndex = r => require.ensure([], () => r(require('@/page/notary/notaryIndex')), 'notaryIndex');
+const notarizationInfo = r => require.ensure([], () => r(require('@/page/notary/notarizationInfo')), 'notarizationInfo');
 
 // 公证管理员
 const notarizationManage = r => require.ensure([], () => r(require('@/page/notarymanage/notarizationManage')), 'notarizationManage');//首页
@@ -36,6 +38,7 @@ const totalEvidenceList = r => require.ensure([], () => r(require('@/page/notary
 const NMIndex = r => require.ensure([], () => r(require('@/page/notarymanage/NMIndex')), 'NMIndex');//公证员列表（空白）
 const notaryManageInfo = r => require.ensure([], () => r(require('@/page/notarymanage/notaryManageInfo')), 'notaryManageInfo');
 const notaryInformation = r => require.ensure([], () => r(require('@/page/notarymanage/notaryInformation')), 'notaryManageInfo'); // 公证信息
+const NMNotarizationInfo = r => require.ensure([], () => r(require('@/page/notarymanage/NMNotarizationInfo')), 'NMNotarizationInfo');
 // 系统管理员
 const systemManage = r => require.ensure([], () => r(require('@/page/system/systemManage')), 'systemManage');//首页
 const systemUser = r => require.ensure([], () => r(require('@/page/system/systemUser')), 'systemUser');//用户列表
@@ -46,6 +49,7 @@ const systemEvidence = r => require.ensure([], () => r(require('@/page/system/sy
 const systemTrace = r => require.ensure([], () => r(require('@/page/system/systemTrace')), 'systemTrace');//交易记录
 const systemManageInfo = r => require.ensure([], () => r(require('@/page/system/systemManageInfo')), 'systemManageInfo');//个人信息
 const systemIndex = r => require.ensure([], () => r(require('@/page/system/systemIndex')), 'systemIndex');//个人信息
+const systemNarizationInfo = r => require.ensure([], () => r(require('@/page/system/systemNarizationInfo')), 'systemNarizationInfo');//个人信息
 
 const routes = [
 	{
@@ -96,7 +100,11 @@ const routes = [
 			path: '/userIndex',
 			component: userIndex,
 			meta: ['首页'],
-		},]
+		},{
+			path: '/userNotarizationInfo',
+			component: userNotarizationInfo,
+			meta: ['公证服务', '申报材料信息'],
+		}]
 	},
 	{
 		path: '/manageNotarization',
@@ -126,6 +134,10 @@ const routes = [
 			path: '/notaryIndex',
 			component: notaryIndex,
 			meta: ['首页'],
+		}, {
+			path: '/notarizationInfo',
+			component: notarizationInfo,
+			meta: ['信息管理', '申报材料信息'],
 		}]
 	},
 	{
@@ -169,9 +181,11 @@ const routes = [
 			path: '/notaryInformation',
 			component: notaryInformation,
 			meta: ['信息管理','公证信息'],
-		}
-	
-		]
+		},{
+			path: '/NMNotarizationInfo',
+			component: NMNotarizationInfo,
+			meta: ['信息管理', '申报材料信息'],
+		}]
 	},{
 	path: '/systemManage',
 	component: systemManage,
@@ -203,8 +217,12 @@ const routes = [
 	}, {
 		path: '/systemManageInfo',
 		component: systemManageInfo,
-		meta: ['个人中心', '个人信息'],
-	},, {
+		meta: ['信息管理', '个人信息'],
+	},,{
+		path: '/systemNarizationInfo',
+		component: systemNarizationInfo,
+		meta: ['信息管理', '申报材料信息'],
+	}, {
 		path: '/systemTrace',
 		component: systemTrace,
 		meta: ['记录查询', '交易记录'],

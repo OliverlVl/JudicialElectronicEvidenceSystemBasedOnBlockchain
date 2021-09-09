@@ -43,6 +43,7 @@
             >
             <el-menu-item index="notaryManageInfo">个人信息</el-menu-item>
             <el-menu-item index="notaryInformation">公证信息</el-menu-item>
+            <el-menu-item index="NMNotarizationInfo">申报材料信息</el-menu-item>
           </el-submenu>
           <el-submenu index="6">
             <template slot="title"
