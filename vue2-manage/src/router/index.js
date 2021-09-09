@@ -35,7 +35,7 @@ const totalNotary = r => require.ensure([], () => r(require('@/page/notarymanage
 const totalEvidenceList = r => require.ensure([], () => r(require('@/page/notarymanage/totalEvidenceList')), 'totalEvidenceList');//证据列表
 const NMIndex = r => require.ensure([], () => r(require('@/page/notarymanage/NMIndex')), 'NMIndex');//公证员列表（空白）
 const notaryManageInfo = r => require.ensure([], () => r(require('@/page/notarymanage/notaryManageInfo')), 'notaryManageInfo');
-
+const notaryInformation = r => require.ensure([], () => r(require('@/page/notarymanage/notaryInformation')), 'notaryManageInfo'); // 公证信息
 // 系统管理员
 const systemManage = r => require.ensure([], () => r(require('@/page/system/systemManage')), 'systemManage');//首页
 const systemUser = r => require.ensure([], () => r(require('@/page/system/systemUser')), 'systemUser');//用户列表
@@ -165,7 +165,13 @@ const routes = [
 			path: '/notaryManageInfo',
 			component: notaryManageInfo,
 			meta: ['信息管理','个人信息'],
-		},]
+		},{
+			path: '/notaryInformation',
+			component: notaryInformation,
+			meta: ['信息管理','公证信息'],
+		}
+	
+		]
 	},{
 	path: '/systemManage',
 	component: systemManage,
