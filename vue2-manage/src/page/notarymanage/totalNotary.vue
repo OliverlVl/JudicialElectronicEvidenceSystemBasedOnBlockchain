@@ -1,11 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-input
         v-model="notaryInfo.notaryNameWildcard"
         placeholder="请输入公证员"
-        style="width: 390px; margin-left: 30%"
+        style="width: 390px; margin-left: 3%"
       >
         <el-button
           slot="append"
@@ -123,6 +123,7 @@
     </el-dialog>
     <div class="table_container">
       <el-table :data="tableData" stripe style="width: 100%">
+        <!--
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -138,11 +139,17 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="公证员编号" prop="notaryId"></el-table-column>
-        <el-table-column label="公证员" prop="notaryName"></el-table-column>
-        <el-table-column label="手机号" prop="phoneNumber"></el-table-column>
-        <el-table-column label="性别" prop="sex"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
+        -->
+        <el-table-column label="公证员编号" align="center" prop="notaryId"></el-table-column>
+        <el-table-column label="公证员" align="center" prop="notaryName"></el-table-column>
+        <el-table-column label="手机号" align="center" prop="phoneNumber"></el-table-column>
+        <el-table-column
+          label="公证机构"
+          prop="organizationId"
+          align="center" 
+        ></el-table-column>
+        <el-table-column label="性别" align="center" prop="sex"></el-table-column>
+        <el-table-column label="邮箱" align="center" prop="email"></el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -202,7 +209,7 @@ export default {
           value: "none",
         },
       ],
-      autManId:"",
+      autManId: "",
       // 加解密
     };
   },
@@ -295,7 +302,7 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
-        await userQuery(this.notaryInfo).then((result) => {
+        await notaQuery(this.notaryInfo).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -363,6 +370,7 @@ export default {
 .demo-table-expands label {
   width: 120px;
   color: #000000;
+  
   font-size: 15px;
 }
 .table_container {
@@ -401,5 +409,9 @@ export default {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
 }
 </style>

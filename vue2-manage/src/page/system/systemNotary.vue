@@ -1,11 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-input
         v-model="notaryInfo.notaryNameWildcard"
         placeholder="请输入公证员"
-        style="width: 390px; margin-left: 30%"
+        style="width: 390px; margin-left: 3%"
       >
         <el-button
           slot="append"
@@ -123,26 +123,50 @@
     </el-dialog>
     <div class="table_container">
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="工号">
-                <span>{{ props.row.jobNumber }}</span>
-              </el-form-item>
-              <el-form-item label="公证类型">
-                <span>{{ props.row.notarizationType }}</span>
-              </el-form-item>
-              <el-form-item label="身份证号">
-                <span>{{ props.row.idCard }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
-        <el-table-column label="公证员编号" prop="notaryId"></el-table-column>
-        <el-table-column label="公证员" prop="notaryName"></el-table-column>
-        <el-table-column label="手机号" prop="phoneNumber"></el-table-column>
-        <el-table-column label="性别" prop="sex"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column
+          label="公证员编号"
+          align="center"
+          prop="notaryId"
+        ></el-table-column>
+        <el-table-column
+          label="公证员"
+          align="center"
+          prop="notaryName"
+        ></el-table-column>
+        <el-table-column
+          label="工号"
+          align="center"
+          prop="jobNumber"
+        ></el-table-column>
+        <el-table-column
+          label="公证类型"
+          width="100px"
+          align="center"
+          prop="notarizationType"
+        ></el-table-column>
+        <el-table-column
+          label="手机号"
+          align="center"
+          prop="phoneNumber"
+        ></el-table-column>
+        <el-table-column
+          label="性别"
+          width="100px"
+          align="center"
+          prop="sex"
+        ></el-table-column>
+        <el-table-column
+          label="邮箱"
+          width="200px"
+          align="center"
+          prop="email"
+        ></el-table-column>
+        <el-table-column
+          label="身份证号"
+          width="200px"
+          align="center"
+          prop="idCard"
+        ></el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -168,7 +192,16 @@ export default {
       searchVisible: false,
       decrypt_flag: true,
       // 表格
-      tableData: [{}],
+      tableData: [
+        {
+          jobNumber:"001",
+          notarizationType:"房产证公证",
+          email: "29*********@163.com",
+          sex: "男",
+          idCard: "350103xxxxxxxxxxxx",
+          phoneNumber: "135********",
+        },
+      ],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -201,7 +234,7 @@ export default {
           value: "none",
         },
       ],
-      manId:"",
+      manId: "",
       // 加解密
     };
   },
@@ -406,10 +439,12 @@ export default {
   height: 120px;
   display: block;
 }
-
 .a-style {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+.top-div-set {
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

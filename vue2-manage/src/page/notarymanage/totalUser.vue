@@ -1,11 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-input
         v-model="userInfo.usernameWildcard"
         placeholder="请输入用户名"
-        style="width: 390px; margin-left: 30%"
+        style="width: 390px; margin-left: 3%"
       >
         <el-button
           slot="append"
@@ -101,24 +101,24 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="存储空间">
+            <el-form label-position="right" inline class="demo-table-expand" >
+              <el-form-item label="存储空间:">
                 <span>{{ props.row.storageSpace }}</span>
               </el-form-item>
-              <el-form-item label="已用空间">
+              <el-form-item label="已用空间:">
                 <span>{{ props.row.hasUsedStorage }}</span>
               </el-form-item>
-              <el-form-item label="身份证号">
+              <el-form-item label="身份证号:">
                 <span>{{ props.row.idCard }}</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="用户ID" prop="userId"></el-table-column>
-        <el-table-column label="用户名" prop="username"></el-table-column>
-        <el-table-column label="手机号" prop="phoneNumber"></el-table-column>
-        <el-table-column label="性别" prop="sex"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column label="用户ID" align="center" prop="userId"></el-table-column>
+        <el-table-column label="用户名" align="center" prop="username"></el-table-column>
+        <el-table-column label="手机号" align="center" prop="phoneNumber"></el-table-column>
+        <el-table-column label="性别" align="center" prop="sex"></el-table-column>
+        <el-table-column label="邮箱" align="center" prop="email"></el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -310,8 +310,12 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 120px;
-  color: #99a9bf;
+  width: 35%;
+  color: #000000;
+  background-color: rgba(148, 224, 243, 0.15);
+  border-top: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
 }
 .demo-table-expand .el-form-item {
   margin-right: 0;
@@ -364,4 +368,8 @@ export default {
   cursor: pointer;
   text-decoration: underline;
 }
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
+}
+
 </style>

@@ -11,12 +11,12 @@ let routerMode = 'hash';
 let baseImgPath;
 
 if (process.env.NODE_ENV == 'development') {
-	baseUrl = 'http://127.0.0.1:7001/api/blockchain-law/v1';
-    baseImgPath = 'http://127.0.0.1:7001/api/blockchain-law/v1/addEvidence';
+	baseUrl = 'http://localhost:8080/';
+    baseImgPath = '';
 }else{
 	// baseUrl = '//elm.cangdu.org';
-	baseUrl = 'http://127.0.0.1:7001/api/blockchain-law/v1'
-    baseImgPath = 'http://127.0.0.1:7001/api/blockchain-law/v1/addEvidence';
+	baseUrl = 'http://localhost:8080/'
+    baseImgPath = '';
 }
 
 export {
