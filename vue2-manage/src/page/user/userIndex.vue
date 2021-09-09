@@ -223,7 +223,7 @@ export default {
         },
       ],
       //组织名列表
-      orgName: [
+      orgName: [{},{}
       ],
       //公证费用
       noPay: [
