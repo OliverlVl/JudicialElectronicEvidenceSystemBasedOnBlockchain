@@ -1,11 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-input
         v-model="this.searchQuery.usernameWildcard"
         placeholder="请输入申请人"
-        style="width: 390px; margin-left: 30%"
+        style="width: 390px; margin-left: 3%"
       >
         <el-button
           slot="append"
@@ -21,6 +21,7 @@
         >高级搜索
       </el-button>
       <!--<el-button @click="tryy()">尝试</el-button>-->
+      <!-- <el-divider style="color:red"></el-divider> -->
     </div>
     <el-dialog
       title="高级搜索"
@@ -45,9 +46,9 @@
           >
             <el-option
               v-for="item in evidence_type"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.evidenceType"
+              :label="item.evidenceTypeName"
+              :value="item.evidenceType"
             >
             </el-option>
           </el-select>
@@ -62,9 +63,9 @@
           >
             <el-option
               v-for="item in notarization_type"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.notarizationType"
+              :label="item.notarizationTypeName"
+              :value="item.notarizationType"
             >
             </el-option>
           </el-select>
@@ -126,65 +127,66 @@
       </div>
     </el-dialog>
     <div class="table_container">
-      <el-table :data="tableData"  stripe style="width: 100%">
+      <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form
-              label-position="left"
+              label-position="right"
               inline
               label-width="160px"
               class="demo-table-expand"
             >
-              <el-form-item label="文件目录">
+              <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
-              <el-form-item label="文件大小">
+              <el-form-item label="文件大小:">
                 <span>{{ props.row.fileSize }}</span>
               </el-form-item>
-              <el-form-item label="文件哈希值">
+              <el-form-item label="文件哈希值:">
                 <span>{{ props.row.fileHash }}</span>
               </el-form-item>
-              <el-form-item label="存证时间">
+              <el-form-item label="存证编号:">
+                <span>{{ props.row.evidenceId }}</span>
+              </el-form-item>
+              <el-form-item label="存证时间:">
                 <span>{{ props.row.evidenceTime }}</span>
               </el-form-item>
-              <el-form-item label="上链时间">
+              <el-form-item label="上链时间:">
                 <span>{{ props.row.blockchainTime }}</span>
               </el-form-item>
-              <el-form-item label="公证申请时间">
-                <span>{{ props.row.notarizationStartTime }}</span>
-              </el-form-item>
-              <el-form-item label="存证区块链交易ID">
+              <el-form-item label="存证区块链交易ID:">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
               </el-form-item>
-              <el-form-item label="公证申请区块链交易ID">
+              <el-form-item label="公证申请区块链交易ID:">
                 <span>{{ props.row.notarizationBlockchainIdStart }}</span>
               </el-form-item>
-              <el-form-item label="公证金额">
+              <el-form-item label="申请事项:">
+                <span>{{ props.row.notarizationMatters }}</span>
+              </el-form-item>
+              <el-form-item label="公证金额:">
                 <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
-              <el-form-item label="交易支付状态">
+              <el-form-item label="交易支付状态:">
                 <span>{{ props.row.transactionStatus }}</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
-        <el-table-column label="申请人" prop="userId"></el-table-column>
-        <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
-        <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
-        <el-table-column
-          label="申请事项"
-          prop="notarizationMatters"
-          style="margin-left: 30px"
-        ></el-table-column>
+        <el-table-column label="申请人" align="center" width="180px" prop="userId"></el-table-column>
+        <el-table-column label="存证类型" align="center" width="180px" prop="evidenceType"></el-table-column>
+        <el-table-column label="存证名称" align="center" prop="evidenceName"></el-table-column>
+        <el-table-column label="公证申请时间" align="center" prop="notarizationStartTime"></el-table-column>
         <el-table-column
           label="公证类型"
+          align="center"
+          width="180px"
           prop="notarizationType"
         ></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
               type="primary"
+              size="small"
               @click="appointDeal(scope.row.evidenceId, this.notary_id)"
               >公证</el-button
             >
@@ -225,7 +227,7 @@ export default {
       decryptFlag: 1,
       moneyState: "",
       // 表格
-      tableData: [{},{}],
+      tableData: [{}, {}],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -246,15 +248,15 @@ export default {
       //存证类型选择器
       evidence_type: [
         {
-          label: "不限",
-          value: "none",
+          evidenceTypeName: "不限",
+          evidenceType: "none",
         },
       ],
       //公证类型选择器
       notarization_type: [
         {
-          label: "不限",
-          value: "none",
+          notarizationTypeName: "不限",
+          notarizationType: "none",
         },
       ],
       payment_type: [
@@ -319,7 +321,7 @@ export default {
             }); //foreach结束
             this.pageTotal = this.tableData.length;
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           } //if结束
         }); //await结束
         //获取存证类型
@@ -328,6 +330,8 @@ export default {
             typeres.data.forEach((item) => {
               this.evidence_type.push(item);
             });
+          } else {
+            console.log("存证类型获取失败");
           }
         });
         //获取公证类型
@@ -336,6 +340,8 @@ export default {
             typeres.data.forEach((item) => {
               this.notarization_type.push(item);
             });
+          } else {
+            console.log("公证类型获取失败");
           }
         });
       } catch (error) {
@@ -503,10 +509,12 @@ export default {
   height: 120px;
   display: block;
 }
-
 .a-style {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
 }
 </style>

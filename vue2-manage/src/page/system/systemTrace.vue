@@ -1,10 +1,10 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-select
         v-model="transaction.transactionType"
-        style="margin-left: 30%; width: 390px"
+        style="margin-left: 3%; width: 390px"
         placeholder="请选择交易类型"
       >
         <el-option
@@ -27,14 +27,14 @@
       <el-table :data="tableData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="上链时间">
+            <el-form label-position="right" inline class="demo-table-expand">
+              <el-form-item label="上链时间:">
                 <span>{{ props.row.blockchainTime }}</span>
               </el-form-item>
-              <el-form-item label="交易对象">
+              <el-form-item label="交易对象:">
                 <span>{{ props.row.transactionPeople }}</span>
               </el-form-item>
-              <el-form-item label="购买存储空间大小">
+              <el-form-item label="购买存储空间大小:">
                 <span>{{ props.row.storageSize }}</span>
               </el-form-item>
             </el-form>
@@ -42,22 +42,27 @@
         </el-table-column>
         <el-table-column
           label="交易编号"
+          align="center"
           prop="transactionId"
         ></el-table-column>
         <el-table-column
           label="交易金额"
+          align="center"
           prop="transactionMoney"
         ></el-table-column>
         <el-table-column
           label="交易时间"
+          align="center"
           prop="transactionTime"
         ></el-table-column>
         <el-table-column
           label="区块链ID"
+          align="center"
           prop="transactionBlockchainId"
         ></el-table-column>
         <el-table-column
           label="交易类型"
+          align="center"
           prop="transactionType"
         ></el-table-column>
       </el-table>
@@ -239,8 +244,8 @@ export default {
       tableData: [
         {
           blockchainTime: "",
-          transactionPeople: "/",
-          storageSize: "/",
+          transactionPeople: "",
+          storageSize: "",
         },
         {},
         {},
@@ -396,10 +401,12 @@ export default {
   height: 120px;
   display: block;
 }
-
 .a-style {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
 }
 </style>

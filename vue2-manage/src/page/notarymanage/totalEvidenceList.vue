@@ -1,11 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-input
         v-model="evidence.evidenceNameWildcard"
         placeholder="请输入证据名称"
-        style="width: 390px; margin-left: 30%"
+        style="width: 390px; margin-left: 3%"
       >
         <el-button
           slot="append"
@@ -126,35 +126,39 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="文件哈希">
+            <el-form label-position="right" inline class="demo-table-expand">
+              <el-form-item label="文件哈希:">
                 <span>{{ props.row.fileHash }}</span>
               </el-form-item>
-              <el-form-item label="证据保存区块ID">
+              <el-form-item label="证据保存区块ID:">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
               </el-form-item>
-              <el-form-item label="公证开始时间">
+              <el-form-item label="公证开始时间:">
                 <span>{{ props.row.notarizationStartTime }}</span>
               </el-form-item>
-              <el-form-item label="公证状态">
-                <span>{{ props.row.notarizationStatus }}</span>
-              </el-form-item>
-              <el-form-item label="公证金额">
+              <el-form-item label="公证金额:">
                 <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="证据编号" prop="evidenceId"></el-table-column>
-        <el-table-column label="证据名称" prop="evidenceName"></el-table-column>
+        <el-table-column label="证据编号" align="center" prop="evidenceId"></el-table-column>
+        <el-table-column label="证据名称" align="center" prop="evidenceName"></el-table-column>
         <el-table-column
           label="上链时间"
+          align="center" 
           prop="blockchainTime"
         ></el-table-column>
-        <el-table-column label="证据类型" prop="evidenceType"></el-table-column>
+        <el-table-column label="证据类型" align="center" prop="evidenceType"></el-table-column>
         <el-table-column
           label="公证机构"
+          align="center" 
           prop="organizationName"
+        ></el-table-column>
+        <el-table-column
+          label="公证状态"
+          align="center" 
+          prop="notarizationStatus"
         ></el-table-column>
       </el-table>
       <!-- 分页-->
@@ -302,6 +306,7 @@ export default {
             });
           }
         });
+        console.log(evidence_type);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -444,10 +449,7 @@ export default {
 <style lang="less">
 @import "../../style/mixin";
 .search_container {
-  // padding: 10px;
-  padding-left: 20px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+   padding: 20px;
 }
 .demo-table-expand {
   font-size: 0;
@@ -497,5 +499,8 @@ export default {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
 }
 </style>

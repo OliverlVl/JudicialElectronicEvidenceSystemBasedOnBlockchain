@@ -1,11 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-input
         v-model="userInfo.usernameWildcard"
         placeholder="请输入用户名"
-        style="width: 390px; margin-left: 30%"
+        style="width: 390px; margin-left: 3%"
       >
         <el-button
           slot="append"
@@ -99,29 +99,56 @@
     </el-dialog>
     <div class="table_container">
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="存储空间">
-                <span>{{ props.row.storageSpace }}</span>
-              </el-form-item>
-              <el-form-item label="已用空间">
-                <span>{{ props.row.hasUsedStorage }}</span>
-              </el-form-item>
-              <el-form-item label="身份证号">
-                <span>{{ props.row.idCard }}</span>
-              </el-form-item>
-              <el-form-item label="用户公钥">
-                <span>{{ props.row.publicKey }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户ID" prop="userId"></el-table-column>
-        <el-table-column label="用户名" prop="username"></el-table-column>
-        <el-table-column label="手机号" prop="phoneNumber"></el-table-column>
-        <el-table-column label="性别" prop="sex"></el-table-column>
-        <el-table-column label="邮箱" prop="email"></el-table-column>
+        <el-table-column
+          label="用户编号"
+          align="center"
+          width="160px"
+          prop="userId"
+        ></el-table-column>
+        <el-table-column
+          label="用户名"
+          width="160px"
+          align="center"
+          prop="username"
+        ></el-table-column>
+        <el-table-column
+          label="手机号"
+          align="center"
+          prop="phoneNumber"
+        ></el-table-column>
+        <el-table-column
+          label="性别"
+          align="center"
+          width="100px"
+          prop="sex"
+        ></el-table-column>
+        <el-table-column
+          label="邮箱"
+          align="center"
+          prop="email"
+        ></el-table-column>
+        <el-table-column
+          label="身份证号"
+          align="center"
+          prop="idCard"
+        ></el-table-column>
+        <el-table-column
+          label="已用空间"
+          align="right"
+          width="100px"
+          prop="hasUsedStorage"
+        ></el-table-column>
+        <el-table-column
+          label="/"
+          align="center"
+          width="20px"
+        >/</el-table-column>
+        <el-table-column
+          label="存储空间"
+          align="left"
+          width="100px"
+          prop="storageSpace"
+        ></el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -147,7 +174,24 @@ export default {
       searchVisible: false,
       decrypt_flag: true,
       // 表格
-      tableData: [{}],
+      tableData: [
+        {
+          email: "29*********@163.com",
+          sex: "男",
+          storageSpace: 1000,
+          hasUsedStorage: 210,
+          idCard: "350103xxxxxxxxxxxx",
+          phoneNumber:"135********",
+        },{
+          email: "29*********@163.com",
+          sex: "男",
+          storageSpace: 1000,
+          hasUsedStorage: 210,
+          showStorage: "",
+          idCard: "350103xxxxxxxxxxxx",
+          phoneNumber:"135********",
+        },
+      ],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -172,7 +216,7 @@ export default {
           value: "1",
         },
       ],
-      manId:"",
+      manId: "",
       // 加解密
     };
   },
@@ -205,7 +249,7 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           }
         });
       } catch (error) {
@@ -263,12 +307,12 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           }
         });
         this.resetData();
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
     },
     resetData() {
@@ -300,9 +344,6 @@ export default {
     handleDel() {
       this.$message.success("审核成功");
     },
-    tryy(){
-      alert("1");
-    }
   },
 };
 </script>
@@ -359,5 +400,8 @@ export default {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
 }
 </style>

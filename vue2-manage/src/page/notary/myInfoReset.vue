@@ -2,97 +2,116 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="head">信息修改</div>
+    <div style="margin-left: 13%; ">
+      <el-form label-width="100px" style="margin-top: 25px; width:950px" inline>
+        <el-form-item label="姓名:">
+          <el-input
+            v-model="initInfor.notaryName"
+            placeholder="请输入姓名"
+            style="width: 340px"
+            :disabled="true"
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container">
-      &emsp; <span style="margin-left: 25%">姓名:</span> &emsp;
-      <el-input
-        v-model="initInfor.notaryName"
-        placeholder="请输入手机号"
-        style="width: 440px"
-        :disabled="true"
-      ></el-input>
-    </div>
+        <el-form-item label="编号:">
+          <el-input
+            v-model="initInfor.notaryId"
+            placeholder="请输入编号"
+            style="width: 340px"
+            :disabled="true"
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container">
-      &emsp; <span style="margin-left: 25%">编号:</span> &emsp;
-      <el-input
-        v-model="initInfor.notaryId"
-        placeholder="请输入手机号"
-        style="width: 440px"
-        :disabled="true"
-      ></el-input>
-    </div>
+        <el-form-item label="工号:">
+          <el-input
+            v-model="initInfor.jobNumber"
+            placeholder="请输入工号"
+            style="width: 340px"
+            :disabled="true"
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container">
-      &emsp; <span style="margin-left: 25%">工号:</span> &emsp;
-      <el-input
-        v-model="initInfor.jobNumber"
-        placeholder="请输入手机号"
-        style="width: 440px"
-        :disabled="true"
-      ></el-input>
-    </div>
+        <el-form-item label="公证机构ID:">
+          <el-input
+            v-model="initInfor.organizationId"
+            placeholder="请输入工号"
+            style="width: 340px"
+            :disabled="true"
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container">
-      &emsp; <span style="margin-left: 21%">公证机构ID：</span> &emsp;
-      <el-input
-        v-model="initInfor.organizationId"
-        placeholder="请输入邮箱"
-        style="width: 440px; margin-left: -1%"
-        :disabled="true"
-      ></el-input>
-    </div>
+        <el-form-item label="工作年限:">
+          <el-input
+            v-model="initInfor.notaryId"
+            placeholder="请输入编号"
+            style="width: 340px"
+            :disabled="true"
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container">
-      &emsp; <span style="margin-left: 23.5%">手机号:</span> &emsp;
-      <el-input
-        v-model="initInfor.phoneNumber"
-        placeholder="请输入手机号"
-        style="width: 440px; margin-left: 0.3%"
-      ></el-input>
-    </div>
+        <el-form-item label="职位:">
+          <el-input
+            v-model="initInfor.notaryId"
+            placeholder="请输入编号"
+            style="width: 340px"
+            :disabled="true"
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container">
-      &emsp; <span style="margin-left: 25%">邮箱:</span> &emsp;
-      <el-input
-        v-model="initInfor.email"
-        placeholder="请输入邮箱"
-        style="width: 440px"
-      ></el-input>
-    </div>
+        <el-form-item label="手机号:" prop="phone">
+          <el-input
+            v-model="initInfor.phoneNumber"
+            placeholder="请输入手机号"
+            style="width: 340px"
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container">
-      &emsp; <span style="margin-left: 22.5%">公证类型：</span> &emsp;
-      <el-select
-        v-model="initInfor.notarizationType"
-        placeholder="请选择"
-        filterable
-        style="margin-left: -1.1%"
-      >
-        <el-option
-          v-for="item in notarization_type"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
-      <el-button @click="tryy()">取 消</el-button>
-    </div>
+        <el-form-item label="密码:" prop="pass">
+          <el-input
+            v-model="initInfor.password"
+            placeholder="请输入密码"
+            style="width: 340px"
+            show-password
+          ></el-input>
+        </el-form-item>
 
-    <div class="table_container" style="margin-left: 35%">
-      <el-button type="primary" @click="changeVisible = true"
-        >修改密码</el-button
-      >
-      <el-button type="primary" @click="SubmitInfo()">提交</el-button>
+        <el-form-item label="邮箱:" prop="emails">
+          <el-input
+            v-model="initInfor.email"
+            placeholder="请输入邮箱"
+            style="width: 340px"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="公证类型:" prop="notarizationType">
+          <el-select
+            v-model="initInfor.notarizationType"
+            placeholder="请选择公证类型"
+            style="width: 340px"
+          >
+            <el-option
+              v-for="item in notarization_type"
+              :key="item.notarizationType"
+              :label="item.notarizationTypeName"
+              :value="item.notarizationType"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        
+      </el-form>
     </div>
+    <div style="margin-left:45; margin-top:2%"> 
+          <el-button type="primary" @click="SubmitInfo()">确定</el-button>
+        </div>
+
     <el-dialog
       title="修改密码"
       :visible.sync="changeVisible"
       style="width: 100%"
     >
       <el-form label-width="100px">
-        <el-form-item label="旧密码:" style="margin-left:25%">
+        <el-form-item label="旧密码:" style="margin-left: 25%">
           <el-input
             v-model="oldPass"
             placeholder="请输入旧密码"
@@ -100,7 +119,7 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="新密码:" style="margin-left:25%">
+        <el-form-item label="新密码:" style="margin-left: 25%">
           <el-input
             v-model="this.newPass"
             placeholder="请输入新密码"
@@ -109,8 +128,15 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-          <el-button @click="changeVisible = false">取 消</el-button>
-          <el-button @click="ChangePass(); changeVisible = false;" type="primary">确 定</el-button>
+        <el-button @click="changeVisible = false">取 消</el-button>
+        <el-button
+          @click="
+            ChangePass();
+            changeVisible = false;
+          "
+          type="primary"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -146,17 +172,17 @@ export default {
       },
       notarization_type: [
         {
-          label: "不限",
-          value: "none",
+          notarizationTypeName: "不限",
+          notarizationType: "none",
         },
       ],
-      notary_id:"",
+      notary_id: "",
     };
   },
   created() {
     this.decryptFlag = 1;
     this.notary_id = localStorage.getItem("notaryId");
-    //this.initData();
+    this.initData();
   },
   computed: {},
   components: {
@@ -167,15 +193,17 @@ export default {
     async initData() {
       try {
         const query = {
-          notaryId: this.notary_id,
+          //notaryId: this.notary_id,
+          notaryId: "1",
         };
 
         await notaQuery(query).then((result) => {
           if (result.status) {
+            console.log(result.data)
             this.initInfor = {};
             this.initInfor = result.data;
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           }
         });
         //获取公证类型
@@ -187,7 +215,7 @@ export default {
           }
         });
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
     },
     // 处理导航页
@@ -201,6 +229,7 @@ export default {
     async SubmitInfo() {
       try {
         const submitInfo = {
+          notaryId: this.notary_id,
           phoneNumber: this.initInfor.phoneNumber,
           email: this.initInfor.email,
           notarizationType: this.initInfor.notarizationType,
@@ -217,13 +246,13 @@ export default {
       }
     },
     async ChangePass() {
-      try{
-        if (this.oldPass != this.initInfor.password){
+      try {
+        if (this.oldPass != this.initInfor.password) {
           alert("原密码输入错误");
         }
         const query = {
           password: this.newPass,
-        }
+        };
         await notarregist(query).then((result) => {
           if (result.status) {
             alert("修改成功");
@@ -231,13 +260,13 @@ export default {
             throw new Error("获取数据失败");
           }
         });
-      }catch(e){
-        throw new Error(e.message)
+      } catch (e) {
+        throw new Error(e.message);
       }
     },
-    tryy(){
+    tryy() {
       alert("1");
-    }
+    },
   },
 };
 </script>

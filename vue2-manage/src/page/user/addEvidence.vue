@@ -19,9 +19,9 @@
             >
               <el-option
                 v-for="item in evidenceType"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.evidenceType"
+                :label="item.evidenceTypeName"
+                :value="item.evidenceType"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -94,11 +94,14 @@ export default {
     //获取存证类型
     getEvidenceType() {
       try {
+        console.log("1111111111111111111111111111");
         getEvidenceType().then((result) => {
+          console.log("222222222222222222222222222");
           if (result.status == true) {
             //成功
             console.log(result.data);
             result.data.forEach((item) => {
+              console.log(item);
               this.evidenceType.push(item);
             });
           } else {

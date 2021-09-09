@@ -1,11 +1,11 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-input
         placeholder="请输入存证名称"
         v-model="notarization.evidenceName"
-        style="margin-left: 30%; width: 390px"
+        style="margin-left: 3%; width: 390px"
         clearable
       >
         <el-button
@@ -22,67 +22,71 @@
       <el-table :data="tableData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="文件目录">
+            <el-form label-position="right" inline class="demo-table-expand">
+              <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
-              <el-form-item label="文件大小">
+              <el-form-item label="文件大小:">
                 <span>{{ props.row.fileSize }}</span>
               </el-form-item>
-              <el-form-item label="文件Hash值">
+              <el-form-item label="文件Hash值:">
                 <span>{{ props.row.fileHash }}</span>
               </el-form-item>
-              <el-form-item label="存证时间">
+              <el-form-item label="存证时间:">
                 <span>{{ props.row.evidenceTime }}</span>
               </el-form-item>
-              <el-form-item label="存证区块链交易ID">
+              <el-form-item label="存证区块链交易ID:">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
               </el-form-item>
-              <el-form-item label="上链时间">
+              <el-form-item label="上链时间:">
                 <span>{{ props.row.blockchainTime }}</span>
               </el-form-item>
-              <el-form-item label="申请事项">
+              <el-form-item label="申请事项:">
                 <span>{{ props.row.notarizationMatters }}</span>
               </el-form-item>
-              <el-form-item label="公证申请时间">
-                <span>{{ props.row.notarizationStartTime }}</span>
-              </el-form-item>
-              <el-form-item label="公证申请区块链交易ID">
+              <el-form-item label="公证申请区块链交易ID:">
                 <span>{{ props.row.notarizationBlockchainIdStart }}</span>
               </el-form-item>
-
-              <el-form-item label="公证完成区块链交易ID">
+              <el-form-item label="公证完成区块链交易ID:">
                 <span>{{ props.row.notarizationBlockchainIdEnd }}</span>
               </el-form-item>
-              <el-form-item label="公证金额">
-                <span>{{ props.row.notarizationMoney }}</span>
-              </el-form-item>
-              <el-form-item label="支付状态">
+              <el-form-item label="支付状态:">
                 <span>{{ props.row.transactionStatus }}</span>
               </el-form-item>
-              <el-form-item label="审核信息">
+              <el-form-item label="审核信息:">
                 <span>{{ props.row.notarizationInformation }}</span>
               </el-form-item>
-              <el-form-item label="公证完成时间">
+              <el-form-item label="公证完成时间:">
                 <span>{{ props.row.notarizationEndTime }}</span>
               </el-form-item>
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
-        <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
-        <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
-
         <el-table-column
           label="公证类型"
+          align="center"
+          width="140"
           prop="notarizationType"
         ></el-table-column>
+        <el-table-column label="存证类型" align="center" prop="evidenceType"></el-table-column>
         <el-table-column
           label="公证机构"
+          align="center"
           prop="organizationName"
         ></el-table-column>
         <el-table-column
+          label="公证金额"
+          align="center"
+          prop="notarizationMoney"
+        ></el-table-column>
+        <el-table-column
+          label="公证申请时间"
+          align="center"
+          prop="notarizationStartTime"
+        ></el-table-column>
+        <el-table-column
           label="公证状态"
+          align="center"
           prop="notarizationStatus"
         ></el-table-column>
       </el-table>
@@ -119,9 +123,9 @@
           >
             <el-option
               v-for="item in evidenceType"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.evidenceType"
+              :label="item.evidenceTypeName"
+              :value="item.evidenceType"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -133,9 +137,9 @@
           >
             <el-option
               v-for="item in notarizationType"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.notarizationType"
+              :label="item.notarizationTypeName"
+              :value="item.notarizationType"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -343,7 +347,15 @@ export default {
     // 获取公证机构列表
     async getAgent() {
       try {
-        orgaQuery().then((result) => {
+        const query = {
+          organizationId: "none",
+          organizationIdNameWildcard: "none",
+          addressWildcard: "none",
+          phoneNumberWildcard: "none",
+          legalPeopleWildcard: "none",
+          emailWildcard: "none",
+        };
+        orgaQuery(query).then((result) => {
           if (result.status == true) {
             //成功
             console.log(result.data);
@@ -483,7 +495,7 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 25%;
+  width: 35%;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
@@ -527,5 +539,8 @@ export default {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
 }
 </style>

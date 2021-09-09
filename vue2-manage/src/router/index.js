@@ -108,7 +108,7 @@ const routes = [
 		}, {
 			path: '/haveDeal',
 			component: haveDeal,
-			meta: ['公证中心', '已处理列表'],
+			meta: ['公证中心', '个人已完成列表'],
 		}, {
 			path: '/myInfoReset',
 			component: myInfoReset,
@@ -116,7 +116,7 @@ const routes = [
 		}, {
 			path: '/notDeal2',
 			component: notDeal2,
-			meta: ['公证中心', '待处理列表'],
+			meta: ['公证中心', '个人待处理列表'],
 		}, {
 			path: '/bookDeal',
 			component: bookDeal,

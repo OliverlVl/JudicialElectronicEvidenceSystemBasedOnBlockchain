@@ -1,84 +1,109 @@
 <template>
   <div class="totalDiv fillcontain">
     <head-top></head-top>
-    <div style="display: flex; height: 50%; margin-top: 1.5%">
-      <div style="width: 30%; margin-left: 1.5%">
-        <div style="height: 35%">
-          <el-form style="padding-left: 25%">
+    <div class="top-set">区块链电子存证平台</div>
+    <div style="display: flex; height: 50%; margin-left: 0.5%">
+      <div style="width: 29%" class="div-set">
+        <i class="el-icon-s-data title-set">交易统计</i>
+        <div style="height: 30%">
+          <el-form style="margin-left: 20%; width: 200%">
             <el-form-item label="公证总次数:" class="demo-table-expands">
-              <span class="demo-table-expands">2222</span>
+              <span class="demo-table-expands">{{
+                this.noNumber.totalNum
+              }}</span>
             </el-form-item>
             <el-form-item label="公证成功次数:" class="demo-table-expands">
-              <span class="demo-table-expands" style="color: #00af17"
-                >1111</span
-              >
+              <span class="demo-table-expands" style="color: #00af17">{{
+                this.noNumber.successNum
+              }}</span>
             </el-form-item>
-            <el-form-item label="公证失败次数:" class="demo-table-expands">
-              <span class="demo-table-expands" style="color: red">1111</span>
+            <el-form-item label="公证驳回次数:" class="demo-table-expands">
+              <span class="demo-table-expands" style="color: red">{{
+                this.noNumber.notSuccessNum
+              }}</span>
             </el-form-item>
           </el-form>
         </div>
         <!--公证员列表-->
-        <div style="height: 65%">
+        <div style="height: 65%; width: 90%; margin-top: 3%; margin-left: 7%">
           <el-table
             :data="noRank"
-            height="100%"
+            height="210px"
             border
-            :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
-            :row-class-name="tableRowClassName"
+            stripe
+            :header-cell-style="{
+              background: '#eef1f6',
+              color: '#606266',
+              fontSize: '15px',
+            }"
           >
             <el-table-column
-              label=""
-              width="50%"
+              label="No."
+              width="70%"
               prop="notaryRank"
               align="center"
             ></el-table-column>
             <el-table-column
               label="公证员"
-              width="150%"
+              width="120%"
               prop="notaryName"
               align="center"
             ></el-table-column>
             <el-table-column
               label="公证数量"
-              width="150%"
+              width="120%"
               prop="notarizationCount"
               align="center"
             ></el-table-column>
           </el-table>
         </div>
       </div>
-      <!--饼状图-->
-      <div id="myChart" style="width: 39%" class="no-div"></div>
+
       <!--组织列表-->
-      <div style="width: 30%">
+      <div style="width: 30%" class="noTableRow div-set">
+        <i class="el-icon-s-flag title-set">机构信息</i>
         <el-table
           :data="orgName"
-          stripe
           height="100%"
           border
-          :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+          :header-cell-style="{
+            background: '#eef1f6',
+            color: '#606266',
+            fontSize: '23px',
+            align: 'center',
+          }"
+          :show-header="status"
+          :cell-style="{ 'text-align': 'left' }"
         >
           <el-table-column
             label="公证机构"
-            prop="organization_name"
+            prop="organizationName"
             align="center"
             width="330%"
           ></el-table-column>
         </el-table>
       </div>
+      <!--饼状图-->
+      <div
+        id="myChart"
+        style="width: 39%; margin-left: 0.5%"
+        class="div-set"
+      ></div>
     </div>
-    <div style="width: 100%; height: 39%; position: relative; display: flex">
+    <div class="down-div-set div-set">
       <div class="tryy">
         <el-table
-          :data="notPay"
-          border="1px soild #000000"
-          height="100%"
-          :header-cell-style="{ background: '#eef1f6', color: '#606266' , height: '55px'}"
+          :data="noPay"
+          height="210px"
+          :header-cell-style="{
+            background: '#eef1f6',
+            color: '#606266',
+            height: '55px',
+          }"
         >
           <el-table-column
             label="公证类型"
-            prop="notarizationType"
+            prop="notarizationTypeName"
             align="center"
             width="180%"
           ></el-table-column>
@@ -92,22 +117,22 @@
       </div>
       <div style="width: 30%; position: relative" class="button-set-no">
         <div>
-        <el-button
-          type="danger"
-          @click="addEvidence()"
-          style="width: 60%; margin-bottom: 15px; height: 80px"
-        >
-          <span style="font-size:25px;">我要公证</span>
-        </el-button>
+          <el-button
+            type="danger"
+            @click="addEvidence()"
+            style="width: 60%; margin-bottom: 15px; height: 80px"
+          >
+            <span style="font-size: 25px">我要公证</span>
+          </el-button>
         </div>
         <div>
           <el-button
-          type="primary"
-          @click="querySpace()"
-          style="width: 60%; height: 80px"
-        >
-          <span style="font-size:25px;">查询剩余空间</span>
-        </el-button>
+            type="primary"
+            @click="querySpace()"
+            style="width: 60%; height: 80px"
+          >
+            <span style="font-size: 25px">查询剩余空间</span>
+          </el-button>
         </div>
       </div>
     </div>
@@ -118,10 +143,18 @@
 import headTop from "../../components/headTop";
 import "echarts";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { orgaQuery, rankStasQue, notPayQuery } from "@/api/getData";
+import { orgaQuery, rankStasQue, notPayQuery, noNumQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
+      status:false,
+      //公证数量
+      noNumber: {
+        successNum: 7651,
+        notSuccessNum: 1246,
+        totalNum: 8897,
+      },
+      //公证类型及数量
       noType: [
         {
           name: "房产证公证",
@@ -136,115 +169,73 @@ export default {
           value: 666,
         },
       ],
+      //公证员排名
       noRank: [
         {
           notaryName: "张三",
-          notarizationCount: 10,
+          notarizationCount: 108,
           notaryRank: 1,
         },
         {
           notaryName: "李四",
-          notarizationCount: 10,
+          notarizationCount: 97,
           notaryRank: 2,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
+          notarizationCount: 96,
           notaryRank: 3,
         },
         {
-          notaryName: "王五",
-          notarizationCount: 10,
-          notaryRank: 3,
+          notaryName: "甲",
+          notarizationCount: 91,
+          notaryRank: 4,
+        },
+        {
+          notaryName: "乙",
+          notarizationCount: 87,
+          notaryRank: 5,
+        },
+        {
+          notaryName: "丙",
+          notarizationCount: 79,
+          notaryRank: 6,
+        },
+        {
+          notaryName: "丁",
+          notarizationCount: 78,
+          notaryRank: 7,
+        },
+        {
+          notaryName: "戊",
+          notarizationCount: 76,
+          notaryRank: 8,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
-          notaryRank: 3,
+          notarizationCount: 73,
+          notaryRank: 9,
         },
         {
           notaryName: "王五",
-          notarizationCount: 10,
-          notaryRank: 3,
-        },
-        {
-          notaryName: "王五",
-          notarizationCount: 10,
-          notaryRank: 3,
-        },
-        {
-          notaryName: "王五",
-          notarizationCount: 10,
-          notaryRank: 3,
-        },
-        {
-          notaryName: "王五",
-          notarizationCount: 10,
-          notaryRank: 3,
-        },
-        {
-          notaryName: "王五",
-          notarizationCount: 10,
-          notaryRank: 3,
+          notarizationCount: 70,
+          notaryRank: 10,
         },
       ],
+      //组织名列表
       orgName: [
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
-        {
-          organization_name: "111111",
-        },
       ],
-      notPay: [
-        {
-          notarizationType: "房产证公证",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationType: "房产证公证",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationType: "房产证公证",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationType: "房产证公证",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationType: "房产证公证",
-          notarizationMoney: 100,
-        },
+      //公证费用
+      noPay: [
       ],
-      userId:"",
+      nota_Num: [{}],
+      userId: "",
     };
   },
   created() {
-    this.userId= sessionStorage.getItem("userID"),
+    this.userId = sessionStorage.getItem("userID");
     this.initData();
+    this.getNoPay();
   },
   mounted() {
     this.drawLine();
@@ -264,7 +255,35 @@ export default {
         legalPeopleWildcard: "none",
         emailWildcard: "none",
       };
+      const noRankQuery = {
+        timeFlag: 1,
+        decryptFlag: 1,
+        sort: 0,
+      };
       try {
+        //公证数量查询
+        await noNumQuery().then((result) => {
+          if (result.status) {
+            this.noNumber = result.data;
+          } else {
+            console.log("获取数据失败");
+          }
+        });
+        //公证员排名
+        await rankStasQue(noRankQuery).then((result) => {
+          if (result.status) {
+            console.log(result.data)
+            this.noRank = [];
+            result.data.forEach((item, index) => {
+              if (index <= 10) {
+                this.noRank.push(item);
+              }
+            });
+          } else {
+            console.log("获取排名失败");
+          }
+        });
+        //获取组织名
         await orgaQuery(orgQuery).then((result) => {
           if (result.status) {
             this.orgName = [];
@@ -272,21 +291,40 @@ export default {
               this.orgName.push(item);
             });
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取机构名失败失败");
           }
         });
-        const noRankQuery = {
-          timeFlag: 1,
-          decryptFlag: 1,
-          sort: 0,
-        };
-        await rankStasQue(noRankQuery).then((result) => {
+        /*
+        //获取公证类型及数量
+        await noTypeQuery().then((result) => {
+          console.log("获取公证类型及数量开始");
+          typeRes = {};
           if (result.status) {
-            this.noRank = [];
-            result.data.forEach((item, index) => {
-              if (index <= 10) {
-                this.noRank.push(item);
-              }
+            this.noType = [];
+            console.log(result.data);
+            typeRes = {};
+            result.data.forEach((item) => {
+              typeRes.name = item.data.notarTypeName;
+              typeRes.value = item.data.Num;
+              this.noType.push(typeRes);
+            });
+          } else {
+            console.log("获取数据失败");
+          }
+        });*/
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
+    async getNoPay() {
+      try {
+        //公证费用查询
+        await notPayQuery().then((result) => {
+          if (result.status) {
+            console.log(result.data);
+            this.noPay = [];
+            result.data.forEach((item) => {
+              this.noPay.push(item);
             });
           } else {
             throw new Error("获取数据失败");
@@ -311,6 +349,7 @@ export default {
         title: {
           text: "公证类型及其数量",
           left: "center",
+          padding: 30,
           textStyle: {
             fontSize: 25,
           },
@@ -368,6 +407,7 @@ export default {
 .demo-table-expands {
   font-size: 20px;
   margin-bottom: 0%;
+  font-weight: bolder;
 }
 .demo-table-expands label {
   width: 120px;
@@ -388,7 +428,7 @@ export default {
   margin-top: 8px;
 }
 .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
+  //border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
@@ -415,25 +455,56 @@ export default {
   cursor: pointer;
   text-decoration: underline;
 }
-.el-table th,
-.el-table tr,
-.el-table td {
+.top-set {
+  width: 100%;
+  font-size: 23px;
+  margin-bottom: 0.5%;
+  text-align: center;
+  height: 3.5%;
+  padding-top: 0.5%;
+  font-weight: bolder;
+}
+.noTableRow {
+  margin-left: 0.5%;
+}
+.noTableRow .el-table {
+  margin-left: 7%;
+}
+.div-set .el-table th,
+.div-set .el-table tr,
+.div-set .el-table td {
   background-color: transparent !important; /* 背景透明 */
-  border: 1px solid #ffffff;
+  border: 1px solid #000000;
   color: #000000;
-  height: 30px;
   line-height: 30px;
 }
-.el-table,
-.el-table__expanded-cell {
+.div-set .el-table,
+.div-set .el-table__expanded-cell {
   background-color: transparent;
 }
+.div-set {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  box-shadow: 10px 0px 39px 0px rgb(219, 217, 217) inset;
+  display: flex;
+  flex-direction: column;
+
+  //align-items: center;
+}
+.title-set {
+  margin-top: 2%;
+  margin-left: 3%;
+  font-size: 20px;
+  font-weight: bolder;
+  height: 10%;
+  //text-align: left;
+}
 .tryy {
-  width: 30%;
+  width: 35%;
   position: absolute;
-  height: 80%;
-  top: 7%;
-  left: 21%;
+  height: 93%;
+  top: 5%;
+  left: 15%;
   //background: #20a0ff;
 }
 .tryy .el-table th,
@@ -442,19 +513,29 @@ export default {
   background-color: transparent !important; /* 背景透明 */
   border: 1px solid #000000;
   color: #000000;
-  height: 50px;
+  height: 35px;
   line-height: 15px;
-  font-size: 20px;
+  font-size: 19px;
 }
 .tryy .el-table,
 .tryy .el-table__expanded-cell {
   background-color: transparent;
+  margin-left: 10%;
+  margin-top: 2%;
 }
 .button-set-no {
   position: absolute;
-  height:60%;
+  height: 60%;
   top: 15%;
   left: 55%;
   //background:red
+}
+.down-div-set {
+  width: 99.5%;
+  height: 36%;
+  position: relative;
+  display: flex;
+  margin-top: 0.5%;
+  margin-left: 0.2%;
 }
 </style>
