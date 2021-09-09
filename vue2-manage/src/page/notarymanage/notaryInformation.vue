@@ -181,7 +181,7 @@
 
 <script>
 import headTop from "@/components/headTop";
-import { getEvidenceType, addEvidence } from "@/api/getData";
+import { createType, updateType ,updateMoney,noTypeQuery} from "@/api/getData";
 export default {
   data() {
     return {

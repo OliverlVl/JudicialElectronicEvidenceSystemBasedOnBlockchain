@@ -152,10 +152,18 @@ export const notPayQuery = data => fetch('/notPayQuery',data, 'POST');
 
 
 
-
-
-
-
+/**
+* 	新增公证类型
+*/
+export const createType = data => fetch('/aut/createType',data, 'POST');
+/**
+* 	修改公证类型
+*/
+export const updateType = data => fetch('/aut/updateType',data, 'POST');
+/**
+* 	修改公证金额
+*/
+export const updateMoney = data => fetch('/aut/updateMoney',data, 'POST');
 
 
 
