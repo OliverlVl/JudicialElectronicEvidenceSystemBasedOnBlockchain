@@ -4,10 +4,10 @@
     <div class="head">信息修改</div>
     <el-form
       label-width="200px"
-      style="margin-left: 20%; margin-top: 35px"
+      style="margin-left: 20%; margin-top: 25px"
       :rules="rules"
     >
-      <el-form-item label="姓名:" style="margin-bottom:3.5%">
+      <el-form-item label="姓名:">
         <el-input
           v-model="initInfor.username"
           placeholder="请输入姓名"
@@ -16,7 +16,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="编号:" style="margin-bottom:3.5%">
+      <el-form-item label="编号:">
         <el-input
           v-model="initInfor.manId"
           placeholder="请输入编号"
@@ -26,7 +26,7 @@
       </el-form-item>
 
 
-      <el-form-item label="手机号:" prop="phone" style="margin-bottom:3.5%"> 
+      <el-form-item label="手机号:" prop="phone">
         <el-input
           v-model="initInfor.phoneNumber"
           placeholder="请输入手机号"
@@ -34,7 +34,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="密码:" prop="pass" style="margin-bottom:3.5%">
+      <el-form-item label="密码:" prop="pass">
         <el-input
           v-model="initInfor.password"
           placeholder="请输入密码"
@@ -43,7 +43,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="邮箱:" prop="emails" style="margin-bottom:3.5%">
+      <el-form-item label="邮箱:" prop="emails">
         <el-input
           v-model="initInfor.email"
           placeholder="请输入邮箱"
@@ -120,7 +120,7 @@ export default {
     this.decryptFlag = 1;
     this.manId = localStorage.getItem("manId");
     this.initData();
-    //this.oldPass = this.initInfor.password;
+    this.oldPass = this.initInfor.password;
   },
   computed: {
   },
@@ -132,9 +132,10 @@ export default {
     async initData() {
       try {
         const query = {
-          manId: this.manId,
+          notaryId: this.notary_id,
         };
-        await sysQuery(query).then((result) => {
+
+        await notaQuery(query).then((result) => {
           if (result.status) {
             this.initInfor = {};
             this.initInfor = result.data;
@@ -165,9 +166,9 @@ export default {
     async SubmitInfo() {
       try {
         const submitInfo = {
-          manId: this.manId,
           phoneNumber: this.initInfor.phoneNumber,
           email: this.initInfor.email,
+          notarizationType: this.initInfor.notarizationType,
           password: this.initInfor.password,
         };
         await notarregist(submitInfo).then((result) => {

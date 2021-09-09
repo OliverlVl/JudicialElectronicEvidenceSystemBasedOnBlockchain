@@ -68,34 +68,47 @@
         </el-table>
       </div>
     </div>
-    <div style="width: 100%; height: 39%; position: relative">
+    <div style="width: 100%; height: 39%; position: relative; display: flex">
       <div class="tryy">
         <el-table
-          :data="NMInfo"
-          stripe
-          height="100%"
+          :data="notPay"
           border="1px soild #000000"
-          :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+          height="100%"
+          :header-cell-style="{ background: '#eef1f6', color: '#606266' , height: '55px'}"
         >
           <el-table-column
-            label="机构公证数量"
-            prop="notarizationCount"
+            label="公证类型"
+            prop="notarizationType"
             align="center"
-            width="330%"
+            width="180%"
           ></el-table-column>
           <el-table-column
-            label="机构公证成功数量"
-            prop="notarizationSuccessCount"
+            label="公证金额（元）"
+            prop="notarizationMoney"
             align="center"
-            width="330%"
-          ></el-table-column>
-          <el-table-column
-            label="机构公证收益"
-            prop="notarizationTotalMoney"
-            align="center"
-            width="330%"
+            width="180%"
           ></el-table-column>
         </el-table>
+      </div>
+      <div style="width: 30%; position: relative" class="button-set-no">
+        <div>
+        <el-button
+          type="danger"
+          @click="addEvidence()"
+          style="width: 60%; margin-bottom: 15px; height: 80px"
+        >
+          <span style="font-size:25px;">我要公证</span>
+        </el-button>
+        </div>
+        <div>
+          <el-button
+          type="primary"
+          @click="querySpace()"
+          style="width: 60%; height: 80px"
+        >
+          <span style="font-size:25px;">查询剩余空间</span>
+        </el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -105,13 +118,7 @@
 import headTop from "../../components/headTop";
 import "echarts";
 import { baseUrl, baseImgPath } from "@/config/env";
-import {
-  orgaQuery,
-  rankStasQue,
-  orgStasQue,
-  orgStasGen,
-  autmanQuery,
-} from "@/api/getData";
+import { orgaQuery, rankStasQue, notPayQuery } from "@/api/getData";
 export default {
   data() {
     return {
@@ -185,24 +192,58 @@ export default {
         {
           organization_name: "111111",
         },
-      ],
-      NMInfo: [
         {
-          notarizationTotalMoney: 10000,
-          notarizationSuccessCount: 100,
-          notarizationCount: 200,
+          organization_name: "111111",
+        },
+        {
+          organization_name: "111111",
+        },
+        {
+          organization_name: "111111",
+        },
+        {
+          organization_name: "111111",
+        },
+        {
+          organization_name: "111111",
+        },
+        {
+          organization_name: "111111",
+        },
+        {
+          organization_name: "111111",
+        },
+        {
+          organization_name: "111111",
         },
       ],
-      // 获取数据
-      pageTotal: 0,
-      pageIndex: 1,
-      pageSize: 10,
-      autManId: "",
-      organizationId: "",
+      notPay: [
+        {
+          notarizationType: "房产证公证",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationType: "房产证公证",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationType: "房产证公证",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationType: "房产证公证",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationType: "房产证公证",
+          notarizationMoney: 100,
+        },
+      ],
+      userId:"",
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
+    this.userId= sessionStorage.getItem("userID"),
     this.initData();
   },
   mounted() {
@@ -215,7 +256,6 @@ export default {
   methods: {
     // 初始化数据
     async initData() {
-      //所有组织信息
       const orgQuery = {
         organizationId: "none",
         organizationIdNameWildcard: "none",
@@ -235,7 +275,6 @@ export default {
             throw new Error("获取数据失败");
           }
         });
-        //公证员排名
         const noRankQuery = {
           timeFlag: 1,
           decryptFlag: 1,
@@ -251,34 +290,6 @@ export default {
             });
           } else {
             throw new Error("获取数据失败");
-          }
-        });
-        //获取组织信息
-        const query = {
-          timeFlag: 1,
-          decryptFlag: 1,
-        };
-        const autQuery = {
-          autManId: this.autManId,
-        };
-        await autmanQuery(autQuery).then((result) => {
-          if (result.status) {
-            this.organizationId = result.data.organizationId;
-          }
-        });
-        await orgStasGen().then((result) => {
-          if (result.status == false) {
-            throw new Error("统计生成失败");
-          }
-        });
-        await orgStasQue(query).then((result) => {
-          if (result.status) {
-            this.NMInfo = [];
-            result.data.forEach((item) => {
-              if (item.organizationId == this.organizationId) {
-                this.NMInfo.push(item);
-              }
-            });
           }
         });
       } catch (error) {
@@ -330,6 +341,13 @@ export default {
     },
     tableRowClassName({ row, rowIndex }) {
       return "noTableRow";
+    },
+    // 新增存证路由跳转
+    addEvidence() {
+      this.$router.push("/addEvidence");
+    },
+    querySpace() {
+      this.$router.push("/capacityPackage");
     },
   },
 };
@@ -410,15 +428,12 @@ export default {
 .el-table__expanded-cell {
   background-color: transparent;
 }
-.no-div {
-  //border: 1px solid #000000;
-}
 .tryy {
-  height: 39%;
-  width: 78%;
+  width: 30%;
   position: absolute;
-  top: 15%;
-  left: 10%;
+  height: 80%;
+  top: 7%;
+  left: 21%;
   //background: #20a0ff;
 }
 .tryy .el-table th,
@@ -427,12 +442,19 @@ export default {
   background-color: transparent !important; /* 背景透明 */
   border: 1px solid #000000;
   color: #000000;
-  height: 30px;
-  line-height: 30px;
+  height: 50px;
+  line-height: 15px;
   font-size: 20px;
 }
 .tryy .el-table,
 .tryy .el-table__expanded-cell {
   background-color: transparent;
+}
+.button-set-no {
+  position: absolute;
+  height:60%;
+  top: 15%;
+  left: 55%;
+  //background:red
 }
 </style>

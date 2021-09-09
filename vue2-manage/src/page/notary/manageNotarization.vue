@@ -20,8 +20,8 @@
             >
             <!-- <el-menu-item index="evidenceList">存证列表</el-menu-item> -->
             <el-menu-item index="bookDeal">可公证列表</el-menu-item>
-            <el-menu-item index="notDeal2">个人待处理列表</el-menu-item>
-            <el-menu-item index="haveDeal">个人已完成列表</el-menu-item>
+            <el-menu-item index="notDeal2">待处理列表</el-menu-item>
+            <el-menu-item index="haveDeal">已完成列表</el-menu-item>
           </el-submenu>
           <!-- <el-submenu index="2">
 						<template slot="title"><i class="el-icon-document"></i>取证服务</template>

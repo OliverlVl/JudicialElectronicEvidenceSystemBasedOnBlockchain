@@ -2,46 +2,45 @@
   <div class="fillcontain">
     <head-top></head-top>
     <!-- 头部查询-->
-    <div class="search_container top-div-set">
-      
+    <div class="search_container">
+      <el-button
+        type="primary"
+        @click="addEvidence()"
+        >新增存证</el-button
+      >
       <el-input
         placeholder="请输入存证名称"
         v-model="evidence.evidenceName"
-        style="margin-left: 3%; width: 390px"
+        style="margin-left: 20%; width: 390px"
         clearable
       >
-        <el-button
-          slot="append"
-          icon="el-icon-search"
-          @click="getEvidenceData()"
-        ></el-button>
+      <el-button slot="append" icon="el-icon-search" @click="getEvidenceData()"></el-button>
       </el-input>
-
+      
       <!-- <el-button type="primary" @click="handleSearch()">搜索</el-button> -->
       <el-button type="primary" @click="searchVisible = true">
         高级搜索
       </el-button>
-      <el-button type="primary" @click="addEvidence()">新增存证</el-button>
     </div>
     <!-- 记录列表-->
     <div class="table_container">
       <el-table :data="tableData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="right" inline class="demo-table-expand">
-              <el-form-item label="文件目录:">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="文件目录">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
-              <el-form-item label="文件大小:">
+              <el-form-item label="文件大小">
                 <span>{{ props.row.fileSize }}</span>
               </el-form-item>
-              <el-form-item label="文件Hash值:">
+              <el-form-item label="文件Hash值">
                 <span>{{ props.row.fileHash }}</span>
               </el-form-item>
-              <el-form-item label="存证区块链交易ID:">
+              <el-form-item label="存证区块链交易ID">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
               </el-form-item>
-              <el-form-item label="上链时间:">
+              <el-form-item label="上链时间">
                 <span>{{ props.row.blockchainTime }}</span>
               </el-form-item>
             </el-form>
@@ -50,13 +49,13 @@
         <el-table-column
           type="index"
           label="序号"
-          width="70px"
+          width="100"
         ></el-table-column>
-        <el-table-column label="存证编号" align="center" prop="evidenceId"></el-table-column>
-        <el-table-column label="存证名称" align="center" prop="evidenceName"></el-table-column>
-        <el-table-column label="存证类型" align="center" prop="evidenceType"></el-table-column>
-        <el-table-column label="存证时间" align="center" prop="evidenceTime"></el-table-column>
-        <el-table-column label="操作" align="center" width="360">
+        <el-table-column label="存证编号" prop="evidenceId"></el-table-column>
+        <el-table-column label="存证名称" prop="evidenceName"></el-table-column>
+        <el-table-column label="存证类型" prop="evidenceType"></el-table-column>
+        <el-table-column label="存证时间" prop="evidenceTime"></el-table-column>
+        <el-table-column label="操作" width="360">
           <template slot-scope="scope">
             <el-button
               size="small"
@@ -98,9 +97,9 @@
           >
             <el-option
               v-for="item in notarizationType"
-              :key="item.notarizationType"
-              :label="item.notarizationTypeName"
-              :value="item.notarizationType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -157,9 +156,9 @@
           >
             <el-option
               v-for="item in evidenceType"
-              :key="item.evidenceType"
-              :label="item.evidenceTypeName"
-              :value="item.evidenceType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -191,6 +190,7 @@
             style="width: 55%"
           ></el-date-picker>
         </el-form-item>
+        
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -217,9 +217,8 @@ export default {
       searchVisible: false,
       notarPayVisible: false,
 
-      /*evidence: {
-        //userId: sessionStorage.getItem("userID"),
-        userId: "1",
+      evidence: {
+        userId: sessionStorage.getItem("userID"),
         evidenceName: "",
         evidenceType: "",
         // evidenceTimeStart: "none",
@@ -227,22 +226,6 @@ export default {
         // blockchainTimeStart: "none",
         // blockchainTimeEnd: "none",
         notarizationStatus: 0,
-      },*/
-      evidence: {
-        evidenceId: "none",
-        userId: "1",
-        usernameWildcard: "none",
-        fileSizeFloor: -1,
-        fileSizeUpper: -1,
-        evidenceName: "",
-        evidenceType: "",
-        evidenceTimeStart: "none",
-        evidenceTimeEnd: "none",
-        blockchainTimeStart: "none",
-        blockchainTimeEnd: "none",
-        notarizationStatus: "none",
-        evidenceBlockchainId: "none",
-        decryptFlag: 1,
       },
       // 存证类型
       evidenceType: [],
@@ -373,16 +356,7 @@ export default {
     // 获取公证机构列表
     async getAgent() {
       try {
-        const query = {
-          organizationId: "none",
-          organizationIdNameWildcard: "none",
-          addressWildcard: "none",
-          phoneNumberWildcard: "none",
-          legalPeopleWildcard: "none",
-          emailWildcard: "none",
-        };
-        orgaQuery(query).then((result) => {
-          console.log("获取公证机构状态：" + result.status);
+        orgaQuery().then((result) => {
           if (result.status == true) {
             //成功
             console.log(result.data);
@@ -391,7 +365,7 @@ export default {
             });
           } else {
             //失败
-            console.log(result.message + "获取公证机构列表失败");
+            console.log("获取公证机构列表失败");
           }
         });
       } catch (e) {
@@ -517,15 +491,13 @@ export default {
         // 为空时后端所需的参数
         this.evidence.evidenceName = "none";
       }
-      if (this.evidence.evidenceType == "") {
+      if ((this.evidence.evidenceType == "")) {
         // 为空时后端所需的参数
         this.evidence.evidenceType = "none";
       }
       // 请求数据
       try {
-        console.log("请求数据");
         await userEvidenceQuery(this.evidence).then((result) => {
-          console.log(result.data);
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -586,17 +558,13 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 35%;
-  color: #000000;
-  background-color: rgba(148, 224, 243, 0.15);
-  border-top: 1px solid #d9d9d9;
-  border-bottom: 1px solid #d9d9d9;
+  width: 20%;
+  color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-  
 }
 .table_container {
   padding: 20px;
@@ -634,8 +602,5 @@ export default {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
-}
-.top-div-set {
-  background:rgba(196, 196, 196, 0.5)
 }
 </style>

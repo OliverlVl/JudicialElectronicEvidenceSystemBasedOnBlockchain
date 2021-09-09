@@ -1,5 +1,4 @@
 import fetch from '@/config/fetch'
-//import { baseUrl } from '../config/env';
 
 
 /**
@@ -37,7 +36,7 @@ export const userEvidenceQuery = data => fetch('/user/evidenceQuery', data, 'POS
  /**
  * 公证类型查询
  */
-export const noTypeQuery = data => fetch('noTypeQuery', data, 'POST');
+export const noTypeQuery = data => fetch('/noTypeQuery', data, 'POST');
 
 /**
  * 公证请求
@@ -105,11 +104,11 @@ export const notarmanageRecord = data => fetch('/aut/notarRecord',data, 'POST');
 /*
  * 	查询证据列表
  */
-export const evidenceQuery = data => fetch('evidenceQuery',data, 'POST');
+export const evidenceQuery = data => fetch('/aut/evidenceQuery',data, 'POST');
 /**
 * 	存证类型查询
 */
-export const eviTypeQuery = data => fetch('eviTypeQuery',data, 'POST');
+export const eviTypeQuery = data => fetch('/eviTypeQuery',data, 'POST');
 /**
 
 /**
@@ -190,43 +189,6 @@ export const notaQuery = data => fetch('/aut/notaQuery',data, 'POST');
 * 	机构管理员信息查询
 */
 export const autmanQuery = data => fetch('/aut/autmanQuery',data, 'POST');
-/**
-* 	公证总数查询
-*/
-export const noNumQuery = data => fetch('/noNumQuery',data, 'POST');
-/**
-* 	公证类型及其数量查询
-*/
-//export const noTypeQuery = data => fetch('/noTypeQuery',data, 'POST');
-
-
-
-/**
-* 	系统管理员登录
-*/
-export const sysLogin = data => fetch('/sys/login',data, 'POST');
-/**
-* 	系统管理员注册
-*/
-export const sysRegist = data => fetch('/sys/regist',data, 'POST');
-/**
-* 	系统管理员信息完善
-*/
-export const sysUpdate = data => fetch('/sys/update',data, 'POST');
-/**
-* 	机构管理员登录
-*/
-export const autLogin = data => fetch('/aut/login',data, 'POST');
-/**
-* 	机构管理员注册
-*/
-export const autRegist = data => fetch('/aut/regist',data, 'POST');
-/**
-* 	机构管理员信息完善
-*/
-export const autUpdate = data => fetch('/aut/update',data, 'POST');
-
-
 
 
 
