@@ -27,14 +27,14 @@
       <el-table :data="tableData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="上链时间">
+            <el-form label-position="right" inline class="demo-table-expand">
+              <el-form-item label="上链时间:">
                 <span>{{ props.row.blockchainTime }}</span>
               </el-form-item>
-              <el-form-item label="交易对象">
+              <el-form-item label="交易对象:">
                 <span>{{ props.row.transactionPeople }}</span>
               </el-form-item>
-              <el-form-item label="购买存储空间大小">
+              <el-form-item label="购买存储空间大小:">
                 <span>{{ props.row.storageSize }}</span>
               </el-form-item>
             </el-form>
