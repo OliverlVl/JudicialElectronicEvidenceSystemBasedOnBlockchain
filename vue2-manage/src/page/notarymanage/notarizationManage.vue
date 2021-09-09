@@ -39,9 +39,9 @@
           </el-submenu>
           <el-submenu index="5">
             <template slot="title"
-              ><i class="el-icon-setting"></i>个人信息</template
+              ><i class="el-icon-setting"></i>信息管理</template
             >
-            <el-menu-item index="notaryManageInfo">信息修改</el-menu-item>
+            <el-menu-item index="notaryManageInfo">个人信息</el-menu-item>
           </el-submenu>
           <el-submenu index="6">
             <template slot="title"

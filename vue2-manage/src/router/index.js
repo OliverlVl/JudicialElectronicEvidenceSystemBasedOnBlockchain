@@ -113,7 +113,7 @@ const routes = [
 		}, {
 			path: '/myInfoReset',
 			component: myInfoReset,
-			meta: ['个人中心', '信息修改'],
+			meta: ['信息管理', '个人信息'],
 		}, {
 			path: '/notDeal2',
 			component: notDeal2,
@@ -164,7 +164,7 @@ const routes = [
 		},{
 			path: '/notaryManageInfo',
 			component: notaryManageInfo,
-			meta: ['个人中心','信息修改'],
+			meta: ['信息管理','个人信息'],
 		},]
 	},{
 	path: '/systemManage',
