@@ -9,7 +9,6 @@
           ref="formData"
           label-width="200px"
           class="demo-formData"
-          
         >
           <el-form-item label="存证类型" prop="evidenceType">
             <el-select
@@ -39,17 +38,21 @@
               :http-request="uploadFile"
               :show-file-list="true"
               :auto-upload="false"
+              :file-list="fileList"
+              ref="upload"
+              multiple
               drag
             >
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">
                 将文件拖到此处，或<em>点击上传</em>
               </div>
+              <div slot="tip" class="el-upload__tip">可以选个多个文件上传</div>
             </el-upload>
           </el-form-item>
           <el-form-item class="button_submit">
             <el-button type="primary" @click="submitForm('formData')"
-              >立即创建</el-button
+              >确定上传</el-button
             >
             <el-button @click="resetForm('formData')">重置</el-button>
           </el-form-item>
@@ -68,6 +71,7 @@ export default {
       formData: {
         evidenceType: "",
         evidenceName: "",
+        fileList: [],
       },
 
       rules: {
@@ -116,7 +120,7 @@ export default {
 
     //添加文件时触发
     uploadFile(file) {
-      this.formDate.append("file", file.file);
+      this.formData.append("file", file.file);
       this.isuploadfile = true;
     },
 
@@ -132,26 +136,40 @@ export default {
           }
           // 开始上传
           try {
-            this.formDate.append("userId", sessionStorage.getItem("userId"));
-            addEvidence(this.formDate).then((result) => {
-              if (result.status == true) {
-                //成功
+            this.formData.append("userId", sessionStorage.getItem("userId"));
+            let config = {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            };
+            axios.defaults.baseURL = "http://127.0.0.1:8080"; 
+            axios.post("/addEvidence", this.formData, config).then((res) => {
+              let data = res.data;
+              if (data.status) {
+                // 清空数据
+                this.formData.evidenceType='';
+                thi.formData.evidenceName='';
+                thi.formData.fileList=[];
+
                 this.$message({
                   type: "success",
-                  message: "存证成功",
+                  message: "存证上传成功",
                 });
               } else {
-                //失败
-                console.log("存证失败");
+                this.$message({
+                  type: "error",
+                  message: "存证上传失敗",
+                });
               }
             });
+       
           } catch (e) {
             console.log(e);
           }
         } else {
           this.$message({
             type: "error",
-            message: "请输入存证名称",
+            message: "请输入完整信息",
           });
           return false;
         }
@@ -160,6 +178,7 @@ export default {
     // 重置表单
     resetForm(formData) {
       this.$refs[formData].resetFields();
+      this.$refs.upload.clearFiles()
     },
   },
 };
