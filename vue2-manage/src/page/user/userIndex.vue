@@ -8,7 +8,7 @@
         <div style="height: 30%">
           <el-form style="margin-left: 20%; width: 200%">
             <el-form-item label="公证总次数:" class="demo-table-expands">
-              <span class="demo-table-expands">{{
+              <span class="demo-table-expands" style="color: #ffffff">{{
                 this.noNumber.totalNum
               }}</span>
             </el-form-item>
@@ -26,62 +26,57 @@
         </div>
         <!--公证员列表-->
         <div style="height: 65%; width: 90%; margin-top: 3%; margin-left: 7%">
-          <el-table
-            :data="noRank"
-            height="210px"
-            border
-            stripe
-            :header-cell-style="{
-              background: '#eef1f6',
-              color: '#606266',
-              fontSize: '15px',
-            }"
-          >
-            <el-table-column
-              label="No."
-              width="70%"
-              prop="notaryRank"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              label="公证员"
-              width="120%"
-              prop="notaryName"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              label="公证数量"
-              width="120%"
-              prop="notarizationCount"
-              align="center"
-            ></el-table-column>
-          </el-table>
+          <el-scrollbar>
+            <el-table
+              :data="noRank"
+              class="show-tabel"
+              :header-cell-style="{
+                background: '#eef1f6',
+                color: '#d1d0d0',
+                fontSize: '15px',
+              }"
+            >
+              <el-table-column
+                label="No."
+                width="70%"
+                prop="notaryRank"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="公证员"
+                width="120%"
+                prop="notaryName"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="公证数量"
+                width="120%"
+                prop="notarizationCount"
+                align="center"
+              ></el-table-column>
+            </el-table>
+          </el-scrollbar>
         </div>
       </div>
 
       <!--组织列表-->
       <div style="width: 30%" class="noTableRow div-set">
         <i class="el-icon-s-flag title-set">机构信息</i>
-        <el-table
-          :data="orgName"
-          height="100%"
-          border
-          :header-cell-style="{
-            background: '#eef1f6',
-            color: '#606266',
-            fontSize: '23px',
-            align: 'center',
-          }"
-          :show-header="status"
-          :cell-style="{ 'text-align': 'left' }"
-        >
-          <el-table-column
-            label="公证机构"
-            prop="organizationName"
-            align="center"
-            width="330%"
-          ></el-table-column>
-        </el-table>
+        <el-scrollbar wrap-style="overflow-x:hidden;">
+          <el-table
+            :data="orgName"
+            height="100%"
+            :show-header="status"
+            :cell-style="{ 'text-align': 'left' }"
+          >
+            <el-table-column
+              label="公证机构"
+              prop="organizationName"
+              align="center"
+              width="330%"
+            ></el-table-column>
+          </el-table>
+        </el-scrollbar>
       </div>
       <!--饼状图-->
       <div
@@ -90,14 +85,15 @@
         class="div-set"
       ></div>
     </div>
+    <!-- -->
     <div class="down-div-set div-set">
       <div class="tryy">
         <el-table
           :data="noPay"
-          height="210px"
+          class="show-tabel"
           :header-cell-style="{
             background: '#eef1f6',
-            color: '#606266',
+            color: '#d1d0d0',
             height: '55px',
           }"
         >
@@ -143,11 +139,17 @@
 import headTop from "../../components/headTop";
 import "echarts";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { orgaQuery, rankStasQue, notPayQuery, noNumQuery, noTypeQuery } from "@/api/getData";
+import {
+  orgaQuery,
+  rankStasQue,
+  notPayQuery,
+  noNumQuery,
+  noTypeQuery,
+} from "@/api/getData";
 export default {
   data() {
     return {
-      status:false,
+      status: false,
       //公证数量
       noNumber: {
         successNum: 7651,
@@ -223,11 +225,38 @@ export default {
         },
       ],
       //组织名列表
-      orgName: [{},{}
+      orgName: [
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {
+          organizationName: "fuzhou",
+        },
+        {},
       ],
       //公证费用
-      noPay: [
-      ],
+      noPay: [],
       nota_Num: [{}],
       userId: "",
     };
@@ -272,7 +301,7 @@ export default {
         //公证员排名
         await rankStasQue(noRankQuery).then((result) => {
           if (result.status) {
-            console.log(result.data)
+            console.log(result.data);
             this.noRank = [];
             result.data.forEach((item, index) => {
               if (index <= 10) {
@@ -352,6 +381,7 @@ export default {
           padding: 30,
           textStyle: {
             fontSize: 25,
+            color: "#d1d0d0",
           },
         },
         series: [
@@ -378,9 +408,6 @@ export default {
         ],
       });
     },
-    tableRowClassName({ row, rowIndex }) {
-      return "noTableRow";
-    },
     // 新增存证路由跳转
     addEvidence() {
       this.$router.push("/addEvidence");
@@ -395,7 +422,7 @@ export default {
 <style lang="less">
 @import "../../style/mixin";
 .totalDiv {
-  background: url("../image/123.jpg") no-repeat;
+  background: url("../image/dark-1.jpg") no-repeat;
   background-size: 100% 100%;
 }
 .search_container {
@@ -411,13 +438,13 @@ export default {
 }
 .demo-table-expands label {
   width: 120px;
-  color: #000000;
+  color: #ffffff;
   font-size: 15px;
 }
 
 .el-table-set {
-  background: "#eef1f6";
-  color: "#606266";
+  background: #eef1f6;
+  color: #606266;
 }
 .table_container {
   padding: 20px;
@@ -463,19 +490,20 @@ export default {
   height: 3.5%;
   padding-top: 0.5%;
   font-weight: bolder;
+  color: #ddd9d9;
 }
 .noTableRow {
   margin-left: 0.5%;
 }
 .noTableRow .el-table {
-  margin-left: 7%;
+  padding-left: 7%;
 }
 .div-set .el-table th,
 .div-set .el-table tr,
 .div-set .el-table td {
   background-color: transparent !important; /* 背景透明 */
-  border: 1px solid #000000;
-  color: #000000;
+  border-top: 1px solid #ffffff;
+  color: #ffffff;
   line-height: 30px;
 }
 .div-set .el-table,
@@ -485,7 +513,7 @@ export default {
 .div-set {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 20px;
-  box-shadow: 10px 0px 39px 0px rgb(219, 217, 217) inset;
+  box-shadow: 10px 0px 39px 0px rgb(228, 247, 255) inset;
   display: flex;
   flex-direction: column;
 
@@ -497,7 +525,7 @@ export default {
   font-size: 20px;
   font-weight: bolder;
   height: 10%;
-  //text-align: left;
+  color: #d1d0d0;
 }
 .tryy {
   width: 35%;
@@ -511,8 +539,8 @@ export default {
 .tryy.el-table tr,
 .tryy .el-table td {
   background-color: transparent !important; /* 背景透明 */
-  border: 1px solid #000000;
-  color: #000000;
+  border: 1px solid #5e5e5e;
+  color: #ffffff;
   height: 35px;
   line-height: 15px;
   font-size: 19px;
@@ -522,6 +550,10 @@ export default {
   background-color: transparent;
   margin-left: 10%;
   margin-top: 2%;
+  //color: #ffffff;
+}
+.el-table::before {
+  height: 0px;
 }
 .button-set-no {
   position: absolute;
@@ -537,5 +569,22 @@ export default {
   display: flex;
   margin-top: 0.5%;
   margin-left: 0.2%;
+}
+.el-scrollbar__bar {
+  &.is-vertical {
+    width: 5px; //滚动条宽度
+  }
+}
+.el-scrollbar__wrap {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.el-scrollbar__thumb {
+  ////可设置滚动条颜色
+  background: #94949c;
+}
+.show-tabel {
+  height: 205px;
+  overflow: auto;
 }
 </style>

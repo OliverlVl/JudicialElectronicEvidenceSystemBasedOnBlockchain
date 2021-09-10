@@ -8,7 +8,7 @@
         <div style="height: 30%">
           <el-form style="margin-left: 20%; width: 200%">
             <el-form-item label="公证总次数:" class="demo-table-expands">
-              <span class="demo-table-expands">{{
+              <span class="demo-table-expands" style="color: #ffffff">{{
                 this.noNumber.totalNum
               }}</span>
             </el-form-item>
@@ -17,7 +17,7 @@
                 this.noNumber.successNum
               }}</span>
             </el-form-item>
-            <el-form-item label="公证失败次数:" class="demo-table-expands">
+            <el-form-item label="公证驳回次数:" class="demo-table-expands">
               <span class="demo-table-expands" style="color: red">{{
                 this.noNumber.notSuccessNum
               }}</span>
@@ -26,36 +26,36 @@
         </div>
         <!--公证员列表-->
         <div style="height: 65%; width: 90%; margin-top: 3%; margin-left: 7%">
-          <el-table
-            :data="noRank"
-            height="210px"
-            border
-            stripe
-            :header-cell-style="{
-              background: '#eef1f6',
-              color: '#606266',
-              fontSize: '17px',
-            }"
-          >
-            <el-table-column
-              label=""
-              width="50%"
-              prop="notaryRank"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              label="公证员"
-              width="130%"
-              prop="notaryName"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              label="公证数量"
-              width="130%"
-              prop="notarizationCount"
-              align="center"
-            ></el-table-column>
-          </el-table>
+          <el-scrollbar>
+            <el-table
+              :data="noRank"
+              class="show-tabel"
+              :header-cell-style="{
+                background: '#eef1f6',
+                color: '#d1d0d0',
+                fontSize: '15px',
+              }"
+            >
+              <el-table-column
+                label="No."
+                width="70%"
+                prop="notaryRank"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="公证员"
+                width="120%"
+                prop="notaryName"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="公证数量"
+                width="120%"
+                prop="notarizationCount"
+                align="center"
+              ></el-table-column>
+            </el-table>
+          </el-scrollbar>
         </div>
       </div>
 
@@ -65,17 +65,14 @@
         <el-scrollbar wrap-style="overflow-x:hidden;">
           <el-table
             :data="orgName"
-            border
-            :header-cell-style="{
-              background: '#eef1f6',
-              color: '#606266',
-              fontSize: '23px',
-            }"
+            height="100%"
+            :show-header="status"
             :cell-style="{ 'text-align': 'left' }"
           >
             <el-table-column
+              label="公证机构"
               prop="organizationName"
-              
+              align="center"
               width="330%"
             ></el-table-column>
           </el-table>
@@ -95,8 +92,9 @@
           :data="notaInfo"
           stripe
           height="100%"
-          :header-cell-style="{ background: '#eef1f6', color: '#606266' }"
+          :header-cell-style="{ background: '#eef1f6', color: '#d1d0d0' }"
         >
+          
           <el-table-column
             label="个人公证数量"
             prop="notarizationCount"
@@ -128,14 +126,15 @@ import { baseUrl, baseImgPath } from "@/config/env";
 import {
   orgaQuery,
   rankStasQue,
+  notPayQuery,
   noNumQuery,
   noTypeQuery,
-  notaStasGen,
-  notaStasQue,
 } from "@/api/getData";
 export default {
   data() {
     return {
+      status: false,
+      //公证数量
       noNumber: {
         successNum: 7651,
         notSuccessNum: 1246,
@@ -212,32 +211,33 @@ export default {
       //组织名列表
       orgName: [
         {
-          organization_name: "机构1",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构2",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构3",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构4",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构5",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构6",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构7",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构8",
+          organizationName: "fuzhou",
         },
         {
-          organization_name: "机构9",
+          organizationName: "fuzhou",
         },
+        {},
       ],
       notaInfo: [
         {
@@ -246,17 +246,17 @@ export default {
           notarizationSuccessCount: 100,
         },
       ],
-      // 获取数据
-      pageTotal: 0,
-      pageIndex: 1,
-      pageSize: 10,
-      notary_id: "",
+
+      //公证费用
+      noPay: [],
+      nota_Num: [{}],
+      notaryId: "",
     };
   },
   created() {
-    this.notary_id = localStorage.getItem("notaryId");
+    this.notaryId = sessionStorage.getItem("notaryId");
     this.initData();
-    this.getNoSta();
+    this.getNoPay();
   },
   mounted() {
     this.drawLine();
@@ -287,12 +287,13 @@ export default {
           if (result.status) {
             this.noNumber = result.data;
           } else {
-            console.log("获取公证数量失败");
+            console.log("获取数据失败");
           }
         });
         //公证员排名
         await rankStasQue(noRankQuery).then((result) => {
           if (result.status) {
+            console.log(result.data);
             this.noRank = [];
             result.data.forEach((item, index) => {
               if (index <= 10) {
@@ -311,21 +312,25 @@ export default {
               this.orgName.push(item);
             });
           } else {
-            console.log("获取机构名失败");
+            console.log("获取机构名失败失败");
           }
-        }); /*
+        });
+        /*
         //获取公证类型及数量
         await noTypeQuery().then((result) => {
+          console.log("获取公证类型及数量开始");
+          typeRes = {};
           if (result.status) {
             this.noType = [];
-            typeRes = { name: "", value: 0 };
+            console.log(result.data);
+            typeRes = {};
             result.data.forEach((item) => {
-              typeRes.name = item.data.notarType;
+              typeRes.name = item.data.notarTypeName;
               typeRes.value = item.data.Num;
               this.noType.push(typeRes);
             });
           } else {
-            console.log("获取公证类型及数量失败");
+            console.log("获取数据失败");
           }
         });*/
       } catch (error) {
@@ -358,6 +363,7 @@ export default {
         console.log("排名出错");
       }
     },
+
     // 处理导航页
     handlePageChange(val) {
       console.log(val);
@@ -373,8 +379,10 @@ export default {
         title: {
           text: "公证类型及其数量",
           left: "center",
+          padding: 30,
           textStyle: {
             fontSize: 25,
+            color: "#d1d0d0",
           },
         },
         series: [
@@ -401,9 +409,6 @@ export default {
         ],
       });
     },
-    tableRowClassName({ row, rowIndex }) {
-      return "noTableRow";
-    },
   },
 };
 </script>
@@ -411,7 +416,7 @@ export default {
 <style lang="less">
 @import "../../style/mixin";
 .totalDiv {
-  background: url("../image/123.jpg") no-repeat;
+  background: url("../image/dark-1.jpg") no-repeat;
   background-size: 100% 100%;
 }
 .search_container {
@@ -422,18 +427,18 @@ export default {
 }
 .demo-table-expands {
   font-size: 20px;
-  font-weight: bolder;
   margin-bottom: 0%;
+  font-weight: bolder;
 }
 .demo-table-expands label {
   width: 120px;
-  color: #000000;
+  color: #ffffff;
   font-size: 15px;
 }
 
 .el-table-set {
-  background: "#eef1f6";
-  color: "#606266";
+  background: #eef1f6;
+  color: #606266;
 }
 .table_container {
   padding: 20px;
@@ -444,7 +449,7 @@ export default {
   margin-top: 8px;
 }
 .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
+  //border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
@@ -479,19 +484,20 @@ export default {
   height: 3.5%;
   padding-top: 0.5%;
   font-weight: bolder;
+  color: #ddd9d9;
 }
 .noTableRow {
   margin-left: 0.5%;
 }
 .noTableRow .el-table {
-  margin-left: 7%;
+  padding-left: 7%;
 }
 .div-set .el-table th,
 .div-set .el-table tr,
 .div-set .el-table td {
   background-color: transparent !important; /* 背景透明 */
-  border: 1px solid #000000;
-  color: #000000;
+  border-top: 1px solid #ffffff;
+  color: #ffffff;
   line-height: 30px;
 }
 .div-set .el-table,
@@ -501,7 +507,7 @@ export default {
 .div-set {
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 20px;
-  box-shadow: 10px 0px 39px 0px rgb(219, 217, 217) inset;
+  box-shadow: 10px 0px 39px 0px rgb(228, 247, 255) inset;
   display: flex;
   flex-direction: column;
 
@@ -513,7 +519,7 @@ export default {
   font-size: 20px;
   font-weight: bolder;
   height: 10%;
-  //text-align: left;
+  color: #d1d0d0;
 }
 .tryy {
   height: 39%;
@@ -527,8 +533,8 @@ export default {
 .tryy.el-table tr,
 .tryy .el-table td {
   background-color: transparent !important; /* 背景透明 */
-  border: 1px solid #000000;
-  color: #000000;
+  border: 1px solid #c5c5c5;
+  color: #ffffff;
   height: 30px;
   line-height: 30px;
   font-size: 20px;
@@ -536,6 +542,17 @@ export default {
 .tryy .el-table,
 .tryy .el-table__expanded-cell {
   background-color: transparent;
+}
+
+.el-table::before {
+  height: 0px;
+}
+.button-set-no {
+  position: absolute;
+  height: 60%;
+  top: 15%;
+  left: 55%;
+  //background:red
 }
 .down-div-set {
   width: 99.5%;
@@ -545,7 +562,21 @@ export default {
   margin-top: 0.5%;
   margin-left: 0.2%;
 }
-tabel{
-  table-layout: fixed;
+.el-scrollbar__bar {
+  &.is-vertical {
+    width: 5px; //滚动条宽度
+  }
+}
+.el-scrollbar__wrap {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.el-scrollbar__thumb {
+  ////可设置滚动条颜色
+  background: #94949c;
+}
+.show-tabel {
+  height: 205px;
+  overflow: auto;
 }
 </style>
