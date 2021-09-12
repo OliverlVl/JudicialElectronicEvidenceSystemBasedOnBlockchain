@@ -371,6 +371,7 @@ export default {
             color: "#d1d0d0",
           },
         },
+        color:['#426ab3','#5c7a29','#78cdd1','red','#228fbd','#6f60aa','#6a6da9','#78a355','#abc88b','#deab8a'],
         series: [
           {
             name: "数量",
@@ -386,7 +387,6 @@ export default {
                 //formatter: "{d}%",
               },
             },
-
             data: this.noType,
             textStyle: {
               fontSize: 15,
