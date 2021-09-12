@@ -330,14 +330,13 @@ export default {
           }
           // 开始上传
           try {
-            this.formData.append("userId", sessionStorage.getItem("userId"));
             let config = {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
             };
             axios.defaults.baseURL = "http://127.0.0.1:8080";
-            axios.post("/uplaodMaterial", this.formData, config).then((res) => {
+            axios.post("/aut/uplaodMaterial", this.formData, config).then((res) => {
               let data = res.data;
               if (data.status) {
                 // 清空数据
