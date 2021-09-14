@@ -2,11 +2,94 @@
   <div class="totalDiv fillcontain">
     <head-top></head-top>
     <div class="top-set">区块链电子存证平台</div>
-    <div style="display: flex; height: 50%; margin-left: 0.5%">
-      <div style="width: 29%" class="div-set">
-        <i class="el-icon-s-data title-set">交易统计</i>
-        <div style="height: 30%">
-          <el-form style="margin-left: 20%; width: 200%">
+    <el-row>
+      <el-col :span="8"
+        ><div class="grid-content bg-purple div-set">
+          <i class="el-icon-user-solid title-set">公证员信息</i>
+          <el-scrollbar wrap-style="overflow-x:hidden;">
+            <el-table
+              :data="noRank"
+              align="center"
+              :header-cell-style="{
+                background: '#eef1f6',
+                color: '#d1d0d0',
+                fontSize: '15px',
+              }"
+            >
+              <el-table-column
+                label="No."
+                prop="notaryRank"
+                align="center"
+                width="100%"
+              ></el-table-column>
+              <el-table-column
+                label="公证员"
+                prop="notaryName"
+                align="center"
+                width="120%"
+              ></el-table-column>
+              <el-table-column
+                label="公证次数"
+                prop="notarizationCount"
+                align="center"
+                width="120%"
+              ></el-table-column>
+            </el-table>
+          </el-scrollbar></div
+      ></el-col>
+      <el-col :span="10"
+        ><div class="grid-content bg-purple div-set" id="myChart">
+          </div
+      ></el-col>
+      <el-col :span="6"
+        ><div class="grid-content_2 bg-purple div-set">
+          <i class="el-icon-s-data title-set">各公证类型交易统计</i>
+          <el-form style="width: 200%">
+            <el-form-item
+              label="公证类型"
+              class="demo-table-expands"
+              style="margin-top: 10px"
+            >
+              <el-select
+                :popper-append-to-body="false"
+                v-model="noreqType"
+                placeholder="请选择"
+                @change="selChange"
+                class="select-style"
+                popper-class="select-popper"
+              >
+                <el-option
+                  v-for="item in notarType"
+                  :key="item.notarizationType"
+                  :label="item.notarizationTypeName"
+                  :value="item.notarizationType"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <!-- <el-form-item label="总次数:" class="demo-table-expands">
+              <span class="demo-table-expands" style="color: #ffffff">{{
+                this.noTypeNum.totalCount
+              }}</span>
+            </el-form-item> -->
+            <el-form-item label="成功次数:" class="demo-table-expands">
+              <span class="demo-table-expands" style="color: #00af17">{{
+                this.noTypeNum.successCount
+              }}</span>
+            </el-form-item>
+            <el-form-item label="驳回次数:" class="demo-table-expands">
+              <span class="demo-table-expands" style="color: red">{{
+                this.noTypeNum.failedCount
+              }}</span>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-col>
+      <el-col :span="6"
+        ><div class="grid-content_2 bg-purple div-set">
+          <i class="el-icon-s-data title-set">交易统计</i>
+
+          <el-form style="margin-left: 15%; margin-top: 10px; width: 200%">
             <el-form-item label="公证总次数:" class="demo-table-expands">
               <span class="demo-table-expands" style="color: #ffffff">{{
                 this.noNumber.totalNum
@@ -23,13 +106,18 @@
               }}</span>
             </el-form-item>
           </el-form>
-        </div>
-        <!--公证员列表-->
-        <div style="height: 65%; width: 90%; margin-top: 3%; margin-left: 7%">
-          <el-scrollbar>
+        </div></el-col
+      >
+    </el-row>
+    <el-row :gutter="10">
+      <el-col :span="8"
+        ><div class="grid-content bg-purple div-set">
+          <i class="el-icon-bank-card title-set">公证金额</i>
+          <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
-              :data="noRank"
-              class="show-tabel"
+              :data="noPay"
+              height="100%"
+              align="center"
               :header-cell-style="{
                 background: '#eef1f6',
                 color: '#d1d0d0',
@@ -37,54 +125,81 @@
               }"
             >
               <el-table-column
-                label="No."
-                width="70%"
-                prop="notaryRank"
+                label="公证类型"
+                prop="notarizationTypeName"
                 align="center"
+                width="170%"
               ></el-table-column>
               <el-table-column
-                label="公证员"
-                width="120%"
-                prop="notaryName"
+                label="公证金额（元）"
+                prop="notarizationMoney"
                 align="center"
-              ></el-table-column>
-              <el-table-column
-                label="公证数量"
-                width="120%"
-                prop="notarizationCount"
-                align="center"
+                width="170%"
               ></el-table-column>
             </el-table>
           </el-scrollbar>
         </div>
-      </div>
-
-      <!--组织列表-->
-      <div style="width: 30%" class="noTableRow div-set">
-        <i class="el-icon-s-flag title-set">机构信息</i>
-        <el-scrollbar wrap-style="overflow-x:hidden;">
-          <el-table
-            :data="orgName"
-            height="100%"
-            :show-header="status"
-            :cell-style="{ 'text-align': 'left' }"
-          >
-            <el-table-column
-              label="公证机构"
-              prop="organizationName"
+      </el-col>
+      <el-col :span="8"
+        ><div class="grid-content bg-purple div-set">
+          <i class="el-icon-s-flag title-set">机构信息</i>
+          <el-scrollbar wrap-style="overflow-x:hidden;">
+            <el-table
+              :data="orgName"
+              height="100%"
               align="center"
-              width="330%"
-            ></el-table-column>
-          </el-table>
-        </el-scrollbar>
-      </div>
-      <!--饼状图-->
-      <div
-        id="myChart"
-        style="width: 39%; margin-left: 0.5%"
-        class="div-set"
-      ></div>
-    </div>
+              :show-header="status"
+              :cell-style="{ 'text-align': 'left' }"
+            >
+              <el-table-column
+                label="公证机构"
+                prop="organizationName"
+                align="center"
+                width="340%"
+              ></el-table-column>
+            </el-table>
+          </el-scrollbar></div
+      ></el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple div-set">
+          <i class="el-icon-view title-set">快捷按钮</i>
+          <div align="center">
+            <el-button
+              type="warning"
+              @click="systemNotarization()"
+              align="center"
+              style="margin-top: 20px; width: 80%"
+            >
+              <span style="font-size: 25px">查看公证记录</span>
+            </el-button>
+            <br />
+            <el-button
+              type="primary"
+              @click="systemEvidence()"
+              style="margin-top: 20px; width: 80%"
+            >
+              <span style="font-size: 25px">查看存证记录</span>
+            </el-button>
+            <br />
+            <el-button
+              type="danger"
+              @click="systemTrace()"
+              style="margin-top: 20px; width: 80%"
+            >
+              <span style="font-size: 25px">查看交易记录</span>
+            </el-button>
+            <br />
+            <el-button
+              type="success"
+              @click="systemNarizationInfo()"
+              style="margin-top: 20px; width: 80%"
+            >
+              <span style="font-size: 25px">查看申报材料i信息</span>
+            </el-button>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -103,6 +218,7 @@ export default {
   data() {
     return {
       status: false,
+      noreqType: "",
       //公证数量
       noNumber: {
         successNum: 7651,
@@ -114,14 +230,44 @@ export default {
         {
           name: "房产证公证",
           value: 222,
+          successCount: 217,
+          failedCount: 5,
         },
         {
           name: "驾驶证公证",
           value: 444,
+          successCount: 440,
+          failedCount: 4,
         },
         {
           name: "学历公证",
           value: 666,
+          successCount: 615,
+          failedCount: 51,
+        },
+        {
+          name: "驾驶证1公证",
+          value: 444,
+          successCount: 440,
+          failedCount: 4,
+        },
+        {
+          name: "学历6公证",
+          value: 666,
+          successCount: 615,
+          failedCount: 51,
+        },
+        {
+          name: "学历9公证",
+          value: 666,
+          successCount: 615,
+          failedCount: 51,
+        },
+        {
+          name: "学历91公证",
+          value: 666,
+          successCount: 615,
+          failedCount: 51,
         },
       ],
       //公证员排名
@@ -180,42 +326,89 @@ export default {
       //组织名列表
       orgName: [
         {
-          organizationName: "fuzhou",
+          organizationName: "福州市公证处",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院顶顶顶顶顶顶顶顶顶",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院",
         },
         {
-          organizationName: "fuzhou",
+          organizationName: "福建省福州市中级人民法院",
         },
-        {},
+      ],
+      notarType: [
+        {
+          notarizationType: 0,
+          notarizationTypeName: "房产证公证",
+        },
+        {
+          notarizationType: 1,
+          notarizationTypeName: "驾驶证公证",
+        },
       ],
       //公证费用
-      noPay: [],
+      noPay: [
+        {
+          notarizationTypeName: "出生",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationTypeName: "房产证",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationTypeName: "驾驶证",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationTypeName: "学历",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationTypeName: "出生",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationTypeName: "出生",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationTypeName: "出生",
+          notarizationMoney: 100,
+        },
+        {
+          notarizationTypeName: "出生",
+          notarizationMoney: 100,
+        },
+      ],
       nota_Num: [{}],
-      manId: "",
+      userId: "",
+      noTypeNum: {
+        totalCount: 0,
+        successCount: 0,
+        failedCount: 0,
+      },
     };
   },
   created() {
-    this.manId = sessionStorage.getItem("manId");
+    this.userId = sessionStorage.getItem("userID");
     this.initData();
     this.getNoPay();
   },
@@ -327,32 +520,52 @@ export default {
       let myChart = this.$echarts.init(document.getElementById("myChart"));
       // 绘制图表
       myChart.setOption({
-        tooltip: {},
+        tooltip: {
+          formatter: function (params) {
+            return (
+              params.marker +
+              "类型：" +
+              params.name +
+              "<br/>公证次数：" +
+              params.value
+            );
+          },
+        },
         title: {
           text: "公证类型及其数量",
           left: "center",
-          padding: 30,
+
           textStyle: {
-            fontSize: 25,
+            fontSize: 30,
             color: "#d1d0d0",
           },
         },
+        color: [
+          "#45C2E0",
+          "#C1EBDD",
+          "#FFC851",
+          "#5A5476",
+          "#1869A0",
+          "#FF9393",
+          "#78a355",
+          "#abc88b",
+          "#deab8a",
+        ],
         series: [
           {
             name: "数量",
             type: "pie",
-            radius: "65%",
-            center: ["50%", "60%"],
+            radius: "50%",
+            center: ["50%", "55%"],
             label: {
               //饼图图形上的文本标签
               normal: {
                 textStyle: {
-                  fontSize: 16, //文字的字体大小
+                  fontSize: 20, //文字的字体大小
                 },
                 //formatter: "{d}%",
               },
             },
-
             data: this.noType,
             textStyle: {
               fontSize: 15,
@@ -360,13 +573,50 @@ export default {
           },
         ],
       });
+      
     },
     // 新增存证路由跳转
-    addEvidence() {
-      this.$router.push("/addEvidence");
+    systemNotarization() {
+      this.$router.push("/systemNotarization");
     },
-    querySpace() {
-      this.$router.push("/capacityPackage");
+    systemEvidence() {
+      this.$router.push("/systemEvidence");
+    },
+    systemTrace() {
+      this.$router.push("/systemTrace");
+    },
+    systemNarizationInfo() {
+      this.$router.push("/systemNarizationInfo");
+    },
+    async selChange() {
+      /*
+      await notarizationTypeNum().then((result) => {
+        if (result.status) {
+          console.log(result.data);
+          this.noTypeNum = {};
+          result.data.forEach((item) => {
+            if (item.notarizationType == this.noreqType) {
+              this.noTypeNum = item.data;
+            }
+          });
+        } else {
+          alert("选择出错");
+        }
+      });*/
+
+      if (this.noreqType == 0) {
+        this.noTypeNum = {
+          totalCount: 100,
+          successCount: 99,
+          failedCount: 1,
+        };
+      } else if (this.noreqType == 1) {
+        this.noTypeNum = {
+          totalCount: 100,
+          successCount: 98,
+          failedCount: 2,
+        };
+      }
     },
   },
 };
@@ -374,76 +624,71 @@ export default {
 
 <style lang="less">
 @import "../../style/mixin";
+
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  position: sticky;
+}
+
+.bg-purple {
+  // background: #d3dce6;
+  background-color: transparent !important;
+  // position: relative;
+  box-shadow: 5px 0px 29px 0px rgb(48, 131, 167) inset;
+}
+.el-col {
+  position: center;
+}
+
+.grid-content {
+  border-radius: 20px;
+  height: 390px;
+  padding: 20px;
+  margin-left: 20px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.grid-content_2 {
+  border-radius: 20px;
+  height: 190px;
+  padding: 10px;
+  margin-left: 20px;
+  margin-top: 10px;
+  position: relative;
+}
+
 .totalDiv {
   background: url("../image/dark-1.jpg") no-repeat;
-  background-size: 100% 100%;
+  
+  background-size:500% 500%;
+  min-height:200%;
+  position: relative;
 }
-.search_container {
-  // padding: 10px;
-  padding-left: 20px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
+
 .demo-table-expands {
   font-size: 20px;
   margin-bottom: 0%;
   font-weight: bolder;
 }
 .demo-table-expands label {
-  width: 120px;
+  width: 150px;
   color: #ffffff;
-  font-size: 15px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
-.el-table-set {
-  background: #eef1f6;
-  color: #606266;
-}
-.table_container {
-  padding: 20px;
-}
-.Pagination {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 8px;
-}
-.avatar-uploader .el-upload {
-  //border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #20a0ff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  text-align: center;
-}
-.avatar {
-  width: 120px;
-  height: 120px;
-  display: block;
-}
-.a-style {
-  color: #0500ee;
-  cursor: pointer;
-  text-decoration: underline;
-}
 .top-set {
   width: 100%;
-  font-size: 23px;
-  margin-bottom: 0.5%;
+  font-size: 40px;
+  margin: 10px;
   text-align: center;
-  height: 3.5%;
-  padding-top: 0.5%;
+
   font-weight: bolder;
-  color: #ddd9d9;
+  color: #f3e306;
 }
 .noTableRow {
   margin-left: 0.5%;
@@ -455,18 +700,17 @@ export default {
 .div-set .el-table tr,
 .div-set .el-table td {
   background-color: transparent !important; /* 背景透明 */
-  border-top: 1px solid #ffffff;
+  //border-top: 1px solid #ffffff;
   color: #ffffff;
-  line-height: 30px;
+  line-height: 20px;
 }
-.div-set .el-table,
-.div-set .el-table__expanded-cell {
+.div-set .el-table {
   background-color: transparent;
 }
 .div-set {
   border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 20px;
-  box-shadow: 10px 0px 39px 0px rgb(228, 247, 255) inset;
+
+  box-shadow: 5px 0px 29px 0px rgb(48, 131, 167) inset;
   display: flex;
   flex-direction: column;
 
@@ -479,14 +723,13 @@ export default {
   font-weight: bolder;
   height: 10%;
   color: #d1d0d0;
-  //text-align: left;
 }
 .tryy {
   width: 35%;
   position: absolute;
   height: 93%;
-  top: 5%;
-  left: 15%;
+  top: 7%;
+  left: 17%;
   //background: #20a0ff;
 }
 .tryy .el-table th,
@@ -502,43 +745,83 @@ export default {
 .tryy .el-table,
 .tryy .el-table__expanded-cell {
   background-color: transparent;
-  margin-left: 10%;
-  margin-top: 2%;
+
+  //margin-left: 10%;
+  //margin-top: 2%;
   //color: #ffffff;
 }
 .el-table::before {
   height: 0px;
 }
-.button-set-no {
-  position: absolute;
-  height: 60%;
-  top: 15%;
-  left: 55%;
-  //background:red
-}
+
 .down-div-set {
   width: 99.5%;
-  height: 36%;
+  height: 35.5%;
   position: relative;
   display: flex;
   margin-top: 0.5%;
   margin-left: 0.2%;
 }
-.el-scrollbar__bar {
-  &.is-vertical {
-    width: 5px; //滚动条宽度
-  }
-}
-.el-scrollbar__wrap {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+
 .el-scrollbar__thumb {
   ////可设置滚动条颜色
   background: #94949c;
 }
-.show-tabel {
-  height: 205px;
-  overflow: auto;
+
+.notary-tabel-set .el-table th,
+.notary-tabel-set .el-table tr,
+.notary-tabel-set .el-table td {
+  background-color: transparent !important; /* 背景透明 */
+  //border: 1px solid #ffffff;
+  color: #ffffff;
+  line-height: 30px;
+}
+.notary-tabel-set .el-table,
+.notary-tabel-set .el-table__expanded-cell {
+  background-color: transparent;
+}
+.notary-tabel-set {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  box-shadow: 5px 0px 29px 0px rgb(228, 247, 255) inset;
+  display: flex;
+  flex-direction: column;
+
+  //align-items: center;
+}
+
+.select-style {
+  width: 20%;
+
+  .el-input__inner {
+    border: 1px solid rgb(48, 131, 167); // 边框
+    border-left-width: 0; // 左边框
+    border-right-width: 0;
+    background-color: rgba(0, 0, 0, 0.8); // 背景颜色
+    font-size: 0.28rem;
+    color: rgb(231, 209, 13); // 字体颜色
+  }
+}
+
+.select-popper {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: solid 0.02rem rgb(48, 131, 167);
+
+  .el-select-dropdown__item.selected {
+    // 被选中选项的字体颜
+    font-size: 0.28rem;
+    color: rgb(231, 209, 13);
+  }
+  li {
+    // background: transparent;
+    color: rgb(255, 255, 255);
+    font-size: 0.28rem;
+  }
+  .el-select-dropdown__item:hover,
+  .el-select-dropdown__item.hover {
+    // 选项背景颜色
+    background-color: rgba(30, 255, 0, 0.2);
+    margin-right: 1px;
+  }
 }
 </style>

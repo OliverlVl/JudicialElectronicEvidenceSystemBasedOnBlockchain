@@ -5,7 +5,7 @@
     <el-row>
       <el-col :span="8"
         ><div class="grid-content bg-purple div-set">
-          <i class="el-icon-s-flag title-set">公证员信息</i>
+          <i class="el-icon-user-solid title-set">公证员信息</i>
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
               :data="noRank"
@@ -20,25 +20,26 @@
                 label="No."
                 prop="notaryRank"
                 align="center"
-                width="110%"
+                width="100%"
               ></el-table-column>
               <el-table-column
                 label="公证员"
                 prop="notaryName"
                 align="center"
-                width="150%"
+                width="120%"
               ></el-table-column>
               <el-table-column
                 label="公证次数"
                 prop="notarizationCount"
                 align="center"
-                width="150%"
+                width="120%"
               ></el-table-column>
             </el-table>
           </el-scrollbar></div
       ></el-col>
-      <el-col :span="9"
-        ><div class="grid-content bg-purple" id="myChart"></div
+      <el-col :span="10"
+        ><div class="grid-content bg-purple div-set" id="myChart">
+          </div
       ></el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
@@ -111,7 +112,7 @@
     <el-row :gutter="10">
       <el-col :span="8"
         ><div class="grid-content bg-purple div-set">
-          <i class="el-icon-s-flag title-set">公证金额</i>
+          <i class="el-icon-bank-card title-set">公证金额</i>
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
               :data="noPay"
@@ -127,13 +128,13 @@
                 label="公证类型"
                 prop="notarizationTypeName"
                 align="center"
-                width="205%"
+                width="170%"
               ></el-table-column>
               <el-table-column
                 label="公证金额（元）"
                 prop="notarizationMoney"
                 align="center"
-                width="205%"
+                width="170%"
               ></el-table-column>
             </el-table>
           </el-scrollbar>
@@ -159,9 +160,9 @@
             </el-table>
           </el-scrollbar></div
       ></el-col>
-      <el-col :span="7">
+      <el-col :span="8">
         <div class="grid-content bg-purple div-set">
-          <i class="el-icon-s-data title-set">快捷按钮</i>
+          <i class="el-icon-view title-set">快捷按钮</i>
           <div align="center">
             <el-button
               type="warning"
@@ -554,7 +555,7 @@ export default {
           {
             name: "数量",
             type: "pie",
-            radius: "70%",
+            radius: "50%",
             center: ["50%", "55%"],
             label: {
               //饼图图形上的文本标签
@@ -572,6 +573,7 @@ export default {
           },
         ],
       });
+      
     },
     // 新增存证路由跳转
     addEvidence() {
@@ -628,12 +630,13 @@ export default {
   &:last-child {
     margin-bottom: 0;
   }
+  position: sticky;
 }
 
 .bg-purple {
   // background: #d3dce6;
   background-color: transparent !important;
-
+  // position: relative;
   box-shadow: 5px 0px 29px 0px rgb(48, 131, 167) inset;
 }
 .el-col {
@@ -646,6 +649,7 @@ export default {
   padding: 20px;
   margin-left: 20px;
   margin-top: 10px;
+  position: relative;
 }
 
 .grid-content_2 {
@@ -654,11 +658,15 @@ export default {
   padding: 10px;
   margin-left: 20px;
   margin-top: 10px;
+  position: relative;
 }
 
 .totalDiv {
   background: url("../image/dark-1.jpg") no-repeat;
-  background-size: 100% 100%;
+  
+  background-size:500% 500%;
+  min-height:200%;
+  position: relative;
 }
 
 .demo-table-expands {
