@@ -13,6 +13,11 @@ export const userLogin = data => fetch('/user/login', data, 'POST');
  */
 
 export const regist = data => fetch('/user/regist', data, 'POST');
+/**
+ * 公证员注册
+ */
+
+ export const notarRegist = data => fetch('/notar/regist', data, 'POST');
 
 /**
  * 获取存证类型
