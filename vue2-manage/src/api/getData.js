@@ -3,16 +3,16 @@ import fetch from '@/config/fetch'
 
 
 /**
- * 登陆
+ * 用户登陆
  */
 
-export const userLogin = data => fetch('/userLogin', data, 'POST');
+export const userLogin = data => fetch('/user/login', data, 'POST');
 
 /**
- * 注册
+ * 用户注册
  */
 
-export const userRegister = data => fetch('/user', data, 'POST');
+export const regist = data => fetch('/user/regist', data, 'POST');
 
 /**
  * 获取存证类型

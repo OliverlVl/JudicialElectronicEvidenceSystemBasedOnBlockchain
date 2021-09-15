@@ -73,7 +73,7 @@
                 type="primary"
                 plain
                 class="submit_btn"
-                @click="dialogFormVisible = true"
+                @click="dialogFormNotaryVisible = true"
                 >注册</el-button
               >
             </el-form-item>
@@ -113,7 +113,7 @@
                 >注册</el-button
               >
               <el-form-item></el-form-item>
-             </el-form-item>
+            </el-form-item>
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="系统管理员" name="fourth">
@@ -162,45 +162,153 @@
       :visible.sync="dialogFormVisible"
       style="width: 100%"
     >
-      <el-form :model="formRegister" :rules="rulesRegister" ref="formRegister">
-        <el-form-item
-          label="手机号码"
-          :label-width="formLabelWidth"
-          prop="phone"
-        >
+      <el-form
+        :model="formRegister"
+        :rules="rulesRegister"
+        ref="formRegister"
+        label-width="300px"
+      >
+        <el-form-item label="用户名" prop="username">
           <el-input
-            v-model="formRegister.phone"
-            auto-comcheckplete="off"
-            placeholder="请输入手机号码"
+            v-model="formRegister.username"
+            placeholder="请输入用户名"
+            style="width: 50%"
+            clearable
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="短信验证"
-          :label-width="formLabelWidth"
-          prop="check"
-        >
-          <el-input
-            v-model="formRegister.check"
-            auto-complete="off"
-            placeholder="请输入短信验证码"
-          ></el-input>
-          <el-button @click="countDown()">{{ content }}</el-button>
-        </el-form-item>
-        <el-form-item
-          label="用户密码"
-          :label-width="formLabelWidth"
-          prop="password"
-        >
+        <el-form-item label="密码" prop="password">
           <el-input
             v-model="formRegister.password"
-            auto-complete="off"
-            placeholder="请设置密码(不少于六位数)"
+            placeholder="请输入密码"
+            style="width: 50%"
+            clearable
           ></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phoneNumber">
+          <el-input
+            v-model="formRegister.phoneNumber"
+            placeholder="请输入手机号码"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号码" prop="idCard">
+          <el-input
+            v-model="formRegister.idCard"
+            placeholder="请输入身份证号码"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input
+            v-model="formRegister.email"
+            placeholder="请输入邮箱"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-radio-group v-model="formRegister.sex">
+            <el-radio label="0">男</el-radio>
+            <el-radio label="1">女</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="registerForm('formRegister')"
+        <el-button type="primary" @click="registerForm()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="公证员注册"
+      :visible.sync="dialogFormNotaryVisible"
+      style="width: 100%"
+    >
+      <el-form
+        :model="notaryRegister"
+        :rules="rulesNotaryRegister"
+        ref="notaryRegister"
+        label-width="300px"
+      >
+        <el-form-item label="用户名" prop="username">
+          <el-input
+            v-model="notaryRegister.username"
+            placeholder="请输入用户名"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input
+            v-model="notaryRegister.password"
+            placeholder="请输入密码"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phoneNumber">
+          <el-input
+            v-model="notaryRegister.phoneNumber"
+            placeholder="请输入手机号码"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号码" prop="idCard">
+          <el-input
+            v-model="notaryRegister.idCard"
+            placeholder="请输入身份证号码"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input
+            v-model="notaryRegister.email"
+            placeholder="请输入邮箱"
+            style="width: 50%"
+            clearable
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="性别">
+          <el-radio-group v-model="notaryRegister.sex">
+            <el-radio label="0">男</el-radio>
+            <el-radio label="1">女</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="公证类型" prop="notarizationType">
+          <el-select
+            v-model="notaryRegister.notarizationType"
+            style="width: 50%"
+            placeholder="请选择公证类型"
+          >
+            <el-option
+              v-for="item in notarizationType"
+              :key="item.notarizationType"
+              :label="item.notarizationTypeName"
+              :value="item.notarizationType"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="公证机构" prop="organizationId">
+          <el-select
+            v-model="notaryRegister.organizationId"
+            style="width: 50%"
+            placeholder="请选择公证机构"
+          >
+            <el-option
+              v-for="item in organization"
+              :key="item.organizationId"
+              :label="item.organizationName"
+              :value="item.organizationId"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormNotaryVisible = false">取 消</el-button>
+        <el-button type="primary" @click="registerNotaryForm()"
           >确 定</el-button
         >
       </div>
@@ -214,6 +322,9 @@ import {
   notaryLogin,
   autManagerLogin,
   sysManagerLogin,
+  regist,
+  orgaQuery,
+  noTypeQuery,
 } from "@/api/getData";
 
 export default {
@@ -234,20 +345,69 @@ export default {
       },
 
       //注册
-      dialogFormVisible: false,
+      dialogFormVisible: false, //用户
+      dialogFormNotaryVisible: false, // 公证员
+
       formRegister: {
-        phone: "",
-        check: "",
-        passwprd: "",
+        username: "",
+        password: "",
+        phoneNumber: "",
+        idCard: "",
+        email: "",
+        sex: "0",
       },
-      formLabelWidth: "80px",
+
       rulesRegister: {
-        phone: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-        check: [
-          { required: true, message: "请输入短信验证码", trigger: "blur" },
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        phoneNumber: [
+          { required: true, message: "请输入手机号码", trigger: "blur" },
+        ],
+        idCard: [
+          { required: true, message: "请输入身份证号码", trigger: "blur" },
+        ],
+        email: [{ required: true, message: "请输入邮箱地址", trigger: "blur" }],
       },
+      // 公证员
+      notaryRegister: {
+        notaryName: "",
+        password: "",
+        phoneNumber: "",
+        idCard: "",
+        email: "",
+        sex: "0",
+        organizationId: "",
+        notarizationType: "",
+        jobNumber: "1",
+      },
+      rulesNotaryRegister: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+        ],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        phoneNumber: [
+          { required: true, message: "请输入手机号码", trigger: "blur" },
+        ],
+        idCard: [
+          { required: true, message: "请输入身份证号码", trigger: "blur" },
+        ],
+        email: [{ required: true, message: "请输入邮箱地址", trigger: "blur" }],
+        organizationId: [
+          { required: true, message: "请选择公证机构", trigger: "change" },
+        ],
+        notarizationType: [
+          { required: true, message: "请选择公证类型", trigger: "change" },
+        ],
+      },
+
+      // 公证机构
+      organization: [],
+
+      // 公证类型
+      notarizationType: [],
+
       //发送验证码
       content: "发送验证码", // 按钮里显示的内容
       totalTime: 60, //记录具体倒计时时间
@@ -255,9 +415,61 @@ export default {
     };
   },
   mounted() {},
-  computed: {},
+  created() {
+    this.getNotarizationType();
+    this.getAgent();
+  },
 
   methods: {
+    // 获取公证机构列表
+    async getAgent() {
+      try {
+        const query = {
+          organizationId: "none",
+          organizationIdNameWildcard: "none",
+          addressWildcard: "none",
+          phoneNumberWildcard: "none",
+          legalPeopleWildcard: "none",
+          emailWildcard: "none",
+        };
+        orgaQuery(query).then((result) => {
+          console.log("获取公证机构状态：" + result.status);
+          if (result.status == true) {
+            //成功
+            console.log(result.data);
+            result.data.forEach((item) => {
+              this.organization.push(item);
+            });
+          } else {
+            //失败
+            console.log(result.message + "获取公证机构列表失败");
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    // 获取公证类型
+    async getNotarizationType() {
+      try {
+        noTypeQuery().then((result) => {
+          if (result.status == true) {
+            //成功
+            console.log(result.data);
+            result.data.forEach((item) => {
+              this.notarizationType.push(item);
+            });
+          } else {
+            //失败
+            console.log("获取公证类型失败");
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
     // 切换tab
     handleClick(tab, event) {
       console.log(tab, event);
@@ -284,7 +496,7 @@ export default {
               });
             }
           });
-          } else if (this.activeName == "second") {
+        } else if (this.activeName == "second") {
           await notaryLogin(this.loginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("userId", result.userId);
@@ -301,7 +513,7 @@ export default {
               });
             }
           });
-          } else if (this.activeName == "third") {
+        } else if (this.activeName == "third") {
           await autManagerLogin(this.loginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("userId", result.userId);
@@ -318,7 +530,6 @@ export default {
               });
             }
           });
-          
         } else {
           await sysManagerLogin(this.loginForm).then((result) => {
             if (result.status) {
@@ -336,7 +547,6 @@ export default {
               });
             }
           });
-         
         }
       } catch (e) {
         console.log(e);
@@ -359,23 +569,15 @@ export default {
         }
       }, 1000);
     },
-    //注册
-    async registerForm(formName) {
-      this.$message({
-        type: "success",
-        message: "注册成功",
-      });
-      this.$refs[formName].validate(async (valid) => {
-        if (valid) {
-          let param = {
-            telephone: this.formRegister.phone,
-            password: this.formRegister.password,
-            check: this.formRegister.check,
-            role: 1,
-          };
-          await register(param)
-            .then((res) => {
-              if (res.error_code == 0) {
+    //用户注册
+    async registerForm() {
+      try {
+        this.$refs.formRegister.validate(async (valid) => {
+          if (valid) {
+            console.log(22222);
+
+            await regist(this.formRegister).then((result) => {
+              if (result.status) {
                 this.$message({
                   type: "success",
                   message: "注册成功",
@@ -384,24 +586,58 @@ export default {
               } else {
                 this.$message({
                   type: "error",
-                  message: res.message,
+                  message: "注册失败",
                 });
               }
-            })
-            .catch(function (error) {
-              console.log(error);
             });
-        } else {
-          this.$notify.error({
-            title: "错误",
-            message: "请输入正确的用户名密码",
-            offset: 100,
+          } else {
+            this.$notify.error({
+              title: "错误",
+              message: "请填写正确的信息",
+              offset: 100,
+            });
+            return false;
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    //公证员注册
+    async registerNotaryForm() {
+      try {
+        this.$refs.notaryRegister.validate(async (valid) => {
+          if (valid) {
+            console.log(333);
+            await regist(this.notaryRegister).then((result) => {
+              if (result.status) {
+                this.$message({
+                  type: "success",
+                  message: "注册成功",
+                });
+                this.dialogFormNotaryVisible = false;
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "注册失败",
+                });
+              }
+            });
+          } else {
+            this.$message({
+            type: "error",
+            message: "请输入完整信息",
           });
-          return false;
-        }
-      });
+            return false;
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
+
   watch: {
     // adminInfo: function(newValue) {
     //   if (newValue.id) {
