@@ -7,6 +7,21 @@ import fetch from '@/config/fetch'
  */
 
 export const userLogin = data => fetch('/user/login', data, 'POST');
+/**
+ * 公证员登陆
+ */
+
+ export const notaryLogin = data => fetch('/notar/login', data, 'POST');
+/**
+ * 机构管理员登陆
+ */
+
+ export const autManagerLogin = data => fetch('/aut/login', data, 'POST');
+ /**
+ * 系统管理员登陆
+ */
+
+export const sysManagerLogin = data => fetch('/sys/login', data, 'POST');
 
 /**
  * 用户注册
