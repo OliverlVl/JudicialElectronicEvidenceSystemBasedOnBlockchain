@@ -32,7 +32,18 @@ export const regist = data => fetch('/user/regist', data, 'POST');
  * 公证员注册
  */
 
- export const notarRegist = data => fetch('/notar/regist', data, 'POST');
+ export const notaryRegist = data => fetch('/notar/regist', data, 'POST');
+
+ /**
+ * 机构管理员注册
+ */
+
+  export const autManagerRegist = data => fetch('/aut/regist', data, 'POST');
+
+  /**
+ * 系统管理员注册
+ */
+ export const sysManagerRegist = data => fetch('/sys/regist', data, 'POST');
 
 /**
  * 获取存证类型
@@ -193,15 +204,6 @@ export const updateMoney = data => fetch('/aut/updateMoney',data, 'POST');
 
 
 
-
-
-
-
-
-/**
-* 	公证员信息修改
-*/
-export const notarregist = data => fetch('/notar/regist',data, 'POST');
 /**
 * 	查看证据文件
 */
