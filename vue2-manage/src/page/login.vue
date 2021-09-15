@@ -323,6 +323,7 @@ import {
   autManagerLogin,
   sysManagerLogin,
   regist,
+  notarRegist,
   orgaQuery,
   noTypeQuery,
 } from "@/api/getData";
@@ -610,7 +611,7 @@ export default {
         this.$refs.notaryRegister.validate(async (valid) => {
           if (valid) {
             console.log(333);
-            await regist(this.notaryRegister).then((result) => {
+            await notarRegist(this.notaryRegister).then((result) => {
               if (result.status) {
                 this.$message({
                   type: "success",
