@@ -162,12 +162,13 @@ export default {
     return {
       searchVisible: false,
       transaction: {
-        userId: sessionStorage.getItem("userID"),
+        //userId: sessionStorage.getItem("userID"),
+        userId: "2",
         // 交易类型
         transactionType: "",
         //交易金额
         // 加解密：1 解密 0 加密
-        decryptFlag: 1,
+        decryptFlag:0,
         //上链时间
         // 交易时间
       },

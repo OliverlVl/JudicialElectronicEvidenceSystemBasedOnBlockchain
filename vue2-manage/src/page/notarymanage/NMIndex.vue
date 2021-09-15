@@ -38,8 +38,7 @@
           </el-scrollbar></div
       ></el-col>
       <el-col :span="10"
-        ><div class="grid-content bg-purple div-set" id="myChart">
-          </div
+        ><div class="grid-content bg-purple div-set" id="myChart"></div
       ></el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
@@ -161,38 +160,36 @@
       ></el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple div-set">
-
-
-          <i class="el-icon-s-data title-set">个人公证统计</i>
+          <i class="el-icon-s-data title-set">机构公证统计</i>
           <el-table
-          :data="orgInfo"
-          stripe
-          height="100%"
-          :header-cell-style="{ background: '#eef1f6', color: '#d1d0d0',fontSize:'16px',}"
-        >
-          <el-table-column
-            label="机构公证次数"
-            prop="notarizationCount"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            label="机构公证成功次数"
-            prop="notarizationSuccessCount"
-            align="center"
-          ></el-table-column>
-          <el-table-column
-            label="机构公证收益"
-            prop="notarizationTotalMoney"
-            align="center"
-          ></el-table-column>
-        </el-table>
+            :data="orgInfo"
+            stripe
+            height="100%"
+            :header-cell-style="{
+              background: '#eef1f6',
+              color: '#d1d0d0',
+              fontSize: '16px',
+            }"
+          >
+            <el-table-column
+              label="机构公证次数"
+              prop="notarizationCount"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              label="机构公证成功次数"
+              prop="notarizationSuccessCount"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              label="机构公证收益"
+              prop="notarizationTotalMoney"
+              align="center"
+            ></el-table-column>
+          </el-table>
 
-
-
-         <i class="el-icon-view title-set">快捷按钮</i>
+          <i class="el-icon-view title-set">快捷按钮</i>
           <div align="center">
-            
-            
             <el-button
               type="primary"
               @click="bookDeal()"
@@ -201,7 +198,7 @@
               <span style="font-size: 25px">查看可公证列表</span>
             </el-button>
             <br />
-           
+
             <el-button
               type="success"
               @click="notDeal2()"
@@ -210,7 +207,6 @@
               <span style="font-size: 25px">待处理公证列表</span>
             </el-button>
           </div>
-
         </div>
       </el-col>
     </el-row>
@@ -226,12 +222,14 @@ import {
   rankStasQue,
   notPayQuery,
   noNumQuery,
-  noTypeQuery,
+  orgStasQue,
+  orgStasGen,
+  autmanQuery,
 } from "@/api/getData";
 export default {
   data() {
     return {
-        orgInfo: [
+      orgInfo: [
         {
           notarizationCount: 50,
           notarizationTotalMoney: 5000,
@@ -239,7 +237,6 @@ export default {
         },
       ],
 
-      
       status: false,
       noreqType: "",
       //公证数量
@@ -421,8 +418,8 @@ export default {
           notarizationMoney: 100,
         },
       ],
-      nota_Num: [{}],
-      userId: "",
+      organizationId: "",
+      autManId: "",
       noTypeNum: {
         totalCount: 0,
         successCount: 0,
@@ -431,9 +428,10 @@ export default {
     };
   },
   created() {
-    this.userId = sessionStorage.getItem("userID");
+    this.autManId = sessionStorage.getItem("autManId");
     this.initData();
     this.getNoPay();
+    this.getOrgNotarInfo();
   },
   mounted() {
     this.drawLine();
@@ -525,11 +523,11 @@ export default {
               this.noPay.push(item);
             });
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           }
         });
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
     },
     // 处理导航页
@@ -538,6 +536,7 @@ export default {
       this.pageIndex = val;
       this.initData();
     },
+    //画图
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("myChart"));
@@ -596,16 +595,16 @@ export default {
           },
         ],
       });
-      
     },
-   
+    //跳转
     bookDeal() {
       this.$router.push("/bookDeal");
     },
-   
+    //跳转
     notDeal2() {
       this.$router.push("/notDeal2");
     },
+    //选择查询的公证类型数量
     async selChange() {
       /*
       await notarizationTypeNum().then((result) => {
@@ -634,6 +633,56 @@ export default {
           successCount: 98,
           failedCount: 2,
         };
+      }
+    },
+    //获取机构公证信息
+    async getOrgNotarInfo() {
+      try {
+        const query = {
+          timeFlag: 1,
+          decryptFlag: 1,
+        };
+        const noQuery = {
+          autManId: this.autManId,
+        };
+        //获取公证机构ID
+        await autmanQuery(noQuery).then((result) => {
+          if (result.status) {
+            this.organizationId = result.data.organizationId;
+          } else {
+            console.log("获取公证员信息失败");
+          }
+        });
+        //公证机构统计生成
+        await orgStasGen().then((result) => {
+          if (result.status) {
+            console.log("机构统计信息生成成功");
+          } else {
+            console.log("机构统计信息生成失败");
+          }
+        });
+        //公证机构统计查询
+        await orgStasQue(query).then((result) => {
+          if (result.status) {
+            result.data.forEach((item) => {
+              if (item.organizationId == this.organizationId) {
+                this.orgInfo=[];
+                this.orgInfo.push(item);
+                // this.orgInfo.notarizationCount = result.data.notarizationCount;
+                // this.orgInfo.notarizationSuccessCount =
+                //   result.data.notarizationSuccessCount;
+                // this.orgInfo.notarizationTotalMoney =
+                //   result.data.notarizationTotalMoney;
+              } else {
+                console.log("查无此机构");
+              }
+            });
+          } else {
+            console.log("机构统计信息获取失败");
+          }
+        });
+      } catch (e) {
+        console.log("获取公证信息失败1");
       }
     },
   },
@@ -681,9 +730,9 @@ export default {
 
 .totalDiv {
   background: url("../image/dark-1.jpg") no-repeat;
-  
-  background-size:500% 500%;
-  min-height:200%;
+
+  background-size: 500% 500%;
+  min-height: 200%;
   position: relative;
 }
 

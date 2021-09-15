@@ -38,8 +38,7 @@
           </el-scrollbar></div
       ></el-col>
       <el-col :span="10"
-        ><div class="grid-content bg-purple div-set" id="myChart">
-          </div
+        ><div class="grid-content bg-purple div-set" id="myChart"></div
       ></el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
@@ -164,34 +163,33 @@
         <div class="grid-content bg-purple div-set">
           <i class="el-icon-s-data title-set">个人公证统计</i>
           <el-table
-          :data="notaInfo"
-          stripe
-          height="100%"
-          :header-cell-style="{ background: '#eef1f6', color: '#d1d0d0',fontSize:'16px', }"
-        >
-          <el-table-column
-            label="个人公证数量"
-            prop="notarizationCount"
-            align="center"
-           
-          ></el-table-column>
-          <el-table-column
-            label="个人公证成功数量"
-            prop="notarizationSuccessCount"
-            align="center"
-           
-          ></el-table-column>
-          <el-table-column
-            label="个人公证收益"
-            prop="notarizationTotalMoney"
-            align="center"
-           
-          ></el-table-column>
-        </el-table>
-         <i class="el-icon-view title-set">快捷按钮</i>
+            :data="notaInfo"
+            stripe
+            height="100%"
+            :header-cell-style="{
+              background: '#eef1f6',
+              color: '#d1d0d0',
+              fontSize: '16px',
+            }"
+          >
+            <el-table-column
+              label="个人公证数量"
+              prop="notarizationCount"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              label="个人公证成功数量"
+              prop="notarizationSuccessCount"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              label="个人公证收益"
+              prop="notarizationTotalMoney"
+              align="center"
+            ></el-table-column>
+          </el-table>
+          <i class="el-icon-view title-set">快捷按钮</i>
           <div align="center">
-            
-            
             <el-button
               type="primary"
               @click="bookDeal()"
@@ -200,7 +198,7 @@
               <span style="font-size: 25px">查看可公证列表</span>
             </el-button>
             <br />
-           
+
             <el-button
               type="success"
               @click="notDeal2()"
@@ -209,7 +207,6 @@
               <span style="font-size: 25px">待处理公证列表</span>
             </el-button>
           </div>
-
         </div>
       </el-col>
     </el-row>
@@ -230,7 +227,7 @@ import {
 export default {
   data() {
     return {
-       notaInfo: [
+      notaInfo: [
         {
           notarizationCount: 50,
           notarizationTotalMoney: 5000,
@@ -238,7 +235,6 @@ export default {
         },
       ],
 
-      
       status: false,
       noreqType: "",
       //公证数量
@@ -421,7 +417,7 @@ export default {
         },
       ],
       nota_Num: [{}],
-      userId: "",
+      notaryId: "",
       noTypeNum: {
         totalCount: 0,
         successCount: 0,
@@ -430,7 +426,7 @@ export default {
     };
   },
   created() {
-    this.userId = sessionStorage.getItem("userID");
+    this.notaryId = sessionStorage.getItem("notaryId");
     this.initData();
     this.getNoPay();
   },
@@ -595,16 +591,16 @@ export default {
           },
         ],
       });
-      
     },
-   
+    //跳转
     bookDeal() {
       this.$router.push("/bookDeal");
     },
-   
+    //跳转
     notDeal2() {
       this.$router.push("/notDeal2");
     },
+    //选择公证类型及其信息
     async selChange() {
       /*
       await notarizationTypeNum().then((result) => {
@@ -633,6 +629,38 @@ export default {
           successCount: 98,
           failedCount: 2,
         };
+      }
+    },
+    async getNoNotarInfo() {
+      try {
+        const query = {
+          timeFlag: 1,
+          decryptFlag: 1,
+        };
+        //公证机构统计生成
+        await notaStasGen().then((result) => {
+          if (result.status) {
+            console.log("公证员统计信息生成成功");
+          } else {
+            console.log("公证员统计信息生成失败");
+          }
+        });
+        //公证机构统计查询
+        await notaStasQue(query).then((result) => {
+          if (result.status) {
+            this.notaInfo = [];
+            this.notaInfo.push(result.data)
+            // this.notaInfo.notarizationCount = result.data.notarizationCount;
+            // this.notaInfo.notarizationTotalMoney =
+            //   result.data.notarizationTotalMoney;
+            // this.notaInfo.notarizationSuccessCount =
+            //   result.data.notarizationSuccessCount;
+          } else {
+            console.log("公证员统计信息获取失败");
+          }
+        });
+      } catch (e) {
+        console.log("获取公证信息失败");
       }
     },
   },
@@ -680,9 +708,9 @@ export default {
 
 .totalDiv {
   background: url("../image/dark-1.jpg") no-repeat;
-  
-  background-size:500% 500%;
-  min-height:200%;
+
+  background-size: 500% 500%;
+  min-height: 200%;
   position: relative;
 }
 

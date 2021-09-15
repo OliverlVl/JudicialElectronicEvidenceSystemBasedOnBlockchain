@@ -63,6 +63,12 @@
           </template>
         </el-table-column>
         <el-table-column
+          label="存证名称"
+          align="center"
+          width="140"
+          prop="evidenceName"
+        ></el-table-column>
+        <el-table-column
           label="公证类型"
           align="center"
           width="140"
@@ -235,7 +241,8 @@ export default {
     return {
       searchVisible: false,
       notarization: {
-        userId: sessionStorage.getItem("userID"),
+        // userId: sessionStorage.getItem("userID"),
+        userId:"1",
         evidenceName: "",
         evidenceType: "",
         notarizationType: "",
@@ -449,11 +456,15 @@ export default {
       if (this.notarization.organizationId == "") {
         this.notarization.organizationId = "none";
       }
+      if (this.notarization.paymentStatus == "") {
+        this.notarization.paymentStatus = "none";
+      }
       if (this.decrypt_flag == false) {
         this.notarization.decryptFlag = 0;
       }
       // 请求数据
       try {
+        console.log(this.notarization);
         await userNotarRecord(this.notarization).then((result) => {
           if (result.status == true) {
             this.tableData = [];
@@ -462,11 +473,12 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            console.log("获取数据失败");
+            console.log("获取数据失败:");
+            console.log(result);
           }
         });
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
       this.notarization.evidenceName = "";
       this.notarization.evidenceType = "";

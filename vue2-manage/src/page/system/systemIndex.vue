@@ -194,7 +194,7 @@
               @click="systemNarizationInfo()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">查看申报材料i信息</span>
+              <span style="font-size: 25px">查看申报材料信息</span>
             </el-button>
           </div>
         </div>

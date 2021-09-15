@@ -268,7 +268,7 @@
 
 <script>
 import headTop from "@/components/headTop";
-import { charge, withdraw, give } from "@/api/getData";
+import { charge, withdraw, give, userQuery, transQuery } from "@/api/getData";
 export default {
   data() {
     return {
@@ -277,9 +277,17 @@ export default {
       withdrawalVisible: false,
       transferVisible: false,
       formData: {
-        userId: sessionStorage.getItem("userId"),
+        //userId: sessionStorage.getItem("userId"),
+        userId:"2",
         transactionMoney: "",
         transactionPeople: "",
+      },
+      transactionQuery: {
+        //userId: sessionStorage.getItem("userId"),
+        userId:"2",
+        transactionMoney: "",
+        transactionPeople: "",
+        decryptFlag:0,
       },
 
       transaction: {
@@ -345,7 +353,8 @@ export default {
     headTop,
   },
   created() {
-    thi.getTransactionData();
+    this.getTransactionData();
+    this.searchInfo();
   },
 
   methods: {
@@ -448,21 +457,47 @@ export default {
     // 获取数据
     async getTransactionData() {
       try {
+        if (this.transactionQuery.transactionMoney == "") {
+        this.transactionQuery.transactionMoney = "none";
+      }
+      if (this.transactionQuery.transactionPeople == "") {
+        this.transactionQuery.transactionPeople = "none";
+      }
         // 请求数据
-        await transQuery(this.transaction).then((result) => {
+        await transQuery(this.transactionQuery).then((result) => {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);
+              console.log(item)
             });
             this.pageTotal = this.tableData.length;
           } else {
-            console.log("获取数据失败");
+            console.log("获取交易数据失败");
           }
         });
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
+    },
+    //获取余额
+    async searchInfo() {
+      const query = {
+        userId: "2",
+      };
+      console.log("获取用户数据");
+      userQuery(query).then((result) => {
+        if (result.status) {
+          result.data.forEach((item) => {
+            console.log(item);
+            this.remains = item.remains;
+            this.hasUsedStorage = item.hasUsedStorage;
+            this.storageSpace = item.storageSpace;
+          });
+          
+        }
+      });
+      //this.storageSpace = this.userInfo.storageSpace;
     },
 
     // 处理导航页

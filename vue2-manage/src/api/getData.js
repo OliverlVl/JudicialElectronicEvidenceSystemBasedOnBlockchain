@@ -37,7 +37,7 @@ export const userEvidenceQuery = data => fetch('/user/evidenceQuery', data, 'POS
  /**
  * 公证类型查询
  */
-export const noTypeQuery = data => fetch('noTypeQuery', data, 'POST');
+export const noTypeQuery = data => fetch('/noTypeQuery', data, 'POST');
 
 /**
  * 公证请求
@@ -105,11 +105,11 @@ export const notarmanageRecord = data => fetch('/aut/notarRecord',data, 'POST');
 /*
  * 	查询证据列表
  */
-export const evidenceQuery = data => fetch('evidenceQuery',data, 'POST');
+export const evidenceQuery = data => fetch('/evidenceQuery',data, 'POST');
 /**
 * 	存证类型查询
 */
-export const eviTypeQuery = data => fetch('eviTypeQuery',data, 'POST');
+export const eviTypeQuery = data => fetch('/eviTypeQuery',data, 'POST');
 /**
 
 /**
@@ -183,7 +183,7 @@ export const updateMoney = data => fetch('/aut/updateMoney',data, 'POST');
 */
 export const notarregist = data => fetch('/notar/regist',data, 'POST');
 /**
-* 	公证员信息修改
+* 	查看证据文件
 */
 export const watchFile = data => fetch('/user/watchFile',data, 'POST');
 /**
@@ -233,6 +233,18 @@ export const autRegist = data => fetch('/aut/regist',data, 'POST');
 * 	机构管理员信息完善
 */
 export const autUpdate = data => fetch('/aut/update',data, 'POST');
+/**
+* 	购买存储空间
+*/
+export const memPay = data => fetch('/user/memPay',data, 'POST');
+/**
+* 	查询申请资料
+*/
+export const notarizationMaterial = data => fetch('/notarizationMaterial',data, 'POST');
+/**
+* 	用户信息修改
+*/
+export const userUpdate = data => fetch('/user/update',data, 'POST');
 
 
 

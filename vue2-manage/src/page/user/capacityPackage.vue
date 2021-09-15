@@ -150,7 +150,7 @@
 
 <script>
 import headTop from "@/components/headTop";
-import { memoryPay } from "@/api/getData";
+import { memPay, userQuery } from "@/api/getData";
 
 export default {
   data() {
@@ -158,13 +158,16 @@ export default {
       storageSpace: "2055",
       hasUsedStorage: "500",
       memoryVisible: false,
+
       formData: {
-        userId: sessionStorage.getItem("userId"),
+        //userId: sessionStorage.getItem("userId"),
+        userId: "2",
         // 金额
-        transactionMoney: "",
+        transactionMoney: -1,
         // 大小
-        storageSize: "",
+        storageSize: -1,
       },
+      userInfo: {},
     };
   },
   //监听 formData.storageSize 字段 ，改变时执行函数
@@ -186,6 +189,9 @@ export default {
         }
       },
     },
+  },
+  created() {
+    this.searchInfo();
   },
   mounted() {},
   components: {
@@ -216,12 +222,13 @@ export default {
         return "#ff0000";
       }
     },
-
     // 购买容量
     async memoryPay() {
       try {
-        memoryPay(this.formData).then((result) => {
-          if (result.status == true) {
+        console.log(this.formData);
+        memPay(this.formData).then((result) => {
+          console.log(result);
+          if (result.status) {
             //成功
             this.$message({
               type: "success",
@@ -238,6 +245,24 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    async searchInfo() {
+      const query = {
+        userId: "2",
+      };
+      userQuery(query).then((result) => {
+        if (result.status) {
+          result.data.forEach((item) => {
+            console.log(item);
+            this.userInfo.remains = item.remains;
+            this.hasUsedStorage = item.hasUsedStorage;
+            this.storageSpace = item.storageSpace;
+          });
+          
+        }
+        console.log(this.userInfo);
+      });
+      //this.storageSpace = this.userInfo.storageSpace;
     },
   },
 };

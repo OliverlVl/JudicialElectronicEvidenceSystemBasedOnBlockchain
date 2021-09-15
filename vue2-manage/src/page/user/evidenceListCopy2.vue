@@ -3,7 +3,6 @@
     <head-top></head-top>
     <!-- 头部查询-->
     <div class="search_container top-div-set">
-      
       <el-input
         placeholder="请输入存证名称"
         v-model="evidence.evidenceName"
@@ -28,7 +27,12 @@
       <el-table :data="tableData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form label-position="right" inline label-width="160px" class="demo-table-expand">
+            <el-form
+              label-position="right"
+              inline
+              label-width="160px"
+              class="demo-table-expand"
+            >
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
@@ -52,10 +56,26 @@
           label="序号"
           width="70px"
         ></el-table-column>
-        <el-table-column label="存证编号" align="center" prop="evidenceId"></el-table-column>
-        <el-table-column label="存证名称" align="center" prop="evidenceName"></el-table-column>
-        <el-table-column label="存证类型" align="center" prop="evidenceType"></el-table-column>
-        <el-table-column label="存证时间" align="center" prop="evidenceTime"></el-table-column>
+        <el-table-column
+          label="存证编号"
+          align="center"
+          prop="evidenceId"
+        ></el-table-column>
+        <el-table-column
+          label="存证名称"
+          align="center"
+          prop="evidenceName"
+        ></el-table-column>
+        <el-table-column
+          label="存证类型"
+          align="center"
+          prop="evidenceType"
+        ></el-table-column>
+        <el-table-column
+          label="存证时间"
+          align="center"
+          prop="evidenceTime"
+        ></el-table-column>
         <el-table-column label="操作" align="center" width="360">
           <template slot-scope="scope">
             <el-button
@@ -117,6 +137,14 @@
               :value="item.organizationId"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="申请事项">
+          <el-input
+            placeholder="请输入申请事项"
+            v-model="notarization.notarizationMatters"
+            style="width: 50%"
+            clearable
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -284,11 +312,14 @@ export default {
 
       // 申请公证数据
       notarization: {
-        userId: sessionStorage.getItem("userID"),
-        evidenceId: "",
+        //userId: sessionStorage.getItem("userID"),
+        userId: "1",
+        evidenceId: "2",
         notarizationType: "",
         organizationId: "",
         notarizationMoney: "",
+        notarizationMatters: "",
+        transactionPeople:"",
       },
 
       // 公证机构
@@ -434,19 +465,21 @@ export default {
     // 发送公证请求
     async notarReq() {
       try {
+        this.notarization.evidenceId = "2";
         notarReq(this.notarization).then((result) => {
+          console.log(result);
           if (result.status == true) {
             //成功
-            console.log(result.data);
+            console.log(result.notarizationMoney);
             //缴费
-            this.notarization.notarizationMoney = result.data.notarizationMoney;
+            this.notarization.notarizationMoney = result.notarizationMoney;
             //
             this.dialogVisible_notarization = false;
             //
             this.notarPayVisible = true;
           } else {
             //失败
-            console.log("公证申请失败");
+            alert("公证申请失败,请补全所有信息");
           }
         });
       } catch (e) {
@@ -457,6 +490,7 @@ export default {
     // 公证缴费
     async notarPay() {
       try {
+        this.notarization.transactionPeople = this.notarization.organizationId
         notarPay(this.notarization).then((result) => {
           if (result.status == true) {
             //成功
@@ -512,7 +546,7 @@ export default {
     // 搜索
     async getEvidenceData() {
       this.searchVisible = false;
-      // 判断
+      //判断
       if (this.evidence.evidenceName == "") {
         // 为空时后端所需的参数
         this.evidence.evidenceName = "none";
@@ -524,8 +558,9 @@ export default {
       // 请求数据
       try {
         console.log("请求数据");
-        await userEvidenceQuery(this.evidence).then((result) => {
-          console.log(result.data);
+        console.log(this.evidence);
+        userEvidenceQuery(this.evidence).then((result) => {
+          console.log(result);
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -593,7 +628,6 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
-  
 }
 .table_container {
   padding: 20px;
@@ -633,6 +667,6 @@ export default {
   text-decoration: underline;
 }
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

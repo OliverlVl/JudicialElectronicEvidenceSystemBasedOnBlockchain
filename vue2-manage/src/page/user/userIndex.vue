@@ -575,6 +575,24 @@ export default {
       });
       
     },
+    async searchInfo() {
+      const query = {
+        userId: "2",
+      };
+      userQuery(query).then((result) => {
+        if (result.status) {
+          result.data.forEach((item) => {
+            console.log(item);
+            this.userInfo.remains = item.remains;
+            this.userInfo.hasUsedStorage = item.hasUsedStorage;
+            this.userInfo.storageSpace = item.storageSpace;
+          });
+          
+        }
+        console.log(this.userInfo);
+      });
+      //this.storageSpace = this.userInfo.storageSpace;
+    },
     // 新增存证路由跳转
     addEvidence() {
       this.$router.push("/addEvidence");
@@ -662,13 +680,11 @@ export default {
 }
 
 .totalDiv {
-  background: url("../image/dark-1.jpg") no-repeat;
-  
+  background: url("../image/dark-1.jpg") no-repeat; 
   background-size:500% 500%;
   min-height:200%;
   position: relative;
 }
-
 .demo-table-expands {
   font-size: 20px;
   margin-bottom: 0%;

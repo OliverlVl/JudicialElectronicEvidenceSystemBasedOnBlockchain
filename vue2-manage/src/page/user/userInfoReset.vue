@@ -19,8 +19,8 @@
             </el-form-item>
             <el-form-item label="性别">
               <el-radio-group v-model="formData.sex" :disabled="update">
-                <el-radio  label="0">男</el-radio>
-                <el-radio   label="1">女</el-radio>
+                <el-radio label="0">男</el-radio>
+                <el-radio label="1">女</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="手机号:">
@@ -56,12 +56,11 @@
               <el-button
                 id="updateId"
                 type="primary"
-                
                 @click="
                   update = false;
                   updateVisible();
                 "
-                style="display: inline; width:100%"
+                style="display: inline; width: 100%"
                 >修改</el-button
               >
               <el-button
@@ -71,7 +70,7 @@
                   update = true;
                   cancelAndSubmitVisible();
                 "
-                style="display: none; width:45%"
+                style="display: none; width: 45%"
                 >取消</el-button
               >
               <el-button
@@ -82,7 +81,7 @@
                   cancelAndSubmitVisible();
                   submit();
                 "
-                style="display: none; width:45%"
+                style="display: none; width: 45%"
                 >保存</el-button
               >
             </el-form-item>
@@ -95,7 +94,7 @@
 
 <script>
 import headTop from "@/components/headTop";
-import { addEvidence } from "@/api/getData";
+import { userQuery, userUpdate } from "@/api/getData";
 export default {
   data() {
     return {
@@ -112,12 +111,15 @@ export default {
       visibleUpdate: "",
       visibleCancel: "none",
       visibleSubmit: "none",
+      userId: "",
     };
   },
   components: {
     headTop,
   },
-  created() {},
+  created() {
+    (this.userId = sessionStorage.getItem("userId")), this.initData();
+  },
   mounted() {},
   methods: {
     // 按钮可视化
@@ -132,8 +134,53 @@ export default {
       document.getElementById("cancelId").style.display = "none";
       document.getElementById("submitId").style.display = "none";
     },
+    initData() {
+      const query = {
+        userId: "1",
+      };
+      console.log("开始获取数据");
+      userQuery(query).then((result) => {
+        console.log("函数内");
+        if (result.status) {
+          //成功
+          console.log(result.data);
+          console.log(result.data[0]);
+          console.log(result.data[0].username);
+          this.formData = result.data[0];
+          console.log(this.formData);
+        } else {
+          //失败
+          console.log("获取失败");
+        }
+      });
+    },
     // 数据提交
-    submit() {},
+    submit() {
+      // const query = {
+      //   userId: this.formData.userId,
+      //   newPassword: this.formData.password,
+      //   phoneNumber: this.formData.phoneNumber,
+      //   idCard: this.formData.idCard,
+      //   email: this.formData.email,
+      //   sex: this.formData.email,
+      // };
+      const query = {
+        userId: "1",
+        newPassword: "234",
+        phoneNumber: "15659029386",
+        idCard: "350103199907121536",
+        email: "2916568685@qq.com",
+        sex: "0",
+      };
+      console.log(query);
+      userUpdate(query).then((result) => {
+        if (result.status) {
+          console.log("提交成功");
+        } else {
+          console.log("提交失败"+result.message);
+        }
+      });
+    },
   },
 };
 </script>

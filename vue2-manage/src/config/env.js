@@ -11,11 +11,11 @@ let routerMode = 'hash';
 let baseImgPath;
 
 if (process.env.NODE_ENV == 'development') {
-	baseUrl = 'http://localhost:8080/';
+	baseUrl = 'http://localhost:8080';
     baseImgPath = '';
 }else{
 	// baseUrl = '//elm.cangdu.org';
-	baseUrl = 'http://localhost:8080/'
+	baseUrl = 'http://localhost:8080'
     baseImgPath = '';
 }
 

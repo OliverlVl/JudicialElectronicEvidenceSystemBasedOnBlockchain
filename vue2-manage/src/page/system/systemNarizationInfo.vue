@@ -3,27 +3,23 @@
     <head-top></head-top>
     <div class="search_container top-div-set">
       <label>请选择公证机构:&emsp;</label>
-      <el-select v-model="value" placeholder="请选择">
+      <el-select
+        v-model="organizationId"
+        placeholder="请选择"
+        @change="notarizationMaterialQuery()"
+      >
         <el-option
           v-for="item in orgName"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
+          :key="item.organization_id"
+          :label="item.organization_name"
+          :value="item.organization_id"
         >
         </el-option>
       </el-select>
-
-      <!-- <el-button
-        type="primary"
-        @click="searchVisible = true"
-        style="margin-left: 18px"
-        >高级搜索
-      </el-button> -->
-      <!--<el-button @click="tryy()">尝试</el-button>-->
     </div>
     <div class="table_container">
       <el-table
-        :data="tableData"
+        :data="orgMaterialList"
         stripe
         border
         :show-header="status"
@@ -33,11 +29,18 @@
           label="材料"
           align="left"
           width="1080px"
-          prop="fileName"
+          prop="materialName"
         ></el-table-column>
 
         <el-table-column label="操作" align="center">
-          <el-button type="primary" size="small">下载文件 </el-button>
+          <template slot-scope="scope">
+            <el-button
+              type="primary"
+              size="small"
+              @click="downloadMaterial(scope.row.MaterialId)"
+              >下载文件</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
       <div class="pagination">
@@ -57,109 +60,31 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import {
-  notarRecord,
-  eviTypeQuery,
-  noTypeQuery,
-  notarmanageRecord,
-} from "@/api/getData";
+import { orgaQuery, downloadMaterialFile, notarizationMaterial } from "@/api/getData";
 export default {
   data() {
     return {
       //解密
       status: false,
+      organizationId: "",
+      //MaterialId: "",
       // 表格
-      tableData: [
-        {
-          fileName: "出生证公证",
-        },
-        {
-          fileName: "房产证公证",
-        },
-        {
-          fileName: "法人委托书公证",
-        },
-        {
-          fileName: "寄养保证书公证",
-        },
-        {
-          fileName: "生存公证",
-        },
+      orgName: [
+        { organization_id: "1", organization_name: "福州公证处" },
+        { organization_id: "2", organization_name: "厦门公证处" },
       ],
-      orgName: [],
+      orgMaterialList: [
+        { materialName: "出生证材料" },
+        { materialName: "房产证材料" },
+        { materialName: "驾驶证材料" },
+      ],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      //公证员ID
-      notary_id: "",
-      searchQuery: {
-        usernameWildcard: "",
-        evidenceNameWildcard: "",
-        notarizationStatus: "3",
-        notarizationType: "",
-        paymentStatus: "",
-        evidenceType: "",
-        decryptFlag: 1,
-        notarizationMoneyUpper: -1,
-        notarizationMoneyFloor: -1,
-      },
-      //存证类型选择器
-      evidence_type: [
-        {
-          evidenceTypeName: "不限",
-          evidenceType: "none",
-        },
-      ],
-      //公证类型选择器
-      notarization_type: [
-        {
-          notarizationTypeName: "不限",
-          notarizationType: "none",
-        },
-      ],
-      payment_type: [
-        {
-          label: "未支付",
-          value: "0",
-        },
-        {
-          label: "已支付",
-          value: "1",
-        },
-      ],
-      money_choose: [
-        {
-          label: "小于100元",
-          value: "0",
-        },
-        {
-          label: "100~300元",
-          value: "1",
-        },
-        {
-          label: "大于300元",
-          value: "2",
-        },
-        {
-          label: "不限",
-          value: "none",
-        },
-      ],
-      notarization_status: [
-        {
-          label: "审核通过",
-          value: "3",
-        },
-        {
-          label: "审核不通过",
-          value: "4",
-        },
-      ],
     };
   },
   created() {
-    this.notary_id = localStorage.getItem("notaryId");
     this.decryptFlag = 1;
     this.initData();
   },
@@ -171,182 +96,63 @@ export default {
     // 初始化数据
     async initData() {
       try {
-        if (this.decrypt_flag) {
-          this.decryptFlag = 1;
-        } else {
-          this.decryptFlag = 0;
-        }
         const query = {
-          decryptFlag: this.decryptFlag,
-          notaryId: this.notary_id,
-          dealType: "2",
+          organizationId: "none",
+          organizationIdNameWildcard: "none",
+          addressWildcard: "none",
+          phoneNumberWildcard: "none",
+          legalPeopleWildcard: "none",
+          emailWildcard: "none",
         };
-        await notarRecord(query).then((result) => {
-          if (result.status == true) {
-            this.tableData = [];
+        await orgaQuery(query).then((result) => {
+          if (result.status) {
+            this.orgName = [];
             result.data.forEach((item) => {
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-          } else {
-            console.log("获取数据失败");
-          }
-        });
-        //获取存证类型
-        await eviTypeQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.evidence_type.push(item);
+              this.orgName.push(item);
             });
           } else {
-            console.log("存证类型获取失败");
-          }
-        });
-        //获取公证类型
-        await noTypeQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.notarization_type.push(item);
-            });
-          } else {
-            console.log("公证类型获取失败");
+            console.log("机构信息获取失败");
           }
         });
       } catch (error) {
         throw new Error(result.message);
       }
     },
+    //查询申请材料
+    notarizationMaterialQuery() {
+      const query = {
+        organizationId: this.organizationId,
+      };
+      notarizationMaterial(query).then((result) => {
+        if (result.status) {
+          this.orgMaterialList = [];
+          result.data.forEach((item) => {
+            this.orgMaterialList.push(item);
+          });
+        } else {
+          console.log("获取材料失败");
+        }
+      });
+    },
+    downloadMaterial(materialId) {
+      const query = {
+        MaterialId: materialId,
+      };
+      downloadMaterialFile(query).then((result) => {
+        if (result.status) {
+
+
+          
+        } else {
+          console.log("下载材料失败");
+        }
+      });
+    },
     // 处理导航页
     handlePageChange(val) {
       console.log(val);
       this.pageIndex = val;
       this.initData();
-    },
-    // 搜索
-    async handleSearch() {
-      try {
-        this.dealData();
-        if (this.searchQuery.notarizationStatus == "none") {
-          this.searchQuery.notarizationStatus = "3";
-          await notarmanageRecord(this.searchQuery).then((result) => {
-            if (result.status) {
-              this.tableData = [];
-              result.data.forEach((item) => {
-                this.tableData.push(item);
-              });
-            } else {
-              throw new Error("获取数据失败");
-            }
-          });
-          this.searchQuery.notarizationStatus = "4";
-          await notarmanageRecord(this.searchQuery).then((result) => {
-            if (result.status) {
-              result.data.forEach((item) => {
-                this.tableData.push(item);
-              });
-              this.pageTotal = this.tableData.length;
-            } else {
-              throw new Error("获取数据失败");
-            }
-          });
-          this.searchQuery.notarizationStatus = "none";
-        } else {
-          await notarmanageRecord(this.searchQuery).then((result) => {
-            if (result.status) {
-              this.tableData = [];
-              result.data.forEach((item) => {
-                this.tableData.push(item);
-              });
-              this.pageTotal = this.tableData.length;
-            } else {
-              throw new Error("获取数据失败");
-            }
-          });
-        }
-        this.resetData();
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
-    dealData() {
-      try {
-        //用户名
-        if (this.searchQuery.usernameWildcard == "") {
-          this.searchQuery.usernameWildcard = "none";
-        }
-        //存证名称
-        if (this.searchQuery.evidenceNameWildcard == "") {
-          this.searchQuery.evidenceNameWildcard = "none";
-        }
-        //公证类型
-        if (this.searchQuery.notarizationType == "") {
-          this.searchQuery.notarizationType = "none";
-        }
-        //支付状态
-        if (this.searchQuery.paymentStatus == "") {
-          this.searchQuery.paymentStatus = "none";
-        }
-        //存证类型
-        if (this.searchQuery.evidenceType == "") {
-          this.searchQuery.evidenceType = "none";
-        }
-        //公证状态
-        if (this.searchQuery.notarizationStatus == "") {
-          this.searchQuery.notarizationStatus = "none";
-        }
-        //公证金额
-        if (this.moneyState == "0") {
-          this.searchQuery.notarizationMoneyUpper = 100;
-          this.searchQuery.notarizationMoneyFloor = -1;
-        } else if (this.moneyState == "1") {
-          this.searchQuery.notarizationMoneyUpper = 300;
-          this.searchQuery.notarizationMoneyFloor = 100;
-        } else if (this.moneyState == "2") {
-          this.searchQuery.notarizationMoneyUpper = -1;
-          this.searchQuery.notarizationMoneyFloor = 300;
-        } else {
-          this.searchQuery.notarizationMoneyUpper = -1;
-          this.searchQuery.notarizationMoneyFloor = -1;
-        }
-        //加解密
-        if (this.decrypt_flag) {
-          this.searchQuery.decryptFlag = 1;
-        } else {
-          this.searchQuery.decryptFlag = 0;
-        }
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
-    resetData() {
-      try {
-        //用户名
-        if (this.searchQuery.usernameWildcard == "none") {
-          this.searchQuery.usernameWildcard = "";
-        }
-        //存证名称
-        if (this.searchQuery.evidenceNameWildcard == "none") {
-          this.searchQuery.evidenceNameWildcard = "";
-        }
-        //公证类型
-        if (this.searchQuery.notarizationType == "none") {
-          this.searchQuery.notarizationType = "";
-        }
-        //支付状态
-        if (this.searchQuery.paymentStatus == "none") {
-          this.searchQuery.paymentStatus = "";
-        }
-        //存证类型
-        if (this.searchQuery.evidenceType == "none") {
-          this.searchQuery.evidenceType = "";
-        }
-        //公证状态
-        if (this.searchQuery.notarizationStatus == "none") {
-          this.searchQuery.notarizationStatus = "";
-        }
-      } catch (error) {
-        throw new Error(error.message);
-      }
     },
   },
 };
