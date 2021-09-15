@@ -4,15 +4,15 @@
     <el-row style="margin-top: 20px">
       <el-col :span="12" :offset="2">
         <el-form
-          :model="formData"
+          :model="uploadData"
           :rules="rules"
-          ref="formData"
+          ref="uploadData"
           label-width="200px"
           class="demo-formData"
         >
           <el-form-item label="存证类型" prop="evidenceType">
             <el-select
-              v-model="formData.evidenceType"
+              v-model="uploadData.evidenceType"
               style="width: 50%"
               placeholder="请选择存证类型"
             >
@@ -26,7 +26,7 @@
           </el-form-item>
           <el-form-item label="存证名称" prop="evidenceName">
             <el-input
-              v-model="formData.evidenceName"
+              v-model="uploadData.evidenceName"
               placeholder="请输入存证名称"
               style="width: 50%"
             ></el-input>
@@ -34,7 +34,7 @@
           <el-form-item label="上传文件">
             <el-upload
               class="avatar-uploader"
-              :action="no"
+              action="/addEvidence"
               :http-request="uploadFile"
               :show-file-list="true"
               :auto-upload="false"
@@ -51,7 +51,7 @@
             </el-upload>
           </el-form-item>
           <el-form-item class="button_submit">
-            <el-button type="primary" @click="submitForm('formData')"
+            <el-button type="primary" @click="addEvidence()"
               >确定上传</el-button
             >
             <el-button @click="resetForm('formData')">重置</el-button>
@@ -65,10 +65,11 @@
 <script>
 import headTop from "@/components/headTop";
 import { getEvidenceType, addEvidence } from "@/api/getData";
+import axios from 'axios'
 export default {
   data() {
     return {
-      formData: {
+      uploadData: {
         evidenceType: "",
         evidenceName: "",
         fileList: [],
@@ -90,17 +91,14 @@ export default {
     headTop,
   },
   created() {
-    console.log("eeeeeeeeeee");
     this.getEvidenceType();
   },
   mounted() {},
   methods: {
     //获取存证类型
     getEvidenceType() {
-      try {
-        console.log("1111111111111111111111111111");
+      try { 
         getEvidenceType().then((result) => {
-          console.log("222222222222222222222222222");
           if (result.status == true) {
             //成功
             console.log(result.data);
@@ -120,12 +118,19 @@ export default {
 
     //添加文件时触发
     uploadFile(file) {
-      this.formData.append("file", file.file);
+      console.log(444444444)
+      this.formData.append('file', file.file);
       this.isuploadfile = true;
+      console.log(333333)
     },
 
-    submitForm(formData) {
-      this.$refs[formData].validate((valid) => {
+    addEvidence() {
+      this.formData = new FormData();
+      this.$refs.upload.submit(); // 必须设置，这样才会上次文件，触发uploadFile()函数
+      this.formData.append('evidenceType',this.uploadData.evidenceType);
+      this.formData.append('evidenceName',this.uploadData.evidenceName);
+      this.$refs.uploadData.validate((valid) => {
+ 
         if (valid) {
           if (!this.isuploadfile) {
             this.$message({
@@ -136,6 +141,8 @@ export default {
           }
           // 开始上传
           try {
+            console.log(1111111111)
+            console.log(this.formData.file)
             this.formData.append("userId", sessionStorage.getItem("userId"));
             let config = {
               headers: {
@@ -143,13 +150,13 @@ export default {
               },
             };
             axios.defaults.baseURL = "http://127.0.0.1:8080"; 
-            axios.post("/addEvidence", this.formData, config).then((res) => {
+            axios.post("/user/addEvidence", this.formData, config).then((res) => {
               let data = res.data;
               if (data.status) {
                 // 清空数据
-                this.formData.evidenceType='';
-                thi.formData.evidenceName='';
-                thi.formData.fileList=[];
+                this.uploadData.evidenceType='';
+                thi.uploadData.evidenceName='';
+                thi.uploadData.fileList=[];
 
                 this.$message({
                   type: "success",
