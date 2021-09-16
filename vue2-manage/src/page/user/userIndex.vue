@@ -38,8 +38,7 @@
           </el-scrollbar></div
       ></el-col>
       <el-col :span="10"
-        ><div class="grid-content bg-purple div-set" id="myChart">
-          </div
+        ><div class="grid-content bg-purple div-set" id="myChart"></div
       ></el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
@@ -408,9 +407,11 @@ export default {
     };
   },
   created() {
-    this.userId = sessionStorage.getItem("userID");
+    this.userId = sessionStorage.getItem("userId");
     this.initData();
     this.getNoPay();
+    console.log("userId:" + sessionStorage.getItem("userId"));
+    console.log(this.userId);
   },
   mounted() {
     this.drawLine();
@@ -573,7 +574,6 @@ export default {
           },
         ],
       });
-      
     },
     async searchInfo() {
       const query = {
@@ -587,7 +587,6 @@ export default {
             this.userInfo.hasUsedStorage = item.hasUsedStorage;
             this.userInfo.storageSpace = item.storageSpace;
           });
-          
         }
         console.log(this.userInfo);
       });
@@ -680,9 +679,9 @@ export default {
 }
 
 .totalDiv {
-  background: url("../image/dark-1.jpg") no-repeat; 
-  background-size:500% 500%;
-  min-height:200%;
+  background: url("../image/dark-1.jpg") no-repeat;
+  background-size: 500% 500%;
+  min-height: 200%;
   position: relative;
 }
 .demo-table-expands {

@@ -300,9 +300,9 @@
           >
             <el-option
               v-for="item in notarizationType"
-              :key="item.notarizationType"
-              :label="item.notarizationTypeName"
-              :value="item.notarizationType"
+              :key="item.notarizationTypeId"
+              :label="item.notarizationType"
+              :value="item.notarizationTypeId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -733,15 +733,12 @@ export default {
     async getNotarizationType() {
       try {
         noTypeQuery().then((result) => {
-          if (result.status == true) {
-            //成功
-            result.data.forEach((item) => {
-              this.notarizationType.push(item);
-            });
-          } else {
-            //失败
-            console.log("获取公证类型失败");
-          }
+          console.log("获取公证类型");
+          console.log(result);
+          result.forEach((item) =>{
+            this.notarizationType.push(item);
+            console.log(item);
+          })
         });
       } catch (e) {
         console.log(e);
@@ -752,7 +749,6 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-
 
     //登录
     async submitForm() {
@@ -765,8 +761,9 @@ export default {
                 type: "success",
                 message: "登入成功",
               });
+              //alert(sessionStorage.getItem("userId"));
               // 路由跳转
-              this.$router.push("/userIndex");
+            this.$router.push("/userIndex")
             } else {
               this.$message({
                 type: "error",

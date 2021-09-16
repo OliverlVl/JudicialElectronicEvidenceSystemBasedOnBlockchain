@@ -224,10 +224,6 @@ export const autmanQuery = data => fetch('/aut/autmanQuery',data, 'POST');
 * 	公证总数查询
 */
 export const noNumQuery = data => fetch('/noNumQuery',data, 'POST');
-/**
-* 	公证类型及其数量查询
-*/
-//export const noTypeQuery = data => fetch('/noTypeQuery',data, 'POST');
 
 
 
@@ -267,6 +263,18 @@ export const notarizationMaterial = data => fetch('/notarizationMaterial',data, 
 * 	用户信息修改
 */
 export const userUpdate = data => fetch('/user/update',data, 'POST');
+/**
+* 	充值
+*/
+export const charge = data => fetch('/user/charge',data, 'POST');
+/**
+* 	充值
+*/
+export const give = data => fetch('/user/give',data, 'POST');
+/**
+* 	充值
+*/
+export const withdraw = data => fetch('/user/withdraw',data, 'POST');
 
 
 

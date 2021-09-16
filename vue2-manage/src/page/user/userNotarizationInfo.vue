@@ -10,9 +10,9 @@
       >
         <el-option
           v-for="item in orgName"
-          :key="item.organization_id"
-          :label="item.organization_name"
-          :value="item.organization_id"
+          :key="item.organizationId"
+          :label="item.organizationName"
+          :value="item.organizationId"
         >
         </el-option>
       </el-select>
@@ -60,7 +60,11 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { orgaQuery, downloadMaterialFile, notarizationMaterial } from "@/api/getData";
+import {
+  orgaQuery,
+  downloadMaterialFile,
+  notarizationMaterial,
+} from "@/api/getData";
 export default {
   data() {
     return {
@@ -107,6 +111,7 @@ export default {
         await orgaQuery(query).then((result) => {
           if (result.status) {
             this.orgName = [];
+            console.log(result);
             result.data.forEach((item) => {
               this.orgName.push(item);
             });
@@ -123,12 +128,15 @@ export default {
       const query = {
         organizationId: this.organizationId,
       };
+      console.log(query.organizationId);
       notarizationMaterial(query).then((result) => {
+        console.log(query.organizationId);
         if (result.status) {
           this.orgMaterialList = [];
           result.data.forEach((item) => {
             this.orgMaterialList.push(item);
           });
+          
         } else {
           console.log("获取材料失败");
         }
@@ -140,9 +148,6 @@ export default {
       };
       downloadMaterialFile(query).then((result) => {
         if (result.status) {
-
-
-          
         } else {
           console.log("下载材料失败");
         }

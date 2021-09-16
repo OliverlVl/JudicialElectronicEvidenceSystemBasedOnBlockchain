@@ -172,10 +172,28 @@
             </el-form>
           </template>
         </el-table-column>
-        <el-table-column label="申请人" align="center" width="180px" prop="userId"></el-table-column>
-        <el-table-column label="存证类型" align="center" width="180px" prop="evidenceType"></el-table-column>
-        <el-table-column label="存证名称" align="center" prop="evidenceName"></el-table-column>
-        <el-table-column label="公证申请时间" align="center" prop="notarizationStartTime"></el-table-column>
+        <el-table-column
+          label="申请人"
+          align="center"
+          width="180px"
+          prop="userId"
+        ></el-table-column>
+        <el-table-column
+          label="存证类型"
+          align="center"
+          width="180px"
+          prop="evidenceType"
+        ></el-table-column>
+        <el-table-column
+          label="存证名称"
+          align="center"
+          prop="evidenceName"
+        ></el-table-column>
+        <el-table-column
+          label="公证申请时间"
+          align="center"
+          prop="notarizationStartTime"
+        ></el-table-column>
         <el-table-column
           label="公证类型"
           align="center"
@@ -357,8 +375,10 @@ export default {
     async appointDeal(evidenceId, notaryId) {
       const query = {
         evidence_id: evidenceId,
-        notary_id: notaryId,
+        //notary_id: notaryId,
+        notary_id: "1",
       };
+      console.log(query);
       let result = await appoint(query);
       if (result.status) {
         alert("你已成功申请");
@@ -374,6 +394,7 @@ export default {
             this.tableData = [];
             result.data.forEach((item) => {
               this.tableData.push(item);
+              console.log(item);
             });
             this.pageTotal = this.tableData.length;
           } else {
@@ -387,6 +408,8 @@ export default {
     },
     dealData() {
       try {
+        //this.searchQuery.notaryId = this.notary_id;
+        this.searchQuery.notaryId = "5";
         //用户名
         if (this.searchQuery.usernameWildcard == "") {
           this.searchQuery.usernameWildcard = "none";
@@ -422,11 +445,12 @@ export default {
           this.searchQuery.notarizationMoneyFloor = -1;
         }
         //加解密
-        if (this.decrypt_flag) {
-          this.searchQuery.decryptFlag = 1;
-        } else {
-          this.searchQuery.decryptFlag = 0;
-        }
+        // if (this.decrypt_flag) {
+        //   this.searchQuery.decryptFlag = 1;
+        // } else {
+        //   this.searchQuery.decryptFlag = 0;
+        // }
+        this.searchQuery.decryptFlag = 0;
       } catch (error) {
         throw new Error(error.message);
       }
@@ -515,6 +539,6 @@ export default {
   text-decoration: underline;
 }
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

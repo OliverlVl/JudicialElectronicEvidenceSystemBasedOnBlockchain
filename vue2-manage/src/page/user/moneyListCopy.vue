@@ -162,13 +162,12 @@ export default {
     return {
       searchVisible: false,
       transaction: {
-        //userId: sessionStorage.getItem("userID"),
-        userId: "2",
+        userId: sessionStorage.getItem("userId"),
         // 交易类型
-        transactionType: "",
+        transactionType: "none",
         //交易金额
         // 加解密：1 解密 0 加密
-        decryptFlag:0,
+        decryptFlag: 0,
         //上链时间
         // 交易时间
       },
@@ -253,7 +252,7 @@ export default {
   },
   created() {
     // 获取数据
-    // this.getTransactionData();
+    this.getTransactionData();
   },
   computed: {},
   components: {
@@ -265,8 +264,19 @@ export default {
       let start = this.transactionTime[0];
       let end = this.transactionTime[1];
       this.transaction.transactionTimeStart = start.getTime();
+      // start.getFullYear() +
+      // "-" +
+      // (start.getMonth() + 1) +
+      // "-" +
+      // start.getDate() +
+      // " " +
+      // start.getHours() +
+      // ":" +
+      // start.getMinutes() +
+      // ":" +
+      // start.getSeconds();
       this.transaction.transactionTimeEnd = end.getTime();
-      console.log();
+      console.log(this.transaction.transactionTimeStart);
     },
 
     // 上链时间赋值
@@ -320,9 +330,26 @@ export default {
         // 请求数据
 
         await transQuery(this.transaction).then((result) => {
+          console.log(this.transaction);
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (item.blockchainTime == null) {
+                item.blockchainTime = "null";
+              }
+              if (item.transactionBlockchainId == null) {
+                item.transactionBlockchainId = "null";
+              }
+              if (item.transactionPeople == null) {
+                item.transactionPeople = "null";
+              }
+              if (item.storageSize == null) {
+                item.storageSize = "null";
+              }
+              if (this.transaction.decryptFlag == 0) {
+                item.transactionMoney = "******";
+                item.transactionPeople = "******";
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;

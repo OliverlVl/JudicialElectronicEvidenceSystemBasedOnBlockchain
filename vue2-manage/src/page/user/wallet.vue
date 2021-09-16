@@ -276,25 +276,18 @@ export default {
       rechargeVisible: false,
       withdrawalVisible: false,
       transferVisible: false,
+      //充值转账提现
       formData: {
-        //userId: sessionStorage.getItem("userId"),
-        userId:"2",
+        userId: sessionStorage.getItem("userId"),
         transactionMoney: "",
         transactionPeople: "",
-      },
-      transactionQuery: {
-        //userId: sessionStorage.getItem("userId"),
-        userId:"2",
-        transactionMoney: "",
-        transactionPeople: "",
-        decryptFlag:0,
       },
 
       transaction: {
-        userId: sessionStorage.getItem("userID"),
+        userId: sessionStorage.getItem("userId"),
         // 交易类型
-        transactionType: "充值",
-        decryptFlag: 1,
+        transactionType: "0",
+        decryptFlag: 0,
       },
 
       //时间选择器
@@ -376,8 +369,9 @@ export default {
             //成功
             this.$message({
               type: "success",
-              message: "充值成功",
+              message: "充值成功，请刷新页面",
             });
+            
           } else {
             //失败
             this.$message({
@@ -390,7 +384,6 @@ export default {
         console.log(e);
       }
     },
-
     //提现
     async withdrawal() {
       try {
@@ -400,13 +393,13 @@ export default {
             //成功
             this.$message({
               type: "success",
-              message: "转账成功",
+              message: "提现成功，请刷新页面",
             });
           } else {
             //失败
             this.$message({
               type: "error",
-              message: "转账失败",
+              message: "提现失败",
             });
           }
         });
@@ -414,7 +407,6 @@ export default {
         console.log(e);
       }
     },
-
     //转账
     async transfer() {
       try {
@@ -424,7 +416,7 @@ export default {
             //成功
             this.$message({
               type: "success",
-              message: "转账成功",
+              message: "转账成功，请刷新页面",
             });
           } else {
             //失败
@@ -438,37 +430,34 @@ export default {
         console.log(e);
       }
     },
-
     // tab 被选中时触发
     handleClick(tab, event) {
       console.log(tab, event);
       if (tab.label == "充值记录") {
-        this.transaction.transactionType = "充值";
+        this.transaction.transactionType = "0";
         this.getTransactionData();
       } else if (tab.label == "提现记录") {
-        this.transaction.transactionType = "提现";
+        this.transaction.transactionType = "2";
         this.getTransactionData();
       } else if (tab.label == "转账记录") {
-        this.transaction.transactionType = "转赠";
+        this.transaction.transactionType = "1";
         this.getTransactionData();
       }
     },
-
     // 获取数据
     async getTransactionData() {
       try {
-        if (this.transactionQuery.transactionMoney == "") {
-        this.transactionQuery.transactionMoney = "none";
-      }
-      if (this.transactionQuery.transactionPeople == "") {
-        this.transactionQuery.transactionPeople = "none";
-      }
         // 请求数据
-        await transQuery(this.transactionQuery).then((result) => {
+        await transQuery(this.transaction).then((result) => {
+          console.log(this.transaction)
           if (result.status == true) {
             this.tableData = [];
+            console.log(result)
             result.data.forEach((item) => {
-              this.tableData.push(item);
+              // if (this.transaction.decryptFlag == 0) {
+              //   item.transactionMoney = "******";
+              // }
+              this.tableData.push(item);     
               console.log(item)
             });
             this.pageTotal = this.tableData.length;
@@ -483,7 +472,8 @@ export default {
     //获取余额
     async searchInfo() {
       const query = {
-        userId: "2",
+        userId: sessionStorage.getItem("userId"),
+        decryptFlag:1,
       };
       console.log("获取用户数据");
       userQuery(query).then((result) => {

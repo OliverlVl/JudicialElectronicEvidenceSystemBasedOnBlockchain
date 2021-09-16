@@ -118,9 +118,9 @@
           >
             <el-option
               v-for="item in notarizationType"
-              :key="item.notarizationType"
-              :label="item.notarizationTypeName"
-              :value="item.notarizationType"
+              :key="item.notarizationTypeId"
+              :label="item.notarizationType"
+              :value="item.notarizationTypeId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -244,21 +244,9 @@ export default {
     return {
       searchVisible: false,
       notarPayVisible: false,
-
-      /*evidence: {
-        //userId: sessionStorage.getItem("userID"),
-        userId: "1",
-        evidenceName: "",
-        evidenceType: "",
-        // evidenceTimeStart: "none",
-        // evidenceTimeEnd: "none",
-        // blockchainTimeStart: "none",
-        // blockchainTimeEnd: "none",
-        notarizationStatus: 0,
-      },*/
       evidence: {
         evidenceId: "none",
-        userId: "1",
+        userId: sessionStorage.getItem("userId"),
         usernameWildcard: "none",
         fileSizeFloor: -1,
         fileSizeUpper: -1,
@@ -270,7 +258,7 @@ export default {
         blockchainTimeEnd: "none",
         notarizationStatus: "none",
         evidenceBlockchainId: "none",
-        decryptFlag: 1,
+        decryptFlag: 0,
       },
       // 存证类型
       evidenceType: [],
@@ -312,14 +300,14 @@ export default {
 
       // 申请公证数据
       notarization: {
-        //userId: sessionStorage.getItem("userID"),
-        userId: "1",
-        evidenceId: "2",
+        userId: sessionStorage.getItem("userId"),
+        //userId: "1",
+        evidenceId: "",
         notarizationType: "",
         organizationId: "",
         notarizationMoney: "",
         notarizationMatters: "",
-        transactionPeople:"",
+        transactionPeople: "",
       },
 
       // 公证机构
@@ -333,19 +321,19 @@ export default {
       select: "",
       // 表格
       tableData: [
-        {
-          evidenceId: "12987122",
-          evidenceName: "文凭",
-          evidenceType: "文件存证",
-          evidenceTime: "2021-08-09",
-          filePath: "/XXX/XXX/XX",
-          fileSize: "10.5MB",
-          fileHash: "xjklfglksdf",
-          evidenceBlockchainId: "132135465476461",
-          blockchainTime: "2021-08-09",
-        },
-        {},
-        {},
+        // {
+        //   evidenceId: "12987122",
+        //   evidenceName: "文凭",
+        //   evidenceType: "文件存证",
+        //   evidenceTime: "2021-08-09",
+        //   filePath: "/XXX/XXX/XX",
+        //   fileSize: "10.5MB",
+        //   fileHash: "xjklfglksdf",
+        //   evidenceBlockchainId: "132135465476461",
+        //   blockchainTime: "2021-08-09",
+        // },
+        // {},
+        // {},
       ],
       // 获取数据
       pageTotal: 0,
@@ -368,7 +356,7 @@ export default {
     };
   },
   created() {
-    // this.getEvidenceData();
+    this.getEvidenceData();
     this.getNotarizationType();
     this.getAgent();
     this.getEvidenceType();
@@ -434,16 +422,12 @@ export default {
     async getNotarizationType() {
       try {
         noTypeQuery().then((result) => {
-          if (result.status == true) {
-            //成功
-            console.log(result.data);
-            result.data.forEach((item) => {
-              this.notarizationType.push(item);
-            });
-          } else {
-            //失败
-            console.log("获取公证类型失败");
-          }
+          console.log("获取公证类型");
+          console.log(result);
+          result.forEach((item) =>{
+            this.notarizationType.push(item);
+            console.log(item);
+          })
         });
       } catch (e) {
         console.log(e);
@@ -465,7 +449,6 @@ export default {
     // 发送公证请求
     async notarReq() {
       try {
-        this.notarization.evidenceId = "2";
         notarReq(this.notarization).then((result) => {
           console.log(result);
           if (result.status == true) {
@@ -490,7 +473,7 @@ export default {
     // 公证缴费
     async notarPay() {
       try {
-        this.notarization.transactionPeople = this.notarization.organizationId
+        this.notarization.transactionPeople = this.notarization.organizationId;
         notarPay(this.notarization).then((result) => {
           if (result.status == true) {
             //成功
@@ -546,6 +529,7 @@ export default {
     // 搜索
     async getEvidenceData() {
       this.searchVisible = false;
+      console.log(this.evidence.userId);
       //判断
       if (this.evidence.evidenceName == "") {
         // 为空时后端所需的参数
@@ -574,8 +558,8 @@ export default {
       } catch (error) {
         throw new Error(error.message);
       }
-      this.evidence.evidenceName = "";
-      this.evidence.evidenceType = "";
+      // this.evidence.evidenceName = "";
+      // this.evidence.evidenceType = "";
     },
 
     //时间戳转日期

@@ -196,7 +196,6 @@ export default {
           //notaryId: this.notary_id,
           notaryId: "1",
         };
-
         await notaQuery(query).then((result) => {
           if (result.status) {
             console.log(result.data)

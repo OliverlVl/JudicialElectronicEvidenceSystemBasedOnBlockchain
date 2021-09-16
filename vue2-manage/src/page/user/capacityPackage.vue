@@ -160,8 +160,8 @@ export default {
       memoryVisible: false,
 
       formData: {
-        //userId: sessionStorage.getItem("userId"),
-        userId: "2",
+        userId: sessionStorage.getItem("userId"),
+        //userId: "2",
         // 金额
         transactionMoney: -1,
         // 大小
@@ -248,7 +248,8 @@ export default {
     },
     async searchInfo() {
       const query = {
-        userId: "2",
+        userId: sessionStorage.getItem("userId"),
+        decryptFlag:1,
       };
       userQuery(query).then((result) => {
         if (result.status) {

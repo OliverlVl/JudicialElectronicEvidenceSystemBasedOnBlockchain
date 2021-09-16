@@ -261,9 +261,10 @@ export default {
       //公证员ID
       notary_id: "",
       searchQuery: {
+        notaryId: "1",
         usernameWildcard: "",
         evidenceNameWildcard: "",
-        notarizationStatus: "2",
+        notarizationStatus: "1",
         notarizationType: "",
         paymentStatus: "",
         evidenceType: "",
@@ -416,7 +417,14 @@ export default {
     },
     async handleSearch() {
       try {
+        console.log("准备处理数据");
         this.dealData();
+        console.log("数据处理好了");
+        console.log(this.searchQuery);
+        const query = {
+          decryptFlag: 0,
+          notaryId: "1",
+        };
         await notarmanageRecord(this.searchQuery).then((result) => {
           if (result.status) {
             this.tableData = [];
@@ -425,16 +433,17 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           }
         });
         this.resetData();
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
     },
     dealData() {
       try {
+        //this.searchQuery.notaryId = this.notary_id;
         //用户名
         if (this.searchQuery.usernameWildcard == "") {
           this.searchQuery.usernameWildcard = "none";
@@ -470,11 +479,12 @@ export default {
           this.searchQuery.notarizationMoneyFloor = -1;
         }
         //加解密
-        if (this.decrypt_flag) {
-          this.searchQuery.decryptFlag = 1;
-        } else {
-          this.searchQuery.decryptFlag = 0;
-        }
+        // if (this.decrypt_flag) {
+        //   this.searchQuery.decryptFlag = 1;
+        // } else {
+        //   this.searchQuery.decryptFlag = 0;
+        // }
+        this.searchQuery.decryptFlag = 0;
       } catch (error) {
         throw new Error(error.message);
       }
@@ -563,6 +573,6 @@ export default {
   text-decoration: underline;
 }
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

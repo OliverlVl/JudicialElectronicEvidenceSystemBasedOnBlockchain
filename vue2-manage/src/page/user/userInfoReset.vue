@@ -19,8 +19,8 @@
             </el-form-item>
             <el-form-item label="性别">
               <el-radio-group v-model="formData.sex" :disabled="update">
-                <el-radio label="0">男</el-radio>
-                <el-radio label="1">女</el-radio>
+                <el-radio label="男">男</el-radio>
+                <el-radio label="女">女</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="手机号:">
@@ -98,15 +98,7 @@ import { userQuery, userUpdate } from "@/api/getData";
 export default {
   data() {
     return {
-      formData: {
-        userId: sessionStorage.getItem("userId"),
-        username: "lvl",
-        sex: "0",
-        phoneNumber: "18015922630",
-        idCard: "350181199805061796",
-        email: "12826353@fuz.com",
-        password: "1321313",
-      },
+      formData: {},
       update: true,
       visibleUpdate: "",
       visibleCancel: "none",
@@ -118,9 +110,17 @@ export default {
     headTop,
   },
   created() {
-    (this.userId = sessionStorage.getItem("userId")), this.initData();
+    this.userId = sessionStorage.getItem("userId"), 
+    this.initData();
   },
-  mounted() {},
+  mounted() {
+    this.initData();
+  },
+  watch: {
+    '$route'() {
+      this.initData();
+    },
+  },
   methods: {
     // 按钮可视化
     updateVisible() {
@@ -136,7 +136,8 @@ export default {
     },
     initData() {
       const query = {
-        userId: "1",
+        userId: sessionStorage.getItem("userId"),
+        decryptFlag: 1,
       };
       console.log("开始获取数据");
       userQuery(query).then((result) => {
@@ -156,32 +157,24 @@ export default {
     },
     // 数据提交
     submit() {
-      // const query = {
-      //   userId: this.formData.userId,
-      //   newPassword: this.formData.password,
-      //   phoneNumber: this.formData.phoneNumber,
-      //   idCard: this.formData.idCard,
-      //   email: this.formData.email,
-      //   sex: this.formData.email,
-      // };
-      const query = {
-        userId: "1",
-        newPassword: "234",
-        phoneNumber: "15659029386",
-        idCard: "350103199907121536",
-        email: "2916568685@qq.com",
-        sex: "0",
-      };
-      console.log(query);
-      userUpdate(query).then((result) => {
+      this.formData["newPassword"] = this.formData.password;
+      if (this.formData.sex == "男") {
+        this.formData.sex = "0";
+      } else {
+        this.formData.sex = "1";
+      }
+      console.log(this.formData);
+      userUpdate(this.formData).then((result) => {
         if (result.status) {
           console.log("提交成功");
+          this.$router.push("/userInfoReset")
         } else {
-          console.log("提交失败"+result.message);
+          console.log("提交失败" + result.message);
         }
       });
     },
   },
+  
 };
 </script>
 
