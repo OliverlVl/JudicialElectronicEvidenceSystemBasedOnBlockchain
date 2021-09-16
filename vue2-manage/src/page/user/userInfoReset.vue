@@ -167,7 +167,7 @@ export default {
       userUpdate(this.formData).then((result) => {
         if (result.status) {
           console.log("提交成功");
-          this.$router.push("/userInfoReset")
+          this.initData();
         } else {
           console.log("提交失败" + result.message);
         }

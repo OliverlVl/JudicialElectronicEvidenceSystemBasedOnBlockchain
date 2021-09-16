@@ -348,7 +348,7 @@ export default {
               }
               if (this.transaction.decryptFlag == 0) {
                 item.transactionMoney = "******";
-                item.transactionPeople = "******";
+                item.transactionPeople = item.transactionPeople == "null" ? "null": "******";
               }
               this.tableData.push(item);
             });

@@ -260,6 +260,11 @@ export const memPay = data => fetch('/user/memPay',data, 'POST');
 */
 export const notarizationMaterial = data => fetch('/notarizationMaterial',data, 'POST');
 /**
+* 	下载申报资料
+*/
+export const downloadMaterialFile = data => fetch('/downloadMaterialFile',data, 'POST');
+
+/**
 * 	用户信息修改
 */
 export const userUpdate = data => fetch('/user/update',data, 'POST');

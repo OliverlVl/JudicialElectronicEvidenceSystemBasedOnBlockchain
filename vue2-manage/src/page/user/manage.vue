@@ -48,12 +48,12 @@
             <el-menu-item index="moneyListCopy">交易记录</el-menu-item>
             <el-menu-item index="userInfoReset">个人信息</el-menu-item>
           </el-submenu>
-          <el-submenu index="5">
+          <!-- <el-submenu index="5">
             <template slot="title"
               ><i class="el-icon-warning"></i>说明</template
             >
             <el-menu-item index="explain">说明</el-menu-item>
-          </el-submenu>
+          </el-submenu> -->
         </el-menu>
       </el-col>
       <el-col :span="20" style="height: 100%; overflow: auto">

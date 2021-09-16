@@ -111,8 +111,9 @@
       title="容量套餐"
       :visible.sync="memoryVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
-      <el-form ref="formData" :model="formData" label-width="200px">
+      <el-form ref="formData" :model="formData" label-width="25%">
         <el-form-item label="容量套餐:">
           <el-radio-group v-model="formData.storageSize" size="medium">
             <el-radio border label="200"
@@ -225,6 +226,7 @@ export default {
     // 购买容量
     async memoryPay() {
       try {
+        this.memoryVisible=false;
         console.log(this.formData);
         memPay(this.formData).then((result) => {
           console.log(result);
@@ -234,6 +236,7 @@ export default {
               type: "success",
               message: "套餐购买成功",
             });
+
           } else {
             //失败
             this.$message({

@@ -27,18 +27,19 @@
       title="充值"
       :visible.sync="rechargeVisible"
       style="width: 60%; margin: 0 auto"
+      :append-to-body="true"
     >
       <el-form
         ref="formData"
         :model="formData"
-        label-width="200px"
+        label-width="100px"
         id="recharge"
       >
         <el-form-item label="充值金额">
           <el-input
             v-model="formData.transactionMoney"
             placeholder="请输入充值金额"
-            style="width: 50%"
+            style="width: 90%"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -52,18 +53,19 @@
       title="提现"
       :visible.sync="withdrawalVisible"
       style="width: 60%; margin: 0 auto"
+      :append-to-body="true"
     >
       <el-form
         ref="formData"
         :model="formData"
-        label-width="200px"
+        label-width="100px"
         id="recharge"
       >
         <el-form-item label="提现金额">
           <el-input
             v-model="formData.transactionMoney"
             placeholder="请输入提现金额"
-            style="width: 50%"
+            style="width: 90%"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -77,25 +79,26 @@
       title="转账"
       :visible.sync="transferVisible"
       style="width: 60%; margin: 0 auto"
+      :append-to-body="true"
     >
       <el-form
         ref="formData"
         :model="formData"
-        label-width="200px"
+        label-width="100px"
         id="recharge"
       >
         <el-form-item label="转账对象">
           <el-input
             v-model="formData.transactionPeople"
             placeholder="请输入转账对象"
-            style="width: 50%"
+            style="width: 90%"
           ></el-input>
         </el-form-item>
         <el-form-item label="转账金额">
           <el-input
             v-model="formData.transactionMoney"
             placeholder="请输入充值金额"
-            style="width: 50%"
+            style="width: 90%"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -113,8 +116,8 @@
             type="datetimerange"
             align="left"
             unlink-panels
-            start-placeholder="交易开始时间"
-            end-placeholder="交易结束时间"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
             range-separator="至"
             :picker-options="pickerOptions"
             @change="selectTransactionTime"
@@ -134,11 +137,11 @@
               prop="transactionId"
             ></el-table-column>
             <el-table-column
-              label="交易金额"
+              label="充值金额"
               prop="transactionMoney"
             ></el-table-column>
             <el-table-column
-              label="交易时间"
+              label="充值时间"
               prop="transactionTime"
             ></el-table-column>
             <el-table-column
@@ -163,8 +166,8 @@
             type="datetimerange"
             align="left"
             unlink-panels
-            start-placeholder="提现开始时间"
-            end-placeholder="提现结束时间"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
             range-separator="至"
             :picker-options="pickerOptions"
             @change="selectTransactionTime"
@@ -213,8 +216,8 @@
             type="datetimerange"
             align="left"
             unlink-panels
-            start-placeholder="转账开始时间"
-            end-placeholder="转账结束时间"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
             range-separator="至"
             :picker-options="pickerOptions"
             @change="selectTransactionTime"
@@ -369,9 +372,11 @@ export default {
             //成功
             this.$message({
               type: "success",
-              message: "充值成功，请刷新页面",
+              message: "充值成功",
             });
-            
+            // location.reload(); // 刷新页面
+            // this.$router.go(0); // 刷新页面
+            this.searchInfo();
           } else {
             //失败
             this.$message({
@@ -393,8 +398,9 @@ export default {
             //成功
             this.$message({
               type: "success",
-              message: "提现成功，请刷新页面",
+              message: "提现成功",
             });
+            this.searchInfo();
           } else {
             //失败
             this.$message({
@@ -416,8 +422,9 @@ export default {
             //成功
             this.$message({
               type: "success",
-              message: "转账成功，请刷新页面",
+              message: "转账成功",
             });
+            this.searchInfo();
           } else {
             //失败
             this.$message({

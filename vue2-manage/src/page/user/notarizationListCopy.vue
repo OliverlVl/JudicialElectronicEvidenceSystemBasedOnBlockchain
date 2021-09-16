@@ -143,9 +143,9 @@
           >
             <el-option
               v-for="item in notarizationType"
-              :key="item.notarizationType"
-              :label="item.notarizationTypeName"
-              :value="item.notarizationType"
+              :key="item.notarizationTypeId"
+              :label="item.notarizationType"
+              :value="item.notarizationTypeId"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -403,16 +403,9 @@ export default {
     async getNotarizationType() {
       try {
         noTypeQuery().then((result) => {
-          if (result.status == true) {
-            //成功
-            console.log(result.data);
-            result.data.forEach((item) => {
+            result.forEach((item) => {
               this.notarizationType.push(item);
             });
-          } else {
-            //失败
-            console.log("获取公证类型失败");
-          }
         });
       } catch (e) {
         console.log(e);

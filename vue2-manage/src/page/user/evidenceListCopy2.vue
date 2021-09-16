@@ -258,7 +258,7 @@ export default {
         blockchainTimeEnd: "none",
         notarizationStatus: "none",
         evidenceBlockchainId: "none",
-        decryptFlag: 0,
+        decryptFlag: 1,
       },
       // 存证类型
       evidenceType: [],
