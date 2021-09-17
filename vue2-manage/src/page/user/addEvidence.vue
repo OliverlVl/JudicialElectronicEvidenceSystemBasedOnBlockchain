@@ -77,7 +77,7 @@ export default {
       },
 
       rules: {
-        evidenceName: [{ required: true, message: "请输入存证名称" }],
+        evidenceName: [{ required: true, message: "请输入存证名称",trigger: "blur" }],
         evidenceType: [
           { required: true, message: "请选择存证类型", trigger: "change" },
         ],
@@ -150,19 +150,12 @@ export default {
               .post("/user/addEvidence", this.formData, config)
               .then((res) => {
                 let data = res.data;
-                console.log(data);
-
                 if (data.status == true) {
-                  console.log("415846" + data);
-
-                  console.log("in");
                   this.$message({
                     type: "success",
                     message: "存证上传成功",
                   });
                 } else {
-                  console.log(123);
-                  console.log(data);
                   this.$message({
                     type: "error",
                     message: "存证上传失敗",

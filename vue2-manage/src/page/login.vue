@@ -503,6 +503,7 @@ import {
   sysManagerRegist,
   orgaQuery,
   noTypeQuery,
+  notaStasGen
 } from "@/api/getData";
 
 export default {
@@ -699,6 +700,7 @@ export default {
   created() {
     this.getNotarizationType();
     this.getAgent();
+    this.notaStasGen();
   },
 
   methods: {
@@ -735,7 +737,7 @@ export default {
         noTypeQuery().then((result) => {
           console.log("获取公证类型");
           console.log(result);
-          result.forEach((item) =>{
+          result.data.forEach((item) =>{
             this.notarizationType.push(item);
             console.log(item);
           })
@@ -974,6 +976,25 @@ export default {
         console.log(e);
       }
     },
+
+    // 公证员统计生成
+    async notaStasGen(){
+      try {
+        console.log("公证员统计生成")
+       await notaStasGen().then((result) => {
+          if (result.status) {
+            //成功
+            console.log(result.data);
+            console.log("生成成功");
+          } else {
+            //失败
+            console.log("生成失败");
+          }
+        });
+      } catch (error) {
+        console.log(e);
+      }
+    } 
   },
 
   watch: {
