@@ -283,6 +283,11 @@ export const give = data => fetch('/user/give',data, 'POST');
 * 	充值
 */
 export const withdraw = data => fetch('/user/withdraw',data, 'POST');
+/**
+* 	各个类型的数量、成功数和驳回数
+*/
+export const notarTypeAndNum = data => fetch('/notarTypeAndNum',data, 'POST');
+
 
 
 
