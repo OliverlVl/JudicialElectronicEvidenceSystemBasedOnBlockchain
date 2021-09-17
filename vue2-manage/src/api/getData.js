@@ -85,8 +85,11 @@ export const notarPay = data => fetch('/user/notarPay', data, 'POST');
  */
   export const userNotarRecord = data => fetch('/user/notarRecord', data, 'POST');
 
-
-
+ /**
+ * 用户公证申请记录查询
+ */
+  export const downloadUserFile = data => fetch('/downloadUserFile', data, 'POST');
+  
 
 
 /**

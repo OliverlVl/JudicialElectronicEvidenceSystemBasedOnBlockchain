@@ -85,7 +85,7 @@
               >申请公证</el-button
             >
             <el-button size="small" @click="handleDown(scope.row)"
-              >在线查看</el-button
+              >下载查看</el-button
             >
           </template>
         </el-table-column>
@@ -239,6 +239,7 @@ import {
   notarReq,
   notarPay,
   userEvidenceQuery,
+  downloadUserFile
 } from "@/api/getData";
 export default {
   data() {
@@ -504,7 +505,15 @@ export default {
 
     // 证据查看
     async handleDown(row) {
-      window.open("http://localhost:8080/ipfs/" + row.storage_hash, "_blank"); // 新窗口打开外链接
+      let evidenceId = row.evidenceId;
+      let query = {"evidenceId":evidenceId};
+      window.location.href="http://localhost:8080/downloadUserFile?evidenceId="+evidenceId;
+
+      // console.log(query)
+      //   downloadUserFile(query).then(() => {
+
+      //   })
+      // window.open("http://localhost:8080/ipfs/" + row.storage_hash, "_blank"); // 新窗口打开外链接
       // this.$router.push("http://localhost:8080/ipfs/"+row.storage_hash);
     },
 
