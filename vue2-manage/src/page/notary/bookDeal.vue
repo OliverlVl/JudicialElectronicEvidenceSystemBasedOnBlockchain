@@ -3,7 +3,7 @@
     <head-top></head-top>
     <div class="search_container top-div-set">
       <el-input
-        v-model="this.searchQuery.usernameWildcard"
+        v-model="searchQuery.usernameWildcard"
         placeholder="请输入申请人"
         style="width: 390px; margin-left: 3%"
       >
@@ -27,6 +27,7 @@
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form label-width="200px">
         <el-form-item label="存证名称:">
@@ -62,10 +63,10 @@
             filterable
           >
             <el-option
-              v-for="item in notarization_type"
-              :key="item.notarizationType"
-              :label="item.notarizationTypeName"
-              :value="item.notarizationType"
+              v-for="item in notarizationType"
+              :key="item.notarizationTypeId"
+              :label="item.notarizationType"
+              :value="item.notarizationTypeId"
             >
             </el-option>
           </el-select>
@@ -271,10 +272,10 @@ export default {
         },
       ],
       //公证类型选择器
-      notarization_type: [
+      notarizationType: [
         {
-          notarizationTypeName: "不限",
-          notarizationType: "none",
+          notarizationTypeId: "none",
+          notarizationType: "不限",
         },
       ],
       payment_type: [
@@ -311,6 +312,7 @@ export default {
     this.decryptFlag = 1;
     this.notary_id = localStorage.getItem("notaryId");
     this.initData();
+    this.getNotarizationType();
   },
   computed: {},
   components: {
@@ -319,6 +321,7 @@ export default {
   methods: {
     // 初始化数据
     async initData() {
+      console.log(sessionStorage.getItem("notaryId"));
       try {
         if (this.decrypt_flag) {
           this.decryptFlag = 1;
@@ -352,16 +355,6 @@ export default {
             console.log("存证类型获取失败");
           }
         });
-        //获取公证类型
-        await noTypeQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.notarization_type.push(item);
-            });
-          } else {
-            console.log("公证类型获取失败");
-          }
-        });
       } catch (error) {
         throw new Error(error.message);
       }
@@ -384,6 +377,21 @@ export default {
         alert("你已成功申请");
       } else {
         alert("申请失败");
+      }
+    },
+    // 获取公证类型
+    async getNotarizationType() {
+      try {
+        noTypeQuery().then((result) => {
+          console.log("获取公证类型");
+          console.log(result);
+          result.forEach((item) => {
+            this.notarizationType.push(item);
+            console.log(item);
+          });
+        });
+      } catch (e) {
+        console.log(e);
       }
     },
     async handleSearch() {

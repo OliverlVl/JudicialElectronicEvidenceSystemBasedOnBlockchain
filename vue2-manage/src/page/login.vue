@@ -775,6 +775,7 @@ export default {
           await notaryLogin(this.notaryLoginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("notaryId", result.notaryId);
+              alert(sessionStorage.getItem("notaryId"));
               this.$message({
                 type: "success",
                 message: "登入成功",

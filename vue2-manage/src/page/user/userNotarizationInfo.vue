@@ -29,7 +29,7 @@
           label="材料"
           align="left"
           width="1080px"
-          prop="materialName"
+          prop="notarizationType"
         ></el-table-column>
 
         <el-table-column label="操作" align="center">
@@ -78,9 +78,9 @@ export default {
         { organization_id: "2", organization_name: "厦门公证处" },
       ],
       orgMaterialList: [
-        { materialName: "出生证材料" },
-        { materialName: "房产证材料" },
-        { materialName: "驾驶证材料" },
+        { notarizationType: "出生证材料" },
+        { notarizationType: "房产证材料" },
+        { notarizationType: "驾驶证材料" },
       ],
       // 获取数据
       pageTotal: 0,

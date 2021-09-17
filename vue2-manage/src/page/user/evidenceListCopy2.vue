@@ -108,6 +108,7 @@
       :visible.sync="dialogVisible_notarization"
       size="tiny"
       :before-close="handleClose"
+      :append-to-body="true"
     >
       <el-form ref="notarization" :model="notarization" label-width="100px">
         <el-form-item label="公证类型">
@@ -558,8 +559,8 @@ export default {
       } catch (error) {
         throw new Error(error.message);
       }
-      // this.evidence.evidenceName = "";
-      // this.evidence.evidenceType = "";
+      this.evidence.evidenceName = "";
+      this.evidence.evidenceType = "";
     },
 
     //时间戳转日期

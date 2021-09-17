@@ -61,7 +61,7 @@
                   v-for="item in notarType"
                   :key="item.notarizationType"
                   :label="item.notarizationTypeName"
-                  :value="item.notarizationType"
+                  :value="item.notarizationTypeName"
                 >
                 </el-option>
               </el-select>
@@ -114,7 +114,7 @@
           <i class="el-icon-bank-card title-set">公证金额</i>
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
-              :data="noPay"
+              :data="notarizationType"
               height="100%"
               align="center"
               :header-cell-style="{
@@ -125,7 +125,7 @@
             >
               <el-table-column
                 label="公证类型"
-                prop="notarizationTypeName"
+                prop="notarizationType"
                 align="center"
                 width="170%"
               ></el-table-column>
@@ -212,6 +212,7 @@ import {
   notPayQuery,
   noNumQuery,
   noTypeQuery,
+  notarTypeAndNum,
 } from "@/api/getData";
 export default {
   data() {
@@ -397,6 +398,7 @@ export default {
           notarizationMoney: 100,
         },
       ],
+      notarizationType: [],
       nota_Num: [{}],
       userId: "",
       noTypeNum: {
@@ -409,7 +411,9 @@ export default {
   created() {
     this.userId = sessionStorage.getItem("userId");
     this.initData();
-    this.getNoPay();
+    //this.getNoPay();
+    this.notarTypeAndNumQuery();
+    this.getNotarizationType();
     console.log("userId:" + sessionStorage.getItem("userId"));
     console.log(this.userId);
   },
@@ -470,44 +474,61 @@ export default {
             console.log("获取机构名失败失败");
           }
         });
-        /*
-        //获取公证类型及数量
-        await noTypeQuery().then((result) => {
-          console.log("获取公证类型及数量开始");
-          typeRes = {};
-          if (result.status) {
-            this.noType = [];
-            console.log(result.data);
-            typeRes = {};
-            result.data.forEach((item) => {
-              typeRes.name = item.data.notarTypeName;
-              typeRes.value = item.data.Num;
-              this.noType.push(typeRes);
-            });
-          } else {
-            console.log("获取数据失败");
-          }
-        });*/
       } catch (error) {
         throw new Error(error.message);
       }
     },
-    async getNoPay() {
+    // async getNoPay() {
+    //   try {
+    //     //公证费用查询
+    //     await notPayQuery().then((result) => {
+    //       if (result.status) {
+    //         console.log(result.data);
+    //         this.noPay = [];
+    //         result.data.forEach((item) => {
+    //           this.noPay.push(item);
+    //         });
+    //       } else {
+    //         throw new Error("获取数据失败");
+    //       }
+    //     });
+    //   } catch (error) {
+    //     throw new Error(error.message);
+    //   }
+    // },
+    // 获取公证类型
+    async getNotarizationType() {
       try {
-        //公证费用查询
-        await notPayQuery().then((result) => {
-          if (result.status) {
-            console.log(result.data);
-            this.noPay = [];
-            result.data.forEach((item) => {
-              this.noPay.push(item);
-            });
-          } else {
-            throw new Error("获取数据失败");
-          }
+        noTypeQuery().then((result) => {
+          console.log("获取公证类型");
+          console.log(result);
+          result.forEach((item) => {
+            this.notarizationType.push(item);
+            console.log(item);
+          });
         });
-      } catch (error) {
-        throw new Error(error.message);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    // 获取公证类型及其总数
+    async notarTypeAndNumQuery() {
+      try {
+        notarTypeAndNum().then((result) => {
+          console.log("获取公证类型及其总数");
+          console.log(result);
+          let query = {};
+          result.forEach((item) => {
+            query.name = item.notarizationType;
+            query.value = item.totalNum;
+            query.successNum = item.successNum;
+            query.failedNum = item.failedNum;
+            this.noType.push(query);
+            console.log(item);
+          });
+        });
+      } catch (e) {
+        console.log(e);
       }
     },
     // 处理导航页
@@ -606,28 +627,24 @@ export default {
       this.$router.push("/userNotarizationInfo");
     },
     async selChange() {
-      /*
-      await notarizationTypeNum().then((result) => {
-        if (result.status) {
-          console.log(result.data);
-          this.noTypeNum = {};
-          result.data.forEach((item) => {
-            if (item.notarizationType == this.noreqType) {
-              this.noTypeNum = item.data;
-            }
-          });
-        } else {
-          alert("选择出错");
+      this.noType.forEach((item) =>{
+        if (this.noreqType == item.notarizationType){
+          this.noTypeNum = {
+          totalCount: item.totalNum,
+          successCount: item.successNum,
+          failedCount: item.failedNum,
+        };
         }
-      });*/
+      })
 
-      if (this.noreqType == 0) {
+
+      if (this.noreqType == "房产证公证") {
         this.noTypeNum = {
           totalCount: 100,
           successCount: 99,
           failedCount: 1,
         };
-      } else if (this.noreqType == 1) {
+      } else if (this.noreqType == "驾驶证公证") {
         this.noTypeNum = {
           totalCount: 100,
           successCount: 98,
