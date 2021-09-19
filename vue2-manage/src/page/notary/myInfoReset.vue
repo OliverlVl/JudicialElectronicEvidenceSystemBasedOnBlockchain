@@ -181,7 +181,7 @@ export default {
   },
   created() {
     this.decryptFlag = 1;
-    this.notary_id = localStorage.getItem("notaryId");
+    this.notary_id = sessionStorage.getItem("notaryId"), 
     this.initData();
   },
   computed: {},
@@ -193,8 +193,8 @@ export default {
     async initData() {
       try {
         const query = {
-          //notaryId: this.notary_id,
-          notaryId: "1",
+          notaryId: sessionStorage.getItem("notaryId"),
+          //notaryId: "1",
         };
         await notaQuery(query).then((result) => {
           if (result.status) {

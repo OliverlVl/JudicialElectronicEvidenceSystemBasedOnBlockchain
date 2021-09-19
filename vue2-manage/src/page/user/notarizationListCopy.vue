@@ -74,7 +74,11 @@
           width="140"
           prop="notarizationType"
         ></el-table-column>
-        <el-table-column label="存证类型" align="center" prop="evidenceType"></el-table-column>
+        <el-table-column
+          label="存证类型"
+          align="center"
+          prop="evidenceType"
+        ></el-table-column>
         <el-table-column
           label="公证机构"
           align="center"
@@ -241,17 +245,14 @@ export default {
     return {
       searchVisible: false,
       notarization: {
-        // userId: sessionStorage.getItem("userID"),
-        userId:"1",
+        userId: sessionStorage.getItem("userID"),
         evidenceName: "",
         evidenceType: "",
         notarizationType: "",
         // 支付状态
         paymentStatus: "",
         // 加解密：1 解密 0 加密
-        decryptFlag: 1,
-        // 公证开始时间
-        // 公证完成时间
+        decryptFlag: 0,
         // 公证状态
         notarizationStatus: "",
         // 公证机构
@@ -341,7 +342,7 @@ export default {
   },
   created() {
     // 获取数据
-    // this.getNotarizationData();
+    this.getNotarizationData();
     this.getAgent();
     this.getEvidenceType();
     this.getNotarizationType();
@@ -365,7 +366,6 @@ export default {
         orgaQuery(query).then((result) => {
           if (result.status == true) {
             //成功
-            console.log(result.data);
             result.data.forEach((item) => {
               this.organization.push(item);
             });
@@ -385,7 +385,6 @@ export default {
         getEvidenceType().then((result) => {
           if (result.status == true) {
             //成功
-            console.log(result.data);
             result.data.forEach((item) => {
               this.evidenceType.push(item);
             });
@@ -403,9 +402,9 @@ export default {
     async getNotarizationType() {
       try {
         noTypeQuery().then((result) => {
-            result.forEach((item) => {
-              this.notarizationType.push(item);
-            });
+          result.data.forEach((item) => {
+            this.notarizationType.push(item);
+          });
         });
       } catch (e) {
         console.log(e);
@@ -433,6 +432,9 @@ export default {
     async getNotarizationData() {
       // 关闭弹窗
       this.searchVisible = false;
+      console.log("userId:"+sessionStorage.getItem("userId"));
+      this.notarization.userId = sessionStorage.getItem("userId");
+       console.log(this.notarization.userId)
       // 判断
       if (this.notarization.evidenceName == "") {
         this.notarization.evidenceName = "none";
@@ -457,11 +459,15 @@ export default {
       }
       // 请求数据
       try {
+        console.log("传递参数:")
         console.log(this.notarization);
         await userNotarRecord(this.notarization).then((result) => {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.notarization.decryptFlag == 0) {
+                item.evidenceName = item.evidenceName.substring(7, 27);
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -476,7 +482,7 @@ export default {
       this.notarization.evidenceName = "";
       this.notarization.evidenceType = "";
       this.notarization.notarizationType = "";
-      this.notarization.decryptFlag = 1;
+      //this.notarization.decryptFlag = 1;
       this.notarization.notarizationStatus = "";
       this.notarization.organizationId = "";
     },
@@ -546,6 +552,6 @@ export default {
   text-decoration: underline;
 }
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

@@ -239,7 +239,7 @@ import {
   notarReq,
   notarPay,
   userEvidenceQuery,
-  downloadUserFile
+  downloadUserFile,
 } from "@/api/getData";
 export default {
   data() {
@@ -258,9 +258,9 @@ export default {
         evidenceTimeEnd: "none",
         blockchainTimeStart: "none",
         blockchainTimeEnd: "none",
-        notarizationStatus: "none",
+        notarizationStatus: "1",
         evidenceBlockchainId: "none",
-        decryptFlag: 1,
+        decryptFlag: 0,
       },
       // 存证类型
       evidenceType: [],
@@ -426,10 +426,10 @@ export default {
         noTypeQuery().then((result) => {
           console.log("获取公证类型");
           console.log(result);
-          result.forEach((item) =>{
+          result.data.forEach((item) => {
             this.notarizationType.push(item);
             console.log(item);
-          })
+          });
         });
       } catch (e) {
         console.log(e);
@@ -506,8 +506,9 @@ export default {
     // 证据查看
     async handleDown(row) {
       let evidenceId = row.evidenceId;
-      let query = {"evidenceId":evidenceId};
-      window.location.href="http://localhost:8080/downloadUserFile?evidenceId="+evidenceId;
+      let query = { evidenceId: evidenceId };
+      window.location.href =
+        "http://localhost:8080/downloadUserFile?evidenceId=" + evidenceId;
 
       // console.log(query)
       //   downloadUserFile(query).then(() => {
@@ -558,6 +559,9 @@ export default {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.evidence.decryptFlag == 0) {
+                item.evidenceName = "**********";
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;

@@ -66,11 +66,6 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <!-- <el-form-item label="总次数:" class="demo-table-expands">
-              <span class="demo-table-expands" style="color: #ffffff">{{
-                this.noTypeNum.totalCount
-              }}</span>
-            </el-form-item> -->
             <el-form-item label="成功次数:" class="demo-table-expands">
               <span class="demo-table-expands" style="color: #00af17">{{
                 this.noTypeNum.successCount
@@ -115,7 +110,6 @@
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
               :data="notarizationTypeQuery"
-              height="300px"
               align="center"
               :header-cell-style="{
                 background: '#eef1f6',
@@ -145,15 +139,13 @@
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
               :data="orgName"
-              height="100%"
               align="center"
-              :show-header="status"
+              
               :cell-style="{ 'text-align': 'left' }"
             >
               <el-table-column
                 label="公证机构"
                 prop="organizationName"
-                align="center"
                 width="340%"
               ></el-table-column>
             </el-table>
@@ -209,7 +201,6 @@ import { baseUrl, baseImgPath } from "@/config/env";
 import {
   orgaQuery,
   rankStasQue,
-  notPayQuery,
   noNumQuery,
   noTypeQuery,
   notarTypeAndNum,
@@ -226,50 +217,7 @@ export default {
         totalNum: 8897,
       },
       //公证类型及数量
-      noType: [
-        // {
-        //   name: "房产证公证",
-        //   value: 222,
-        //   successCount: 217,
-        //   failedCount: 5,
-        // },
-        // {
-        //   name: "驾驶证公证",
-        //   value: 444,
-        //   successCount: 440,
-        //   failedCount: 4,
-        // },
-        // {
-        //   name: "学历公证",
-        //   value: 666,
-        //   successCount: 615,
-        //   failedCount: 51,
-        // },
-        // {
-        //   name: "驾驶证1公证",
-        //   value: 444,
-        //   successCount: 440,
-        //   failedCount: 4,
-        // },
-        // {
-        //   name: "学历6公证",
-        //   value: 666,
-        //   successCount: 615,
-        //   failedCount: 51,
-        // },
-        // {
-        //   name: "学历9公证",
-        //   value: 666,
-        //   successCount: 615,
-        //   failedCount: 51,
-        // },
-        // {
-        //   name: "学历91公证",
-        //   value: 666,
-        //   successCount: 615,
-        //   failedCount: 51,
-        // },
-      ],
+      noType: [],
       drawData:[
         {
           name:"驾驶证公证",
@@ -366,40 +314,7 @@ export default {
         },
       ],
       //公证费用
-      noPay: [
-        // {
-        //   notarizationTypeName: "出生",
-        //   notarizationMoney: 100,
-        // },
-        // {
-        //   notarizationTypeName: "房产证",
-        //   notarizationMoney: 100,
-        // },
-        // {
-        //   notarizationTypeName: "驾驶证",
-        //   notarizationMoney: 100,
-        // },
-        // {
-        //   notarizationTypeName: "学历",
-        //   notarizationMoney: 100,
-        // },
-        // {
-        //   notarizationTypeName: "出生",
-        //   notarizationMoney: 100,
-        // },
-        // {
-        //   notarizationTypeName: "出生",
-        //   notarizationMoney: 100,
-        // },
-        // {
-        //   notarizationTypeName: "出生",
-        //   notarizationMoney: 100,
-        // },
-        // {
-        //   notarizationTypeName: "出生",
-        //   notarizationMoney: 100,
-        // },
-      ],
+      noPay: [],
       notarizationTypeQuery: [],
       nota_Num: [{}],
       userId: "",
@@ -489,6 +404,8 @@ export default {
           result.data.forEach((item) => {
             this.notarizationTypeQuery.push(item);
           });
+          console.log("公证类型")
+          console.log(this.notarizationTypeQuery)
         });
       } catch (e) {
         console.log(e);
@@ -501,9 +418,6 @@ export default {
         console.log("获取公证类型及其总数");
         console.log(result);
         result.data.forEach((item) => {
-          if(item.notarizationType == null){
-            item.notarizationType = "2"
-          }
           let query = {};
           query.name = item.notarizationType;
           query.value = item.totalNum;
@@ -512,6 +426,8 @@ export default {
         });
         console.log("noType:")
         console.log(this.noType);
+        console.log("drawData:")
+        console.log(this.drawData);
       });
     },
     // 处理导航页
@@ -595,16 +511,8 @@ export default {
     async selChange() {
       console.log(this.noType);
       console.log(this.noreqType);
-      let type = "";
-      if (this.noreqType == "驾驶证公证") {
-        type = "0";
-      } else if (this.noreqType == "学历公证") {
-        type = "1";
-      } else {
-        type = "2";
-      }
       this.noType.forEach((item) => {
-        if (type == item.notarizationType) {
+        if (this.noreqType == item.notarizationType) {
           this.noTypeNum = {
             totalCount: item.totalNum,
             successCount: item.successNum,
