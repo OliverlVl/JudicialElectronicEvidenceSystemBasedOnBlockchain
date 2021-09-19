@@ -29,9 +29,6 @@
               <el-form-item label="文件大小:">
                 <span>{{ props.row.fileSize }}</span>
               </el-form-item>
-              <el-form-item label="文件Hash值:">
-                <span>{{ props.row.fileHash }}</span>
-              </el-form-item>
               <el-form-item label="存证时间:">
                 <span>{{ props.row.evidenceTime }}</span>
               </el-form-item>
@@ -52,6 +49,7 @@
               </el-form-item>
               <el-form-item label="支付状态:">
                 <span>{{ props.row.transactionStatus }}</span>
+                <el-button v-if="props.row.transactionStatus == '未支付'" type="primary" @click="handlePublic(props.row)" >点击支付</el-button>
               </el-form-item>
               <el-form-item label="审核信息:">
                 <span>{{ props.row.notarizationInformation }}</span>
@@ -149,7 +147,7 @@
               v-for="item in notarizationType"
               :key="item.notarizationTypeId"
               :label="item.notarizationType"
-              :value="item.notarizationTypeId"
+              :value="item.notarizationType"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -229,6 +227,18 @@
         >
       </div>
     </el-dialog>
+
+ <!-- 申请缴费弹窗-->
+    <el-dialog title="公证缴费" :visible.sync="notarPayVisible" size="tiny">
+      <p style="">
+        所需公证金额为：{{ notarizationPay.notarizationMoney }}元，是否支付？
+      </p>
+      <div slot="footer">
+        <el-button @click="notarPayVisible=false">取 消</el-button>
+        <el-button type="primary" @click="notarPay()">确 定</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -239,11 +249,15 @@ import {
   getEvidenceType,
   noTypeQuery,
   userNotarRecord,
+  notarPay,
 } from "@/api/getData";
 export default {
   data() {
     return {
       searchVisible: false,
+      notarPayVisible: false, //缴费
+      
+      // 搜索数据存放
       notarization: {
         userId: sessionStorage.getItem("userID"),
         evidenceName: "",
@@ -252,7 +266,7 @@ export default {
         // 支付状态
         paymentStatus: "",
         // 加解密：1 解密 0 加密
-        decryptFlag: 0,
+        decryptFlag: 1,
         // 公证状态
         notarizationStatus: "",
         // 公证机构
@@ -325,15 +339,15 @@ export default {
       organization: [],
 
       // 表格
-      tableData: [
-        {
-          filePath: "/sss/sss/ss",
-          transactionStatus: "已支付",
-          notarizationStatus: "待公证",
-        },
-        {},
-        {},
-      ],
+      tableData: [],
+
+      // 公证缴费
+      notarizationPay:{
+        userId: sessionStorage.getItem("userId"),
+        evidenceId:"",
+        transactionPeople:"",
+        notarizationMoney:"",
+      },
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -415,9 +429,11 @@ export default {
     selectNotarizationStartTime() {
       let start = this.notarizationStartTime[0];
       let end = this.notarizationStartTime[1];
+    // console.log(this.notarizationStartTime)
       this.notarization.notarizationStartTimeStart = start.getTime();
+      console.log(this.notarization.notarizationStartTimeStart)
       this.notarization.notarizationStartTimeEnd = end.getTime();
-      console.log();
+      console.log(this.notarization.notarizationStartTimeEnd);
     },
 
     // 公证完成时间赋值
@@ -464,9 +480,25 @@ export default {
         await userNotarRecord(this.notarization).then((result) => {
           if (result.status == true) {
             this.tableData = [];
+            console.log(result.data)
             result.data.forEach((item) => {
               if (this.notarization.decryptFlag == 0) {
                 item.evidenceName = item.evidenceName.substring(7, 27);
+              }
+              if(item.notarizationBlockchainIdStart == null){
+                item.notarizationBlockchainIdStart = "暂无数据";
+              }
+              if(item.notarizationBlockchainIdEnd == null){
+                item.notarizationBlockchainIdEnd = "暂无数据";
+              }
+              if(item.notarizationInformation == null){
+                item.notarizationInformation = "暂无数据";
+              }
+              if(item.notarizationEndTime==null){
+                item.notarizationEndTime = "暂无数据"
+              }
+              if(item.transactionStatus == "未支付"){
+                item.notarizationStatus = "未支付"
               }
               this.tableData.push(item);
             });
@@ -485,6 +517,39 @@ export default {
       //this.notarization.decryptFlag = 1;
       this.notarization.notarizationStatus = "";
       this.notarization.organizationId = "";
+    },
+
+     // 公证缴费时先调用这个函数处理数据
+    async handlePublic(row) {
+      this.notarPayVisible = true;
+      this.notarizationPay.evidenceId = row.evidenceId;
+      this.notarizationPay.transactionPeople = row.organizationId; // 收款方 公证机构
+      this.notarizationPay.notarizationMoney = row.notarizationMoney;
+      
+    },
+
+    // 公证缴费
+    async notarPay() {
+      try {
+        notarPay(this.notarizationPay).then((result) => {
+          if (result.status == true) {
+            //成功
+            console.log(result.data);
+            this.notarPayVisible = false;
+            this.$message({
+              type: "success",
+              message: "缴费成功!",
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "缴费失败!",
+            });
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
     },
 
     // 处理导航页
@@ -506,7 +571,7 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 35%;
+  width: 160px;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {

@@ -30,7 +30,6 @@
             <el-form
               label-position="right"
               inline
-              label-width="160px"
               class="demo-table-expand"
             >
               <el-form-item label="文件目录:">
@@ -38,9 +37,6 @@
               </el-form-item>
               <el-form-item label="文件大小:">
                 <span>{{ props.row.fileSize }}</span>
-              </el-form-item>
-              <el-form-item label="文件Hash值:">
-                <span>{{ props.row.fileHash }}</span>
               </el-form-item>
               <el-form-item label="存证区块链交易ID:">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
@@ -121,7 +117,7 @@
               v-for="item in notarizationType"
               :key="item.notarizationTypeId"
               :label="item.notarizationType"
-              :value="item.notarizationTypeId"
+              :value="item.notarizationType"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -258,9 +254,9 @@ export default {
         evidenceTimeEnd: "none",
         blockchainTimeStart: "none",
         blockchainTimeEnd: "none",
-        notarizationStatus: "1",
+        notarizationStatus: "0",
         evidenceBlockchainId: "none",
-        decryptFlag: 0,
+        decryptFlag: 1,
       },
       // 存证类型
       evidenceType: [],
@@ -458,6 +454,11 @@ export default {
             console.log(result.notarizationMoney);
             //缴费
             this.notarization.notarizationMoney = result.notarizationMoney;
+            this.$message({
+              type: "success",
+              message: "请缴费",
+            });
+
             //
             this.dialogVisible_notarization = false;
             //
@@ -619,7 +620,7 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 120px;
+  width: 160px;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
