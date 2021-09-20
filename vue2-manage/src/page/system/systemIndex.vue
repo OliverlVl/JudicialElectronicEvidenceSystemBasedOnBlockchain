@@ -38,8 +38,7 @@
           </el-scrollbar></div
       ></el-col>
       <el-col :span="10"
-        ><div class="grid-content bg-purple div-set" id="myChart">
-          </div
+        ><div class="grid-content bg-purple div-set" id="myChart"></div
       ></el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
@@ -59,19 +58,14 @@
                 popper-class="select-popper"
               >
                 <el-option
-                  v-for="item in notarType"
-                  :key="item.notarizationType"
-                  :label="item.notarizationTypeName"
+                  v-for="item in notarizationTypeQuery"
+                  :key="item.notarizationTypeId"
+                  :label="item.notarizationType"
                   :value="item.notarizationType"
                 >
                 </el-option>
               </el-select>
             </el-form-item>
-            <!-- <el-form-item label="总次数:" class="demo-table-expands">
-              <span class="demo-table-expands" style="color: #ffffff">{{
-                this.noTypeNum.totalCount
-              }}</span>
-            </el-form-item> -->
             <el-form-item label="成功次数:" class="demo-table-expands">
               <span class="demo-table-expands" style="color: #00af17">{{
                 this.noTypeNum.successCount
@@ -115,8 +109,7 @@
           <i class="el-icon-bank-card title-set">公证金额</i>
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
-              :data="noPay"
-              height="100%"
+              :data="notarizationTypeQuery"
               align="center"
               :header-cell-style="{
                 background: '#eef1f6',
@@ -126,7 +119,7 @@
             >
               <el-table-column
                 label="公证类型"
-                prop="notarizationTypeName"
+                prop="notarizationType"
                 align="center"
                 width="170%"
               ></el-table-column>
@@ -146,7 +139,6 @@
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
               :data="orgName"
-              height="100%"
               align="center"
               :show-header="status"
               :cell-style="{ 'text-align': 'left' }"
@@ -154,7 +146,6 @@
               <el-table-column
                 label="公证机构"
                 prop="organizationName"
-                align="center"
                 width="340%"
               ></el-table-column>
             </el-table>
@@ -166,7 +157,7 @@
           <div align="center">
             <el-button
               type="warning"
-              @click="systemNotarization()"
+              @click="systemNotary()"
               align="center"
               style="margin-top: 20px; width: 80%"
             >
@@ -191,7 +182,7 @@
             <br />
             <el-button
               type="success"
-              @click="systemNarizationInfo()"
+              @click="notarizationInfo()"
               style="margin-top: 20px; width: 80%"
             >
               <span style="font-size: 25px">查看申报材料信息</span>
@@ -210,9 +201,9 @@ import { baseUrl, baseImgPath } from "@/config/env";
 import {
   orgaQuery,
   rankStasQue,
-  notPayQuery,
   noNumQuery,
   noTypeQuery,
+  notarTypeAndNum,
 } from "@/api/getData";
 export default {
   data() {
@@ -226,50 +217,8 @@ export default {
         totalNum: 8897,
       },
       //公证类型及数量
-      noType: [
-        {
-          name: "房产证公证",
-          value: 222,
-          successCount: 217,
-          failedCount: 5,
-        },
-        {
-          name: "驾驶证公证",
-          value: 444,
-          successCount: 440,
-          failedCount: 4,
-        },
-        {
-          name: "学历公证",
-          value: 666,
-          successCount: 615,
-          failedCount: 51,
-        },
-        {
-          name: "驾驶证1公证",
-          value: 444,
-          successCount: 440,
-          failedCount: 4,
-        },
-        {
-          name: "学历6公证",
-          value: 666,
-          successCount: 615,
-          failedCount: 51,
-        },
-        {
-          name: "学历9公证",
-          value: 666,
-          successCount: 615,
-          failedCount: 51,
-        },
-        {
-          name: "学历91公证",
-          value: 666,
-          successCount: 615,
-          failedCount: 51,
-        },
-      ],
+      noType: [],
+      drawData: [],
       //公证员排名
       noRank: [
         {
@@ -353,53 +302,11 @@ export default {
           organizationName: "福建省福州市中级人民法院",
         },
       ],
-      notarType: [
-        {
-          notarizationType: 0,
-          notarizationTypeName: "房产证公证",
-        },
-        {
-          notarizationType: 1,
-          notarizationTypeName: "驾驶证公证",
-        },
-      ],
       //公证费用
-      noPay: [
-        {
-          notarizationTypeName: "出生",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationTypeName: "房产证",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationTypeName: "驾驶证",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationTypeName: "学历",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationTypeName: "出生",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationTypeName: "出生",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationTypeName: "出生",
-          notarizationMoney: 100,
-        },
-        {
-          notarizationTypeName: "出生",
-          notarizationMoney: 100,
-        },
-      ],
+      noPay: [],
+      notarizationTypeQuery: [],
       nota_Num: [{}],
-      userId: "",
+      manId: "",
       noTypeNum: {
         totalCount: 0,
         successCount: 0,
@@ -408,12 +315,13 @@ export default {
     };
   },
   created() {
-    this.userId = sessionStorage.getItem("userID");
+    this.manId = sessionStorage.getItem("manId");
     this.initData();
-    this.getNoPay();
+    this.notarTypeAndNumQuery();
+    this.getNotarizationType();
   },
   mounted() {
-    this.drawLine();
+    // this.drawLine();
   },
   computed: {},
   components: {
@@ -469,45 +377,45 @@ export default {
             console.log("获取机构名失败失败");
           }
         });
-        /*
-        //获取公证类型及数量
-        await noTypeQuery().then((result) => {
-          console.log("获取公证类型及数量开始");
-          typeRes = {};
-          if (result.status) {
-            this.noType = [];
-            console.log(result.data);
-            typeRes = {};
-            result.data.forEach((item) => {
-              typeRes.name = item.data.notarTypeName;
-              typeRes.value = item.data.Num;
-              this.noType.push(typeRes);
-            });
-          } else {
-            console.log("获取数据失败");
-          }
-        });*/
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
     },
-    async getNoPay() {
+    // 获取公证类型
+    async getNotarizationType() {
       try {
-        //公证费用查询
-        await notPayQuery().then((result) => {
-          if (result.status) {
-            console.log(result.data);
-            this.noPay = [];
-            result.data.forEach((item) => {
-              this.noPay.push(item);
-            });
-          } else {
-            throw new Error("获取数据失败");
-          }
+        noTypeQuery().then((result) => {
+          // console.log("获取公证类型");
+          // console.log(result);
+          result.data.forEach((item) => {
+            this.notarizationTypeQuery.push(item);
+          });
+          console.log("公证类型");
+          console.log(this.notarizationTypeQuery);
         });
-      } catch (error) {
-        throw new Error(error.message);
+      } catch (e) {
+        console.log(e);
       }
+    },
+    // 获取公证类型及其总数
+    async notarTypeAndNumQuery() {
+      notarTypeAndNum().then((result) => {
+        console.log("获取公证类型及其总数");
+        console.log(result);
+        result.data.forEach((item) => {
+          let query = {};
+          query.name = item.notarizationType;
+          query.value = item.totalNum;
+          this.noType.push(item);
+          this.drawData.push(query);
+        });
+        console.log("noType:");
+        console.log(this.noType);
+        console.log("drawData:");
+        console.log(this.drawData);
+        //画饼图
+        this.drawLine();
+      });
     },
     // 处理导航页
     handlePageChange(val) {
@@ -566,18 +474,17 @@ export default {
                 //formatter: "{d}%",
               },
             },
-            data: this.noType,
+            data: this.drawData,
             textStyle: {
               fontSize: 15,
             },
           },
         ],
       });
-      
     },
     // 新增存证路由跳转
-    systemNotarization() {
-      this.$router.push("/systemNotarization");
+    systemNotary() {
+      this.$router.push("/systemNotary");
     },
     systemEvidence() {
       this.$router.push("/systemEvidence");
@@ -585,38 +492,21 @@ export default {
     systemTrace() {
       this.$router.push("/systemTrace");
     },
-    systemNarizationInfo() {
-      this.$router.push("/systemNarizationInfo");
+    notarizationInfo() {
+      this.$router.push("/userNotarizationInfo");
     },
     async selChange() {
-      /*
-      await notarizationTypeNum().then((result) => {
-        if (result.status) {
-          console.log(result.data);
-          this.noTypeNum = {};
-          result.data.forEach((item) => {
-            if (item.notarizationType == this.noreqType) {
-              this.noTypeNum = item.data;
-            }
-          });
-        } else {
-          alert("选择出错");
+      console.log(this.noType);
+      console.log(this.noreqType);
+      this.noType.forEach((item) => {
+        if (this.noreqType == item.notarizationType) {
+          this.noTypeNum = {
+            totalCount: item.totalNum,
+            successCount: item.successNum,
+            failedCount: item.failedNum,
+          };
         }
-      });*/
-
-      if (this.noreqType == 0) {
-        this.noTypeNum = {
-          totalCount: 100,
-          successCount: 99,
-          failedCount: 1,
-        };
-      } else if (this.noreqType == 1) {
-        this.noTypeNum = {
-          totalCount: 100,
-          successCount: 98,
-          failedCount: 2,
-        };
-      }
+      });
     },
   },
 };
@@ -663,12 +553,10 @@ export default {
 
 .totalDiv {
   background: url("../image/dark-1.jpg") no-repeat;
-  
-  background-size:500% 500%;
-  min-height:200%;
+  background-size: 500% 500%;
+  min-height: 200%;
   position: relative;
 }
-
 .demo-table-expands {
   font-size: 20px;
   margin-bottom: 0%;

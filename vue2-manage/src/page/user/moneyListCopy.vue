@@ -46,6 +46,7 @@
         ></el-table-column>
         <el-table-column
           label="交易金额"
+          width="130"
           prop="transactionMoney"
         ></el-table-column>
         <el-table-column
@@ -59,6 +60,7 @@
         <el-table-column
           label="交易类型"
           prop="transactionType"
+          width="200"
         ></el-table-column>
       </el-table>
 
@@ -168,7 +170,7 @@ export default {
         transactionType: "none",
         //交易金额
         // 加解密：1 解密 0 加密
-        decryptFlag: 0,
+        decryptFlag: 1,
         //上链时间
         // 交易时间
       },
@@ -351,6 +353,7 @@ export default {
                 item.transactionMoney = "******";
                 item.transactionPeople = item.transactionPeople == "null" ? "null": "******";
               }
+              item.transactionTime = item.transactionTime.substring(0,10)+" "+item.transactionTime.substring(11,19)
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;

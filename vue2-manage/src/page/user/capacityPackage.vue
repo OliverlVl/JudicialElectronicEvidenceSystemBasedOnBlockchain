@@ -252,7 +252,7 @@ export default {
     async searchInfo() {
       const query = {
         userId: sessionStorage.getItem("userId"),
-        decryptFlag:0,
+        decryptFlag:1,
       };
       userQuery(query).then((result) => {
         if (result.status) {

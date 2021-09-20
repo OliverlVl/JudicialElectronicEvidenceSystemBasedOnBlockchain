@@ -140,7 +140,7 @@
             <el-table
               :data="orgName"
               align="center"
-              
+              :show-header="status"
               :cell-style="{ 'text-align': 'left' }"
             >
               <el-table-column
@@ -161,7 +161,7 @@
               align="center"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">存证</span>
+              <span style="font-size: 25px">新增存证</span>
             </el-button>
             <br />
             <el-button
@@ -169,7 +169,7 @@
               @click="evidenceListCopy()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">我的存证</span>
+              <span style="font-size: 25px">存证列表</span>
             </el-button>
             <br />
             <el-button
@@ -177,7 +177,7 @@
               @click="notarizationList()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">我的公证</span>
+              <span style="font-size: 25px">公证列表</span>
             </el-button>
             <br />
             <el-button
@@ -185,7 +185,7 @@
               @click="notarizationInfo()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">查看申报材料</span>
+              <span style="font-size: 25px">查看申报材料信息</span>
             </el-button>
           </div>
         </div>
@@ -218,18 +218,7 @@ export default {
       },
       //公证类型及数量
       noType: [],
-      drawData:[
-        {
-          name:"驾驶证公证",
-          value:3,
-        },{
-          name:"学历公证",
-          value:2,
-        },{
-          name:"房产公证",
-          value:1,
-        },
-      ],
+      drawData: [],
       //公证员排名
       noRank: [
         {
@@ -328,14 +317,11 @@ export default {
   created() {
     this.userId = sessionStorage.getItem("userId");
     this.initData();
-    //this.getNoPay();
     this.notarTypeAndNumQuery();
     this.getNotarizationType();
-    // console.log("userId:" + sessionStorage.getItem("userId"));
-    // console.log(this.userId);
   },
   mounted() {
-    this.drawLine();
+    // this.drawLine();
   },
   computed: {},
   components: {
@@ -404,8 +390,8 @@ export default {
           result.data.forEach((item) => {
             this.notarizationTypeQuery.push(item);
           });
-          console.log("公证类型")
-          console.log(this.notarizationTypeQuery)
+          console.log("公证类型");
+          console.log(this.notarizationTypeQuery);
         });
       } catch (e) {
         console.log(e);
@@ -413,7 +399,6 @@ export default {
     },
     // 获取公证类型及其总数
     async notarTypeAndNumQuery() {
-      console.log("11111111111111111111111111111111");
       notarTypeAndNum().then((result) => {
         console.log("获取公证类型及其总数");
         console.log(result);
@@ -424,10 +409,12 @@ export default {
           this.noType.push(item);
           this.drawData.push(query);
         });
-        console.log("noType:")
+        console.log("noType:");
         console.log(this.noType);
-        console.log("drawData:")
+        console.log("drawData:");
         console.log(this.drawData);
+        //画饼图
+        this.drawLine();
       });
     },
     // 处理导航页

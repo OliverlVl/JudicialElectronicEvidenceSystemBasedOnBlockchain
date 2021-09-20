@@ -137,7 +137,7 @@ export default {
     initData() {
       const query = {
         userId: sessionStorage.getItem("userId"),
-        decryptFlag: 0,
+        decryptFlag: 1,
       };
       console.log("开始获取数据");
       userQuery(query).then((result) => {

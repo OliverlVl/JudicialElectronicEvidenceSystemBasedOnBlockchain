@@ -2,21 +2,16 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="head">信息修改</div>
-    <el-form
-      label-width="200px"
-      style="margin-left: 20%; margin-top: 35px"
-      :rules="rules"
-    >
-      <el-form-item label="姓名:" style="margin-bottom:3.5%">
+    <el-form label-width="200px" style="margin-left: 20%; margin-top: 35px">
+      <el-form-item label="用户名:" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.autName"
-          placeholder="请输入姓名"
+          placeholder="请输入用户名"
           style="width: 440px"
-          :disabled="true"
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="编号:" style="margin-bottom:3.5%">
+      <el-form-item label="编号:" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.autManId"
           placeholder="请输入编号"
@@ -25,17 +20,16 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="所属机构:" style="margin-bottom:3.5%">
+      <el-form-item label="所属机构:" style="margin-bottom: 3.5%">
         <el-input
-          v-model="initInfor.organizationId"
+          v-model="initInfor.organizationName"
           placeholder="请选择所属机构"
           style="width: 440px"
           :disabled="true"
         ></el-input>
       </el-form-item>
 
-
-      <el-form-item label="手机号:" prop="phone" style="margin-bottom:3.5%"> 
+      <el-form-item label="手机号:" prop="phone" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.phoneNumber"
           placeholder="请输入手机号"
@@ -43,7 +37,7 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="密码:" prop="pass" style="margin-bottom:3.5%">
+      <el-form-item label="密码:" prop="pass" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.password"
           placeholder="请输入密码"
@@ -52,14 +46,28 @@
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="邮箱:" prop="emails" style="margin-bottom:3.5%">
+      <el-form-item label="邮箱:" prop="emails" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.email"
           placeholder="请输入邮箱"
           style="width: 440px"
         ></el-input>
       </el-form-item>
-
+      <el-form-item label="性别:" prop="sex" style="margin-bottom: 3.5%">
+        <el-select
+          :popper-append-to-body="false"
+          v-model="initInfor.sex"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in sex"
+            :key="item.label"
+            :label="item.key"
+            :value="item.key"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
     </el-form>
 
     <div class="table_container" style="margin-left: 45%">
@@ -71,15 +79,15 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { notaQuery, noTypeQuery, notarregist } from "@/api/getData";
+import { autUpdate, autmanQuery } from "@/api/getData";
 export default {
   data() {
     return {
-      autManId :"",
+      autManId: "",
       changeVisible: false,
       oldPass: "",
       newPass: "",
-       /*
+      /*
       initInfor: {
         notaryId: "8003117104",
         notaryName: "张三",
@@ -93,6 +101,10 @@ export default {
         notarizationType: "none",
       },*/
       initInfor: {},
+      sex: [
+        { label: "0", key: "男" },
+        { label: "1", key: "女" },
+      ],
       /*
       rules: {
         phone: [
@@ -122,12 +134,11 @@ export default {
   },
   created() {
     this.decryptFlag = 1;
-    this.manId = localStorage.getItem("manId");
+    //this.manId = localStorage.getItem("manId");
     this.initData();
     //this.oldPass = this.initInfor.password;
   },
-  computed: {
-  },
+  computed: {},
   components: {
     headTop,
   },
@@ -136,18 +147,22 @@ export default {
     async initData() {
       try {
         const query = {
-          autManId: this.autManId,
+          autManId: sessionStorage.getItem("autManId"),
+          decryptFlag: this.decryptFlag,
         };
+        console.log(query);
         await autmanQuery(query).then((result) => {
           if (result.status) {
+            console.log(result);
             this.initInfor = {};
-            this.initInfor = result.data;
+            this.initInfor = result.data[0];
+            console.log(this.initInfor);
           } else {
             console.log("获取数据失败");
           }
         });
       } catch (error) {
-        throw new Error(error.message);
+        console.log("获取信息失败");
       }
     },
     // 处理导航页
@@ -161,20 +176,30 @@ export default {
     async SubmitInfo() {
       try {
         const submitInfo = {
-          autManId: this.autManId,
+          autManId: sessionStorage.getItem("autManId"),
           phoneNumber: this.initInfor.phoneNumber,
           email: this.initInfor.email,
           newPassword: this.initInfor.password,
+          idCard:this.initInfor.idCard,
+          organizationId:this.initInfor.organizationId,
+          sex: this.initInfor.sex,
         };
-        await notarregist(submitInfo).then((result) => {
+        if (submitInfo.sex == "男") {
+          submitInfo.sex = "0";
+        } else {
+          submitInfo.sex = "1";
+        }
+        console.log("1111111");
+        console.log(submitInfo);
+        await autUpdate(submitInfo).then((result) => {
           if (result.status) {
             alert("修改成功");
           } else {
-            console.log("获取数据失败");
+            console.log(result.message);
           }
         });
       } catch (error) {
-        throw new Error(error.message);
+        console.log(error.message);
       }
     },
     tryy() {
