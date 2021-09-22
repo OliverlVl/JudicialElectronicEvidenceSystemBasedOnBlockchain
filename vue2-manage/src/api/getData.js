@@ -287,6 +287,10 @@ export const withdraw = data => fetch('/user/withdraw',data, 'POST');
 * 	各个类型的数量、成功数和驳回数
 */
 export const notarTypeAndNum = data => fetch('/notarTypeAndNum',data, 'POST');
+/**
+* 	系统管理员查询交易记录
+*/
+export const sysTransQuery = data => fetch('/aut/transQuery',data, 'POST');
 
 
 

@@ -2,18 +2,12 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="search_container top-div-set">
-      <el-select
-        v-model="transaction.transactionType"
+      <el-input
+        v-model="transaction.sernameWildcard"
         style="margin-left: 3%; width: 390px"
-        placeholder="请选择交易类型"
+        placeholder="请输入用户名"
       >
-        <el-option
-          v-for="item in transactionType"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+      </el-input>
       <el-button
         slot="append"
         icon="el-icon-search"
@@ -41,29 +35,32 @@
           </template>
         </el-table-column>
         <el-table-column
+          label="用户名"
+          width="100"
+          prop="username"
+        ></el-table-column>
+        <el-table-column
           label="交易编号"
-          align="center"
           prop="transactionId"
         ></el-table-column>
         <el-table-column
           label="交易金额"
-          align="center"
+          width="100"
           prop="transactionMoney"
         ></el-table-column>
         <el-table-column
           label="交易时间"
-          align="center"
+          width="200"
           prop="transactionTime"
         ></el-table-column>
         <el-table-column
           label="区块链ID"
-          align="center"
           prop="transactionBlockchainId"
         ></el-table-column>
         <el-table-column
           label="交易类型"
-          align="center"
           prop="transactionType"
+          width="200"
         ></el-table-column>
       </el-table>
 
@@ -82,6 +79,7 @@
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form ref="transaction" :model="transaction" label-width="200px">
         <el-form-item label="交易类型" prop="transactionType">
@@ -161,23 +159,17 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { transQuery } from "@/api/getData";
+import { sysTransQuery } from "@/api/getData";
 export default {
   data() {
     return {
       searchVisible: false,
-      manId:"",
       transaction: {
-        userId: sessionStorage.getItem("userID"),
-        // 交易类型
-        transactionType: "",
-        //交易金额
-        // 加解密：1 解密 0 加密
-        decryptFlag: 1,
-        //上链时间
-        // 交易时间
+        userId: "",
+        usernameWildcard: "",
+        transactionType: "none", 
+        decryptFlag: 1,  
       },
-      //
       decrypt_flag: true,
       //时间选择器
       pickerOptions: {
@@ -244,8 +236,8 @@ export default {
       tableData: [
         {
           blockchainTime: "",
-          transactionPeople: "",
-          storageSize: "",
+          transactionPeople: "/",
+          storageSize: "/",
         },
         {},
         {},
@@ -257,7 +249,8 @@ export default {
     };
   },
   created() {
-    this.manId= sessionStorage.getItem("manId");
+    // 获取数据
+    this.getTransactionData();
   },
   computed: {},
   components: {
@@ -269,8 +262,19 @@ export default {
       let start = this.transactionTime[0];
       let end = this.transactionTime[1];
       this.transaction.transactionTimeStart = start.getTime();
+      // start.getFullYear() +
+      // "-" +
+      // (start.getMonth() + 1) +
+      // "-" +
+      // start.getDate() +
+      // " " +
+      // start.getHours() +
+      // ":" +
+      // start.getMinutes() +
+      // ":" +
+      // start.getSeconds();
       this.transaction.transactionTimeEnd = end.getTime();
-      console.log();
+      console.log(this.transaction.transactionTimeStart);
     },
 
     // 上链时间赋值
@@ -292,7 +296,12 @@ export default {
         if (this.transaction.transactionType == "") {
           this.transaction.transactionType = "none";
         }
-
+        if (this.transaction.userId == "") {
+          this.transaction.userId = "none";
+        }
+        if (this.transaction.usernameWildcard == "") {
+          this.transaction.usernameWildcard = "none";
+        }
         if (
           this.transactionMoneyFloor != "" &&
           this.transactionMoneyUpper != ""
@@ -317,16 +326,36 @@ export default {
           this.transaction.transactionMoneyFloor = this.transactionMoneyFloor;
           this.transaction.transactionMoneyUpper = this.transactionMoneyUpper;
         }
-
         if (this.decrypt_flag == false) {
           this.transaction.decryptFlag = 0;
         }
-        // 请求数据
-
-        await transQuery(this.transaction).then((result) => {
+        await sysTransQuery(this.transaction).then((result) => {
+          console.log(this.transaction);
+          console.log(result);
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (item.blockchainTime == null) {
+                item.blockchainTime = "null";
+              }
+              if (item.transactionBlockchainId == null) {
+                item.transactionBlockchainId = "null";
+              }
+              if (item.transactionPeople == null) {
+                item.transactionPeople = "null";
+              }
+              if (item.storageSize == null) {
+                item.storageSize = "null";
+              }
+              if (this.transaction.decryptFlag == 0) {
+                item.transactionMoney = "******";
+                item.transactionPeople =
+                  item.transactionPeople == "null" ? "null" : "******";
+              }
+              item.transactionTime =
+                item.transactionTime.substring(0, 10) +
+                " " +
+                item.transactionTime.substring(11, 19);
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -401,6 +430,7 @@ export default {
   height: 120px;
   display: block;
 }
+
 .a-style {
   color: #0500ee;
   cursor: pointer;

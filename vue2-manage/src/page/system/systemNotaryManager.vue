@@ -65,10 +65,10 @@
             placeholder="请选择"
           >
             <el-option
-              v-for="item in org_info"
-              :key="item.organization_id"
-              :label="organization_name"
-              :value="item.organization_id"
+              v-for="item in orgName"
+              :key="item.organizationId"
+              :label="item.organizationName"
+              :value="item.organizationId"
             >
             </el-option>
           </el-select>
@@ -123,12 +123,12 @@
         <el-table-column
           label="机构管理员"
           align="center"
-          prop="autNameWildcard"
+          prop="autName"
         ></el-table-column>
         <el-table-column
           label="机构名称"
           align="center"
-          prop="organizationId"
+          prop="organizationName"
         ></el-table-column>
         <el-table-column
           label="手机号"
@@ -170,7 +170,7 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { notaQuery, orgaQuery } from "@/api/getData";
+import { autmanQuery, orgaQuery } from "@/api/getData";
 export default {
   data() {
     return {
@@ -178,14 +178,7 @@ export default {
       searchVisible: false,
       decrypt_flag: true,
       // 表格
-      tableData: [
-        {
-          email: "29*********@163.com",
-          sex: "男",
-          idCard: "350103xxxxxxxxxxxx",
-          phoneNumber: "135********",
-        },
-      ],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -211,7 +204,7 @@ export default {
           value: "1",
         },
       ],
-      org_info: [],
+      orgName: [],
     };
   },
   created() {
@@ -226,6 +219,14 @@ export default {
     // 初始化数据
     async initData() {
       try {
+        const orgQuery = {
+        organizationId: "none",
+        organizationIdNameWildcard: "none",
+        addressWildcard: "none",
+        phoneNumberWildcard: "none",
+        legalPeopleWildcard: "none",
+        emailWildcard: "none",
+      };
         const query = {
           autManId: "none",
           autNameWildcard: "none",
@@ -236,7 +237,7 @@ export default {
           organizationId: "none",
           decryptFlag: 1,
         };
-        await notaQuery(query).then((result) => {
+        await autmanQuery(query).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -244,15 +245,18 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           }
         });
-        //获取机构
-        await orgaQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.org_info.push(item);
+        //获取组织名
+        await orgaQuery(orgQuery).then((result) => {
+          if (result.status) {
+            this.orgName = [];
+            result.data.forEach((item) => {
+              this.orgName.push(item);
             });
+          } else {
+            console.log("获取机构名失败失败");
           }
         });
       } catch (error) {
@@ -300,13 +304,12 @@ export default {
       } else {
         this.autMInfo.decryptFlag = 0;
       }
-      //alert(this.autMInfo.decryptFlag);
     },
     // 搜索
     async handleSearch() {
       try {
         this.dealData();
-        await userQuery(this.autMInfo).then((result) => {
+        await autmanQuery(this.autMInfo).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -314,7 +317,7 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            throw new Error("获取数据失败");
+            console.log(result.message);
           }
         });
         this.resetData();

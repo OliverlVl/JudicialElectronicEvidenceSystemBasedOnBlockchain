@@ -174,24 +174,7 @@ export default {
       searchVisible: false,
       decrypt_flag: true,
       // 表格
-      tableData: [
-        {
-          email: "29*********@163.com",
-          sex: "男",
-          storageSpace: 1000,
-          hasUsedStorage: 210,
-          idCard: "350103xxxxxxxxxxxx",
-          phoneNumber:"135********",
-        },{
-          email: "29*********@163.com",
-          sex: "男",
-          storageSpace: 1000,
-          hasUsedStorage: 210,
-          showStorage: "",
-          idCard: "350103xxxxxxxxxxxx",
-          phoneNumber:"135********",
-        },
-      ],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,

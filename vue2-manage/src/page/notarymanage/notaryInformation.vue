@@ -95,6 +95,7 @@
     <el-dialog
       title="修改公证金额"
       :visible.sync="updateMoneyVisible"
+      :append-to-body="true"
       style="width: 60%; margin: 0 auto"
     >
       <el-form

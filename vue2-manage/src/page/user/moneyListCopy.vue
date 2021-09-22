@@ -1,10 +1,10 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container">
+    <div class="search_container top-div-set">
       <el-select
         v-model="transaction.transactionType"
-        style="margin-left: 30%; width: 390px"
+        style="margin-left: 3%; width: 390px"
         placeholder="请选择交易类型"
       >
         <el-option
@@ -331,9 +331,11 @@ export default {
           this.transaction.decryptFlag = 0;
         }
         // 请求数据
-
+        this.transaction.userId = sessionStorage.getItem("userId");
+        
         await transQuery(this.transaction).then((result) => {
           console.log(this.transaction);
+          console.log(result);
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -351,9 +353,13 @@ export default {
               }
               if (this.transaction.decryptFlag == 0) {
                 item.transactionMoney = "******";
-                item.transactionPeople = item.transactionPeople == "null" ? "null": "******";
+                item.transactionPeople =
+                  item.transactionPeople == "null" ? "null" : "******";
               }
-              item.transactionTime = item.transactionTime.substring(0,10)+" "+item.transactionTime.substring(11,19)
+              item.transactionTime =
+                item.transactionTime.substring(0, 10) +
+                " " +
+                item.transactionTime.substring(11, 19);
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -433,5 +439,8 @@ export default {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
+}
+.top-div-set {
+  background:rgba(196, 196, 196, 0.5)
 }
 </style>
