@@ -7,7 +7,7 @@ Vue.use(Router)
 
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');//登入
 const manage = r => require.ensure([], () => r(require('@/page/user/manage')), 'manage');//首页
-const home = r => require.ensure([], () => r(require('@/page/home')), 'home');//统计
+// const home = r => require.ensure([], () => r(require('@/page/home')), 'home');//统计
 const explain = r => require.ensure([], () => r(require('@/page/user/explain')), 'explain');//说明
 const addEvidence = r => require.ensure([], () => r(require('@/page/user/addEvidence')), 'addEvidence'); //存证服务-新增存证
 const userInfoReset = r => require.ensure([], () => r(require('@/page/user/userInfoReset')), 'userInfoReset');//个人中心-信息修改
@@ -62,7 +62,7 @@ const routes = [
 		name: '',
 		children: [{
 			path: '',
-			component: home,
+			component: userIndex,
 			meta: [],
 		}, {
 			path: '/evidenceListCopy2',
@@ -112,7 +112,7 @@ const routes = [
 		name: '',
 		children: [{
 			path: '',
-			component: home,
+			component: notaryIndex,
 			meta: [],
 		}, {
 			path: '/haveDeal',
@@ -146,7 +146,7 @@ const routes = [
 		name: '',
 		children: [{
 			path: '',
-			component: home,
+			component: NMIndex,
 			meta: [],
 		}, {
 			path: '/totalNotarization',
@@ -192,7 +192,7 @@ const routes = [
 	name: '',
 	children: [{
 		path: '',
-		component: home,
+		component: systemIndex,
 		meta: [],
 	}, {
 		path: '/systemUser',

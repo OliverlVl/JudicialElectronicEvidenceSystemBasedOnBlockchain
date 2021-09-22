@@ -480,15 +480,16 @@ export default {
         notarPay(this.notarization).then((result) => {
           if (result.status == true) {
             //成功
-            console.log(result.data);
             this.notarPayVisible = false;
             this.$message({
               type: "success",
-              message: "缴费成功，等待上链，上链成功后可在公证列表中查看",
+              message: "缴费成功!",
             });
           } else {
-            //失败
-            console.log("公证申请失败");
+            this.$message({
+              type: "error",
+              message: "缴费失败!",
+            });
           }
         });
       } catch (e) {

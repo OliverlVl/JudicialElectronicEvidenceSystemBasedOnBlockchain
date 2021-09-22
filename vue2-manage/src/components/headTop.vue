@@ -41,7 +41,7 @@
 				if (command == 'home') {
 					this.$router.push('/manage');
 				}else if(command == 'signout'){
-					const res = await signout()
+					// const res = await signout()
 					 this.$router.push('/');
 					if (res.status == 1) {
 						this.$message({

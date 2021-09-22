@@ -532,9 +532,9 @@ export default {
     async notarPay() {
       try {
         notarPay(this.notarizationPay).then((result) => {
+          console.log(result)
           if (result.status == true) {
             //成功
-            console.log(result.data);
             this.notarPayVisible = false;
             this.$message({
               type: "success",
