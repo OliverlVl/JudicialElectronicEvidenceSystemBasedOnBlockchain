@@ -448,9 +448,8 @@ export default {
     async getNotarizationData() {
       // 关闭弹窗
       this.searchVisible = false;
-      console.log("userId:"+sessionStorage.getItem("userId"));
       this.notarization.userId = sessionStorage.getItem("userId");
-       console.log(this.notarization.userId)
+
       // 判断
       if (this.notarization.evidenceName == "") {
         this.notarization.evidenceName = "none";
@@ -540,6 +539,7 @@ export default {
               type: "success",
               message: "缴费成功!",
             });
+            
           } else {
             this.$message({
               type: "error",

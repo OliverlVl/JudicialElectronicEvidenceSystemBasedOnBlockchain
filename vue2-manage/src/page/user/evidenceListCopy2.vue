@@ -440,8 +440,8 @@ export default {
 
     // 申请公证按钮
     async handlePublic(row) {
-      this.dialogVisible_notarization = true;
-      this.notarization.evidenceId = row.evidenceId;
+;      this.dialogVisible_notarization = true;
+      this.notarization.evidenceId = row.evidenceId
     },
 
     // 发送公证请求
