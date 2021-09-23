@@ -180,8 +180,10 @@ export const rankStasQue = data => fetch('/aut/rankStasQue',data, 'POST');
 */
 export const notPayQuery = data => fetch('/notPayQuery',data, 'POST');
 
-
-
+/**
+* 	公证员信息修改
+*/
+export const notaryUpdate = data => fetch('/notar/update',data, 'POST');
 
 
 

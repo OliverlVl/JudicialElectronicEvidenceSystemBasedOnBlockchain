@@ -2,8 +2,12 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="head">信息修改</div>
-    <div style="margin-left: 13%; ">
-      <el-form label-width="100px" style="margin-top: 25px; width:950px" inline>
+    <div  align="center">
+      <el-form
+        label-width="100px"
+        style="margin-top: 25px; width: 950px"
+        inline
+      >
         <el-form-item label="姓名:">
           <el-input
             v-model="initInfor.notaryName"
@@ -31,9 +35,9 @@
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="公证机构ID:">
+        <el-form-item label="公证机构:">
           <el-input
-            v-model="initInfor.organizationId"
+            v-model="initInfor.organizationName"
             placeholder="请输入工号"
             style="width: 340px"
             :disabled="true"
@@ -42,7 +46,7 @@
 
         <el-form-item label="工作年限:">
           <el-input
-            v-model="initInfor.notaryId"
+            v-model="initInfor.workYear"
             placeholder="请输入编号"
             style="width: 340px"
             :disabled="true"
@@ -51,7 +55,7 @@
 
         <el-form-item label="职位:">
           <el-input
-            v-model="initInfor.notaryId"
+            v-model="initInfor.position"
             placeholder="请输入编号"
             style="width: 340px"
             :disabled="true"
@@ -63,15 +67,17 @@
             v-model="initInfor.phoneNumber"
             placeholder="请输入手机号"
             style="width: 340px"
+            :disabled="update"
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="密码:" prop="pass">
+        <el-form-item label="新密码:" prop="pass">
           <el-input
-            v-model="initInfor.password"
-            placeholder="请输入密码"
+            v-model="initInfor.newPassword"
+            placeholder="请输入新密码"
             style="width: 340px"
             show-password
+            :disabled="update"
           ></el-input>
         </el-form-item>
 
@@ -80,6 +86,7 @@
             v-model="initInfor.email"
             placeholder="请输入邮箱"
             style="width: 340px"
+            :disabled="update"
           ></el-input>
         </el-form-item>
 
@@ -88,6 +95,7 @@
             v-model="initInfor.notarizationType"
             placeholder="请选择公证类型"
             style="width: 340px"
+            :disabled="update"
           >
             <el-option
               v-for="item in notarization_type"
@@ -100,10 +108,46 @@
         </el-form-item>
         
       </el-form>
+
     </div>
-    <div style="margin-left:45%; margin-top:2%"> 
-          <el-button type="primary" @click="SubmitInfo()">确定</el-button>
-        </div>
+    <div align="center">
+              <el-button
+                id="updateId"
+                type="primary"
+                @click="
+                  update = false;
+                  updateVisible();
+                "
+                style="display: inline; width: 30%"
+
+                
+                >修改</el-button
+              >
+              <el-button
+                id="cancelId"
+                type="primary"
+                @click="
+                  update = true;
+                  cancelAndSubmitVisible();
+                "
+                style="display: none; width:30%"
+                >取消</el-button
+              >
+              <el-button
+                id="submitId"
+                type="primary"
+                @click="
+                  update = true;
+                  cancelAndSubmitVisible();
+                  SubmitInfo();
+                "
+                style="display: none; width: 30%"
+                >保存</el-button
+              >
+            </div>
+    <!-- <div style="margin-left: 45%; margin-top: 2%">
+      <el-button type="primary" @click="SubmitInfo()">确定</el-button>
+    </div> -->
 
     <el-dialog
       title="修改密码"
@@ -139,17 +183,19 @@
         >
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { notaQuery, noTypeQuery, notarregist } from "@/api/getData";
+import { notaQuery, noTypeQuery, notarregist, notaryUpdate } from "@/api/getData";
 export default {
   data() {
     return {
       changeVisible: false,
+      update: true,
       oldPass: "",
       newPass: "",
       info: {
@@ -158,18 +204,7 @@ export default {
         email: "",
         notarizationType: "",
       },
-      initInfor: {
-        notaryId: "8003117104",
-        notaryName: "张三",
-        jobNumber: "211020",
-        password: "88888888",
-        phoneNumber: "156*******",
-        idCard: "35************",
-        email: "29********@qq.com",
-        sex: "男",
-        organizationId: "1520",
-        notarizationType: "none",
-      },
+      initInfor: {},
       notarization_type: [
         {
           notarizationTypeName: "不限",
@@ -181,14 +216,26 @@ export default {
   },
   created() {
     this.decryptFlag = 1;
-    this.notary_id = sessionStorage.getItem("notaryId"), 
-    this.initData();
+    (this.notary_id = sessionStorage.getItem("notaryId")), this.initData();
+    this.getNotarizationType();
   },
   computed: {},
   components: {
     headTop,
   },
   methods: {
+     // 按钮可视化
+    updateVisible() {
+      document.getElementById("updateId").style.display = "none";
+      document.getElementById("cancelId").style.display = "inline";
+      document.getElementById("submitId").style.display = "inline";
+    },
+    cancelAndSubmitVisible() {
+      document.getElementById("updateId").style.display = "inline";
+      document.getElementById("cancelId").style.display = "none";
+      document.getElementById("submitId").style.display = "none";
+    },
+
     // 初始化数据
     async initData() {
       try {
@@ -196,16 +243,17 @@ export default {
           notaryId: sessionStorage.getItem("notaryId"),
           //notaryId: "1",
         };
+        console.log(query);
         await notaQuery(query).then((result) => {
           if (result.status) {
-            console.log(result.data)
-            this.initInfor = {};
-            this.initInfor = result.data;
+            console.log(result.data[0]);
+            this.initInfor = result.data[0];
+            
           } else {
             console.log("获取数据失败");
           }
         });
-        //获取公证类型
+         //获取公证类型
         await noTypeQuery().then((typeres) => {
           if (typeres.status) {
             typeres.data.forEach((item) => {
@@ -217,6 +265,8 @@ export default {
         console.log(error.message);
       }
     },
+  
+
     // 处理导航页
     handlePageChange(val) {
       console.log(val);
@@ -227,13 +277,13 @@ export default {
     // 提交
     async SubmitInfo() {
       try {
-        const submitInfo = {
-          notaryId: this.notary_id,
-          phoneNumber: this.initInfor.phoneNumber,
-          email: this.initInfor.email,
-          notarizationType: this.initInfor.notarizationType,
-        };
-        await notarregist(submitInfo).then((result) => {
+       if (this.initInfor.sex == "男") {
+        this.initInfor.sex = "0";
+      } else {
+        this.initInfor.sex = "1";
+      }
+
+        await notaryUpdate(this.initInfor).then((result) => {
           if (result.status) {
             alert("修改成功");
           } else {

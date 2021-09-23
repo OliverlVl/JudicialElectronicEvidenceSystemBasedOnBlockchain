@@ -302,7 +302,7 @@
               v-for="item in notarizationType"
               :key="item.notarizationTypeId"
               :label="item.notarizationType"
-              :value="item.notarizationTypeId"
+              :value="item.notarizationType"
             ></el-option>
           </el-select>
         </el-form-item>

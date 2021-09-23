@@ -127,11 +127,7 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form
-              label-position="right"
-              inline
-              class="demo-table-expand"
-            >
+            <el-form label-position="right" inline class="demo-table-expand">
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
@@ -297,8 +293,7 @@ export default {
         },
       ],
       notarization_status: [
-        {label: "不限",
-          value: "none",},
+        { label: "不限", value: "none" },
         {
           label: "审核通过",
           value: "3",
@@ -331,7 +326,7 @@ export default {
         const query = {
           decryptFlag: this.decryptFlag,
           notaryId: sessionStorage.getItem("notaryId"),
-          notarizationStatus:"3",
+          notarizationStatus: "3",
         };
         await notarmanageRecord(query).then((result) => {
           if (result.status == true) {
@@ -355,7 +350,7 @@ export default {
             throw new Error("获取数据失败");
           }
         });
-        console.log(this.tableData)
+        console.log(this.tableData);
         //获取存证类型
         await eviTypeQuery().then((typeres) => {
           if (typeres.status) {
@@ -508,12 +503,11 @@ export default {
     },
   },
   // 监听路由跳转，刷新数据
-  watch:{
-    '$route' () {
+  watch: {
+    $route() {
       this.initData();
-    }
-  }
-
+    },
+  },
 };
 </script>
 

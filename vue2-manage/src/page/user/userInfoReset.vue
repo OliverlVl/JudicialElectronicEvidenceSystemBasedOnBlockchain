@@ -44,10 +44,11 @@
                 :disabled="update"
               ></el-input>
             </el-form-item>
-            <el-form-item label="密码:">
+            <el-form-item label="新密码:">
               <el-input
-                v-model="formData.password"
+                v-model="formData.newPassword"
                 style="width: 100%"
+                placeholder="请输入新密码"
                 show-password
                 :disabled="update"
               ></el-input>
@@ -157,7 +158,6 @@ export default {
     },
     // 数据提交
     submit() {
-      this.formData["newPassword"] = this.formData.password;
       if (this.formData.sex == "男") {
         this.formData.sex = "0";
       } else {
