@@ -3,7 +3,7 @@
     <head-top></head-top>
     <div class="search_container top-div-set">
       <el-input
-        v-model="this.searchQuery.usernameWildcard"
+        v-model="searchQuery.usernameWildcard"
         placeholder="请输入申请人"
         style="width: 390px; margin-left: 3%"
       >
@@ -172,10 +172,10 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="申请人编号"
+          label="申请人"
           align="center"
           width="180px"
-          prop="userId"
+          prop="username"
         ></el-table-column>
         <el-table-column
           label="存证类型"
@@ -246,7 +246,7 @@ export default {
       searchQuery: {
         usernameWildcard: "",
         evidenceName: "",
-        notarizationStatus: "3",
+        notarizationStatus: "",
         notarizationType: "",
         dealType: "2",
         evidenceType: "",
@@ -297,6 +297,8 @@ export default {
         },
       ],
       notarization_status: [
+        {label: "不限",
+          value: "none",},
         {
           label: "审核通过",
           value: "3",
@@ -329,9 +331,9 @@ export default {
         const query = {
           decryptFlag: this.decryptFlag,
           notaryId: sessionStorage.getItem("notaryId"),
-          dealType: "2",
+          notarizationStatus:"3",
         };
-        await notarRecord(query).then((result) => {
+        await notarmanageRecord(query).then((result) => {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -342,6 +344,18 @@ export default {
             console.log("获取数据失败");
           }
         });
+        query.notarizationStatus = "4";
+        await notarmanageRecord(query).then((result) => {
+          if (result.status) {
+            result.data.forEach((item) => {
+              this.tableData.push(item);
+            });
+            this.pageTotal = this.tableData.length;
+          } else {
+            throw new Error("获取数据失败");
+          }
+        });
+        console.log(this.tableData)
         //获取存证类型
         await eviTypeQuery().then((typeres) => {
           if (typeres.status) {
@@ -376,17 +390,43 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
-        console.log(this.searchQuery.notarizationStatus)
-        await notarmanageRecord(this.searchQuery).then((result) => {
-          if (result.status) {
-            this.tableData = [];
-            result.data.forEach((item) => {
-              this.tableData.push(item);
-            });
-          } else {
-            throw new Error("获取数据失败");
-          }
-        });
+        if (this.searchQuery.notarizationStatus == "none") {
+          this.searchQuery.notarizationStatus = "3";
+          await notarmanageRecord(this.searchQuery).then((result) => {
+            if (result.status) {
+              this.tableData = [];
+              result.data.forEach((item) => {
+                this.tableData.push(item);
+              });
+            } else {
+              throw new Error("获取数据失败");
+            }
+          });
+          this.searchQuery.notarizationStatus = "4";
+          await notarmanageRecord(this.searchQuery).then((result) => {
+            if (result.status) {
+              result.data.forEach((item) => {
+                this.tableData.push(item);
+              });
+              this.pageTotal = this.tableData.length;
+            } else {
+              throw new Error("获取数据失败");
+            }
+          });
+          this.searchQuery.notarizationStatus = "none";
+        } else {
+          await notarmanageRecord(this.searchQuery).then((result) => {
+            if (result.status) {
+              this.tableData = [];
+              result.data.forEach((item) => {
+                this.tableData.push(item);
+              });
+              this.pageTotal = this.tableData.length;
+            } else {
+              throw new Error("获取数据失败");
+            }
+          });
+        }
         this.resetData();
       } catch (error) {
         throw new Error(error.message);

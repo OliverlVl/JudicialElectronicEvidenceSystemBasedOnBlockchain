@@ -155,10 +155,10 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="申请人编号"
+          label="申请人"
           align="center"
           width="180px"
-          prop="userId"
+          prop="username"
         ></el-table-column>
         <el-table-column
           label="存证类型"

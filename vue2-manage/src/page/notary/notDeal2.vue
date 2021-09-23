@@ -3,7 +3,7 @@
     <head-top></head-top>
     <div class="search_container top-div-set">
       <el-input
-        v-model="this.searchQuery.usernameWildcard"
+        v-model="searchQuery.usernameWildcard"
         placeholder="请输入申请人"
         style="width: 390px; margin-left: 3%"
       >
@@ -189,9 +189,9 @@
         </el-table-column>
         <!--<el-table-column label="存证编号" prop="evidenceId"></el-table-column>-->
         <el-table-column
-          label="申请人编号"
+          label="申请人"
           width="140px"
-          prop="userId"
+          prop="username"
           align="center"
         ></el-table-column>
         <el-table-column
