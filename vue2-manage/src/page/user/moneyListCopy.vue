@@ -1,7 +1,7 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container top-div-set">
+    <div class="search_container top-div-set" style="font-size:0px">
       <el-select
         v-model="transaction.transactionType"
         style="margin-left: 3%; width: 390px"
@@ -396,7 +396,7 @@ export default {
 @import "../../style/mixin";
 .search_container {
   padding: 20px;
-  font-size: 0px;
+  
 }
 .demo-table-expand {
   font-size: 0;

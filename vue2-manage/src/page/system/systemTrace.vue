@@ -397,7 +397,7 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 25%;
+  width: 160px;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {

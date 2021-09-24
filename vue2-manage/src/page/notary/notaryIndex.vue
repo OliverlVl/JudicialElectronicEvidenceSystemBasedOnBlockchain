@@ -532,6 +532,7 @@ export default {
         await notaStasQue(query).then((result) => {
           if (result.status) {
             this.notaInfo = [];
+            console.log(result)
             result.data.forEach((item) => {
               if (sessionStorage.getItem("notaryId") == item.notstyId) {
                 this.notaInfo.push(item);
