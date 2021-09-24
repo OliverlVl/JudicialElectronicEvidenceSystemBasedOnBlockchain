@@ -396,12 +396,10 @@ export default {
           query.name = item.notarizationType;
           query.value = item.totalNum;
           this.noType.push(item);
-          this.drawData.push(query);
+          if (item.totalNum != 0) {
+            this.drawData.push(query);
+          }
         });
-        console.log("noType:");
-        console.log(this.noType);
-        console.log("drawData:");
-        console.log(this.drawData);
         //画饼图
         this.drawLine();
       });

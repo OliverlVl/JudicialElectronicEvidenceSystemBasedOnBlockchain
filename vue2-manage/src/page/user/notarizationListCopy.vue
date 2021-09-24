@@ -502,7 +502,9 @@ export default {
             console.log(result.data);
             result.data.forEach((item) => {
               if (this.notarization.decryptFlag == 0) {
-                item.evidenceName = item.evidenceName.substring(7, 27);
+                item.evidenceName = "*********";
+                item.notarizationMoney = "*********";
+                item.fileSize = "*********";
               }
               if (item.notarizationBlockchainIdStart == null) {
                 item.notarizationBlockchainIdStart = "暂无数据";
@@ -513,7 +515,6 @@ export default {
               if (item.notarizationInformation == null) {
                 item.notarizationInformation = "暂无数据";
               }
-
               if (item.notarizationEndTime == null) {
                 item.notarizationEndTime = "暂无数据";
               } else {

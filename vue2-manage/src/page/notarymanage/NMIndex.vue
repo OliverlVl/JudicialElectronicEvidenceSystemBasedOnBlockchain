@@ -412,7 +412,9 @@ export default {
           query.name = item.notarizationType;
           query.value = item.totalNum;
           this.noType.push(item);
-          this.drawData.push(query);
+          if (item.totalNum != 0) {
+            this.drawData.push(query);
+          }
         });
         //画饼图
         this.drawLine();
