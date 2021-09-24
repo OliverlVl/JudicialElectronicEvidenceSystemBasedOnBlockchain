@@ -371,6 +371,24 @@ export default {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if(item.notarizationStartTime!=null){
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               this.tableData.push(item);
             }); //foreach结束
             this.pageTotal = this.tableData.length;
@@ -476,6 +494,24 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if(item.notarizationStartTime!=null){
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
