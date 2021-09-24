@@ -52,7 +52,7 @@
             >
               <el-select
                 :popper-append-to-body="false"
-                v-model="this.sort"
+                v-model="noreqType"
                 placeholder="请选择"
                 @change="selChange"
                 class="select-style"
@@ -391,7 +391,9 @@ export default {
           query.name = item.notarizationType;
           query.value = item.totalNum;
           this.noType.push(item);
-          this.drawData.push(query);
+          if (item.totalNum != 0) {
+            this.drawData.push(query);
+          }
         });
         //画饼图
         this.drawLine();
