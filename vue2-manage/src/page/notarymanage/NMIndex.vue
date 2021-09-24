@@ -213,11 +213,12 @@ import {
   notarTypeAndNum,
   orgaQuery,
   rankStasQue,
+  notaStasGen,
+  notStaTimeQuery,
   noNumQuery,
   orgStasQue,
   orgStasGen,
   orgStaTimeQuery,
-  autmanQuery,
 } from "@/api/getData";
 export default {
   data() {
@@ -342,6 +343,7 @@ export default {
     this.getOrgNotarInfo();
     this.notarTypeAndNumQuery();
     this.getNotarizationType();
+    this.rankQue();
   },
   mounted() {
     //this.drawLine();
@@ -373,19 +375,6 @@ export default {
             this.noNumber = result.data;
           } else {
             console.log("获取数据失败");
-          }
-        });
-        //公证员排名
-        await rankStasQue(noRankQuery).then((result) => {
-          if (result.status) {
-            this.noRank = [];
-            result.data.forEach((item, index) => {
-              if (index <= 10) {
-                this.noRank.push(item);
-              }
-            });
-          } else {
-            console.log("获取排名失败");
           }
         });
         //获取组织名
@@ -427,6 +416,50 @@ export default {
         });
         //画饼图
         this.drawLine();
+      });
+    },
+    async rankQue() {
+      this.noRank = [];
+      await notaStasGen().then((result) => {
+        if (result.status) {
+          console.log("公证员统计生成成功");
+        } else {
+          console.log("公证员统计生成失败");
+          console.log(result.message);
+        }
+      });
+      const query = {
+        sort: 0,
+        decryptFlag: 1,
+        timeFlag: "",
+      };
+      await notStaTimeQuery().then((result) => {
+        if (result.status) {
+          query.timeFlag = result.data[0];
+          result.data.forEach((item) => {
+            if (query.timeFlag < item) {
+              query.timeFlag = item;
+            }
+          });
+          console.log(query.timeFlag);
+        } else {
+          console.log("公证员统计时间查询失败");
+          console.log(result.message);
+        }
+      });
+      await rankStasQue(query).then((result) => {
+        if (result.status) {
+          console.log(result);
+          result.data.forEach((item, index) => {
+            if (index < 15) {
+              item["notaryRank"] = index + 1;
+              this.noRank.push(item);
+            }
+          });
+        } else {
+          console.log("公证员排名查询失败");
+          console.log(result.message);
+        }
       });
     },
     // 处理导航页
@@ -551,8 +584,9 @@ export default {
         if (result.status) {
           this.orgInfo = [];
           result.data.forEach((item) => {
-            if (item.organizationId == sessionStorage.getItem("organizationId")) 
-            {
+            if (
+              item.organizationId == sessionStorage.getItem("organizationId")
+            ) {
               this.orgInfo.push(item);
             }
           });

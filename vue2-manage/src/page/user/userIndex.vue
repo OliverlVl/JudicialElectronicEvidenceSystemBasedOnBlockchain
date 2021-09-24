@@ -6,6 +6,7 @@
       <el-col :span="8"
         ><div class="grid-content bg-purple div-set">
           <i class="el-icon-user-solid title-set">公证员信息</i>
+
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
               :data="noRank"
@@ -51,11 +52,12 @@
             >
               <el-select
                 :popper-append-to-body="false"
-                v-model="noreqType"
+                v-model="this.sort"
                 placeholder="请选择"
                 @change="selChange"
                 class="select-style"
                 popper-class="select-popper"
+                style="width: 200"
               >
                 <el-option
                   v-for="item in notarizationTypeQuery"
@@ -204,6 +206,8 @@ import {
   noNumQuery,
   noTypeQuery,
   notarTypeAndNum,
+  notaStasGen,
+  notStaTimeQuery,
 } from "@/api/getData";
 export default {
   data() {
@@ -319,6 +323,7 @@ export default {
     this.initData();
     this.notarTypeAndNumQuery();
     this.getNotarizationType();
+    this.rankQue();
   },
   mounted() {
     // this.drawLine();
@@ -338,11 +343,6 @@ export default {
         legalPeopleWildcard: "none",
         emailWildcard: "none",
       };
-      const noRankQuery = {
-        timeFlag: 1,
-        decryptFlag: 1,
-        sort: 0,
-      };
       try {
         //公证数量查询
         await noNumQuery().then((result) => {
@@ -350,20 +350,6 @@ export default {
             this.noNumber = result.data;
           } else {
             console.log("获取数据失败");
-          }
-        });
-        //公证员排名
-        await rankStasQue(noRankQuery).then((result) => {
-          if (result.status) {
-            console.log(result.data);
-            this.noRank = [];
-            result.data.forEach((item, index) => {
-              if (index <= 10) {
-                this.noRank.push(item);
-              }
-            });
-          } else {
-            console.log("获取排名失败");
           }
         });
         //获取组织名
@@ -385,8 +371,6 @@ export default {
     async getNotarizationType() {
       try {
         noTypeQuery().then((result) => {
-          // console.log("获取公证类型");
-          // console.log(result);
           result.data.forEach((item) => {
             this.notarizationTypeQuery.push(item);
           });
@@ -409,12 +393,52 @@ export default {
           this.noType.push(item);
           this.drawData.push(query);
         });
-        console.log("noType:");
-        console.log(this.noType);
-        console.log("drawData:");
-        console.log(this.drawData);
         //画饼图
         this.drawLine();
+      });
+    },
+    async rankQue() {
+      this.noRank = [];
+      await notaStasGen().then((result) => {
+        if (result.status) {
+          console.log("公证员统计生成成功");
+        } else {
+          console.log("公证员统计生成失败");
+          console.log(result.message);
+        }
+      });
+      const query = {
+        sort: 0,
+        decryptFlag: 1,
+        timeFlag: "",
+      };
+      await notStaTimeQuery().then((result) => {
+        if (result.status) {
+          query.timeFlag = result.data[0];
+          result.data.forEach((item) => {
+            if (query.timeFlag < item) {
+              query.timeFlag = item;
+            }
+          });
+          console.log(query.timeFlag);
+        } else {
+          console.log("公证员统计时间查询失败");
+          console.log(result.message);
+        }
+      });
+      await rankStasQue(query).then((result) => {
+        if (result.status) {
+          console.log(result);
+          result.data.forEach((item, index) => {
+            if (index < 15) {
+              item["notaryRank"] = index + 1;
+              this.noRank.push(item);
+            }
+          });
+        } else {
+          console.log("公证员排名查询失败");
+          console.log(result.message);
+        }
       });
     },
     // 处理导航页

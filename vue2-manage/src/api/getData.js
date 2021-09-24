@@ -299,11 +299,11 @@ export const sysTransQuery = data => fetch('/aut/transQuery',data, 'POST');
 */
 export const sysQuery = data => fetch('/sys/sysQuery',data, 'POST');
 /**
-* 	系统管理员查询交易记录
+* 	公证员统计时间查询
 */
 export const notStaTimeQuery = data => fetch('/notStaTimeQuery',data, 'POST');
 /**
-* 	系统管理员查询交易记录
+* 	机构统计时间查询
 */
 export const orgStaTimeQuery = data => fetch('/orgStaTimeQuery',data, 'POST');
 

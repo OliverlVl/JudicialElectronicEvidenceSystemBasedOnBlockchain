@@ -496,6 +496,8 @@ export default {
     },
     async getNoSta() {
       try {
+        this.noRank = [];
+        //公证员统计生成
         await notaStasGen().then((result) => {
           if (result.status) {
             console.log("统计生成成功");
@@ -507,7 +509,9 @@ export default {
         const query = {
           timeFlag: "",
           decryptFlag: 1,
+          sort:0,
         };
+        //公证员统计时间查询
         await notStaTimeQuery().then((result) => {
           if (result.status) {
             console.log(result);
@@ -522,6 +526,7 @@ export default {
             console.log("获取数据失败");
           }
         });
+        //公证员统计查询
         await notaStasQue(query).then((result) => {
           if (result.status) {
             this.notaInfo = [];
@@ -535,6 +540,20 @@ export default {
             console.log("获取数据失败");
           }
         });
+        await rankStasQue(query).then((result) => {
+        if (result.status) {
+          console.log(result);
+          result.data.forEach((item, index) => {
+            if (index < 15) {
+              item["notaryRank"] = index + 1;
+              this.noRank.push(item);
+            }
+          });
+        } else {
+          console.log("公证员排名查询失败");
+          console.log(result.message);
+        }
+      });
       } catch (error) {
         console.log("排名出错");
         console.log(error);
