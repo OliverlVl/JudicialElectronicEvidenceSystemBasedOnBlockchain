@@ -216,6 +216,7 @@ import {
   noNumQuery,
   orgStasQue,
   orgStasGen,
+  orgStaTimeQuery,
   autmanQuery,
 } from "@/api/getData";
 export default {
@@ -377,7 +378,6 @@ export default {
         //公证员排名
         await rankStasQue(noRankQuery).then((result) => {
           if (result.status) {
-            console.log(result.data);
             this.noRank = [];
             result.data.forEach((item, index) => {
               if (index <= 10) {
@@ -398,7 +398,7 @@ export default {
           } else {
             console.log("获取机构名失败失败");
           }
-        });      
+        });
       } catch (error) {
         console.log(error.message);
       }
@@ -410,8 +410,6 @@ export default {
           result.data.forEach((item) => {
             this.notarizationTypeQuery.push(item);
           });
-          console.log("公证类型");
-          console.log(this.notarizationTypeQuery);
         });
       } catch (e) {
         console.log(e);
@@ -420,8 +418,6 @@ export default {
     // 获取公证类型及其总数
     async notarTypeAndNumQuery() {
       notarTypeAndNum().then((result) => {
-        console.log("获取公证类型及其总数");
-        console.log(result);
         result.data.forEach((item) => {
           let query = {};
           query.name = item.notarizationType;
@@ -429,10 +425,6 @@ export default {
           this.noType.push(item);
           this.drawData.push(query);
         });
-        console.log("noType:");
-        console.log(this.noType);
-        console.log("drawData:");
-        console.log(this.drawData);
         //画饼图
         this.drawLine();
       });
@@ -527,53 +519,48 @@ export default {
     },
     //获取机构公证信息
     async getOrgNotarInfo() {
-      try {
-        const query = {
-          timeFlag: 1,
-          decryptFlag: 1,
-        };
-        const noQuery = {
-          autManId: this.autManId,
-        };
-        //获取公证机构ID
-        await autmanQuery(noQuery).then((result) => {
-          if (result.status) {
-            this.organizationId = result.data.organizationId;
-          } else {
-            console.log("获取公证员信息失败");
-          }
-        });
-        //公证机构统计生成
-        await orgStasGen().then((result) => {
-          if (result.status) {
-            console.log("机构统计信息生成成功");
-          } else {
-            console.log("机构统计信息生成失败");
-          }
-        });
-        //公证机构统计查询
-        await orgStasQue(query).then((result) => {
-          if (result.status) {
-            result.data.forEach((item) => {
-              if (item.organizationId == this.organizationId) {
-                this.orgInfo=[];
-                this.orgInfo.push(item);
-                // this.orgInfo.notarizationCount = result.data.notarizationCount;
-                // this.orgInfo.notarizationSuccessCount =
-                //   result.data.notarizationSuccessCount;
-                // this.orgInfo.notarizationTotalMoney =
-                //   result.data.notarizationTotalMoney;
-              } else {
-                console.log("查无此机构");
-              }
-            });
-          } else {
-            console.log("机构统计信息获取失败");
-          }
-        });
-      } catch (e) {
-        console.log("获取公证信息失败1");
-      }
+      //统计生成
+      await orgStasGen().then((result) => {
+        if (result.status) {
+          console.log("统计生成成功");
+        } else {
+          console.log("统计生成失败");
+          console.log(result.message);
+        }
+      });
+      const query = {
+        timeFlag: "",
+        decryptFlag: 1,
+      };
+      //统计时间查询
+      await orgStaTimeQuery().then((result) => {
+        if (result.status) {
+          query.timeFlag = result.data[0];
+          result.data.forEach((item) => {
+            if (query.timeFlag < item) {
+              query.timeFlag = item;
+            }
+          });
+          console.log("query.timeFlag");
+          console.log(query.timeFlag);
+        } else {
+          console.log("获取数据失败");
+        }
+      });
+      await orgStasQue(query).then((result) => {
+        if (result.status) {
+          this.orgInfo = [];
+          result.data.forEach((item) => {
+            if (item.organizationId == sessionStorage.getItem("organizationId")) 
+            {
+              this.orgInfo.push(item);
+            }
+          });
+          console.log(this.orgInfo);
+        } else {
+          console.log(result.message);
+        }
+      });
     },
   },
 };

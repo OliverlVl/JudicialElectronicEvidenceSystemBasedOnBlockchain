@@ -216,18 +216,12 @@ import {
   noNumQuery,
   notaStasQue,
   notaStasGen,
-  notaQuery,
+  notStaTimeQuery,
 } from "@/api/getData";
 export default {
   data() {
     return {
-      notaInfo: [
-        {
-          notarizationCount: 50,
-          notarizationTotalMoney: 5000,
-          notarizationSuccessCount: 100,
-        },
-      ],
+      notaInfo: [],
 
       status: false,
       noreqType: "",
@@ -340,7 +334,7 @@ export default {
     this.initData();
     this.notarTypeAndNumQuery();
     this.getNotarizationType();
-    this.getNotarInfo()
+    this.getNoSta();
   },
   mounted() {},
   computed: {},
@@ -372,20 +366,6 @@ export default {
             console.log("获取数据失败");
           }
         });
-        //公证员排名
-        await rankStasQue(noRankQuery).then((result) => {
-          if (result.status) {
-            console.log(result.data);
-            this.noRank = [];
-            result.data.forEach((item, index) => {
-              if (index <= 10) {
-                this.noRank.push(item);
-              }
-            });
-          } else {
-            console.log("获取排名失败");
-          }
-        });
         //获取组织名
         await orgaQuery(orgQuery).then((result) => {
           if (result.status) {
@@ -408,8 +388,6 @@ export default {
           result.data.forEach((item) => {
             this.notarizationTypeQuery.push(item);
           });
-          console.log("公证类型");
-          console.log(this.notarizationTypeQuery);
         });
       } catch (e) {
         console.log(e);
@@ -418,8 +396,6 @@ export default {
     // 获取公证类型及其总数
     async notarTypeAndNumQuery() {
       notarTypeAndNum().then((result) => {
-        console.log("获取公证类型及其总数");
-        console.log(result);
         result.data.forEach((item) => {
           let query = {};
           query.name = item.notarizationType;
@@ -427,10 +403,6 @@ export default {
           this.noType.push(item);
           this.drawData.push(query);
         });
-        console.log("noType:");
-        console.log(this.noType);
-        console.log("drawData:");
-        console.log(this.drawData);
         //画饼图
         this.drawLine();
       });
@@ -522,36 +494,50 @@ export default {
         }
       });
     },
-    async getNotarInfo() {
+    async getNoSta() {
       try {
-        const query = {
-          timeFlag: 1,
-          decryptFlag: 1,
-        };
-        //公证机构统计生成
         await notaStasGen().then((result) => {
           if (result.status) {
-            console.log("公证员统计信息生成成功");
+            console.log("统计生成成功");
           } else {
-            console.log("公证员统计信息生成失败");
+            console.log("统计生成失败");
+            console.log(result.message);
           }
         });
-        //公证机构统计查询
+        const query = {
+          timeFlag: "",
+          decryptFlag: 1,
+        };
+        await notStaTimeQuery().then((result) => {
+          if (result.status) {
+            console.log(result);
+            query.timeFlag = result.data[0];
+            result.data.forEach((item) => {
+              if (query.timeFlag < item) {
+                query.timeFlag = item;
+              }
+            });
+            console.log(query.timeFlag);
+          } else {
+            console.log("获取数据失败");
+          }
+        });
         await notaStasQue(query).then((result) => {
           if (result.status) {
             this.notaInfo = [];
-            this.notaInfo.push(result.data)
-            // this.notaInfo.notarizationCount = result.data.notarizationCount;
-            // this.notaInfo.notarizationTotalMoney =
-            //   result.data.notarizationTotalMoney;
-            // this.notaInfo.notarizationSuccessCount =
-            //   result.data.notarizationSuccessCount;
+            result.data.forEach((item) => {
+              if (sessionStorage.getItem("notaryId") == item.notstyId) {
+                this.notaInfo.push(item);
+              }
+            });
+            console.log(this.notaInfo);
           } else {
-            console.log("公证员统计信息获取失败");
+            console.log("获取数据失败");
           }
         });
-      } catch (e) {
-        console.log("获取公证信息失败");
+      } catch (error) {
+        console.log("排名出错");
+        console.log(error);
       }
     },
   },
