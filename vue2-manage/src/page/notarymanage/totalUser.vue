@@ -348,31 +348,7 @@ export default {
 .search_container {
   padding: 20px;
 }
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 35%;
-  color: #000000;
-  background-color: rgba(148, 224, 243, 0.15);
-  border-top: 1px solid #d9d9d9;
-  border-right: 1px solid #d9d9d9;
-  border-bottom: 1px solid #d9d9d9;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
-.demo-table-expands {
-  font-size: 20px;
-  margin-bottom: 0%;
-}
-.demo-table-expands label {
-  width: 120px;
-  color: #000000;
-  font-size: 15px;
-}
+
 .table_container {
   padding: 20px;
 }

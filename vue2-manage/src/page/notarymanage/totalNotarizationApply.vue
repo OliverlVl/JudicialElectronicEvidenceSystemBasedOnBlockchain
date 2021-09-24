@@ -741,7 +741,6 @@ export default {
 }
 .demo-table-expands label {
   width: 120px;
-  color: #000000;
   font-size: 15px;
 }
 .table_container {
