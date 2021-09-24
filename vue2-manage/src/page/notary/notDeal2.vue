@@ -158,9 +158,6 @@
               <el-form-item label="文件大小:">
                 <span>{{ props.row.fileSize }} KB</span>
               </el-form-item>
-              <el-form-item label="文件哈希值:">
-                <span>{{ props.row.fileHash }}</span>
-              </el-form-item>
               <el-form-item label="存证编号:">
                 <span>{{ props.row.evidenceId }}</span>
               </el-form-item>
@@ -489,6 +486,11 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.searchQuery.decryptFlag == 0) {
+                item.evidenceName = "*********";
+                item.fileSize = "*********";
+                item.notarizationMoney = "*********";
+              }
               if (item.notarizationStartTime != null) {
                 item.notarizationStartTime =
                   item.notarizationStartTime.substring(0, 10) +

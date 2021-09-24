@@ -348,6 +348,8 @@ export default {
               }
               if (this.transaction.decryptFlag == 0) {
                 item.transactionMoney = "******";
+                item.storageSize = "******";
+                item.userRemains = "******";
                 item.transactionPeople =
                   item.transactionPeople == "null" ? "null" : "******";
               }

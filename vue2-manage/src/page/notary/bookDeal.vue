@@ -99,7 +99,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -117,11 +116,7 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form
-              label-position="right"
-              inline
-              class="demo-table-expand"
-            >
+            <el-form label-position="right" inline class="demo-table-expand">
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
@@ -240,7 +235,7 @@ export default {
         evidenceName: "",
         notarizationStatus: "1",
         notarizationType: "",
-        dealType:"0",
+        dealType: "0",
         evidenceType: "",
         decryptFlag: 1,
         notarizationMoneyUpper: -1,
@@ -315,13 +310,13 @@ export default {
           notaryId: sessionStorage.getItem("notaryId"),
           dealType: "0",
         };
-        console.log(query)
+        console.log(query);
         //查询可预约列表
         await notarRecord(query).then((result) => {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
-              if(item.notarizationStartTime!=null){
+              if (item.notarizationStartTime != null) {
                 item.notarizationStartTime =
                   item.notarizationStartTime.substring(0, 10) +
                   " " +
@@ -338,6 +333,9 @@ export default {
                   item.blockchainTime.substring(0, 10) +
                   " " +
                   item.blockchainTime.substring(11, 19);
+              }
+              if (item.notarizationMatters == null) {
+                item.notarizationMatters = "暂无数据";
               }
               this.tableData.push(item);
             }); //foreach结束
@@ -370,7 +368,7 @@ export default {
     async appointDeal(evidenceId) {
       const query = {
         evidenceId: evidenceId,
-        notaryId: sessionStorage.getItem("notaryId")
+        notaryId: sessionStorage.getItem("notaryId"),
       };
       console.log(query);
       let result = await appoint(query);
@@ -380,7 +378,6 @@ export default {
           message: "你已成功申请，可在个人待处理列表中查看！",
         });
         this.initData();
-
       } else {
         alert("申请失败");
       }
@@ -389,7 +386,6 @@ export default {
     async getNotarizationType() {
       try {
         noTypeQuery().then((result) => {
-        
           result.data.forEach((item) => {
             this.notarizationType.push(item);
             console.log(item);
@@ -403,11 +399,16 @@ export default {
       try {
         this.dealData();
         await notarRecord(this.searchQuery).then((result) => {
-           console.log(result)
+          console.log(result);
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
-              if(item.notarizationStartTime!=null){
+              if (this.searchQuery.decryptFlag == 0) {
+                item.evidenceName = "*********";
+                item.fileSize = "*********";
+                item.notarizationMoney = "*********";
+              }
+              if (item.notarizationStartTime != null) {
                 item.notarizationStartTime =
                   item.notarizationStartTime.substring(0, 10) +
                   " " +
@@ -430,7 +431,7 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            throw new Error("获取数据失败");
+            console.log("获取数据失败");
           }
         });
         this.resetData();
@@ -478,7 +479,6 @@ export default {
         } else {
           this.searchQuery.decryptFlag = 0;
         }
-
       } catch (error) {
         throw new Error(error.message);
       }
@@ -507,12 +507,11 @@ export default {
     },
   },
   // 监听路由跳转，刷新数据
-  watch:{
-    '$route' () {
+  watch: {
+    $route() {
       this.initData();
-    }
-  }
-
+    },
+  },
 };
 </script>
 

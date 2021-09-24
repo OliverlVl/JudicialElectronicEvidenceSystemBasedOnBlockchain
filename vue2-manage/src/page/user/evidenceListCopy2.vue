@@ -566,6 +566,7 @@ export default {
             result.data.forEach((item) => {
               if (this.evidence.decryptFlag == 0) {
                 item.evidenceName = "**********";
+                item.fileSize = "**********";
               }
               if (item.evidenceTime != null) {
                 item.evidenceTime =

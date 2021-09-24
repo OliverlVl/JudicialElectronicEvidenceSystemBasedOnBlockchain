@@ -330,6 +330,9 @@ export default {
         this.dealData();
         await evidenceQuery(this.evidence).then((result) => {
           if (result.status) {
+            if (this.evidence.decryptFlag == 0) {
+              item.evidenceName = "********";
+            }
             this.tableData = [];
             result.data.forEach((item) => {
               if (item.evidenceTime != null) {

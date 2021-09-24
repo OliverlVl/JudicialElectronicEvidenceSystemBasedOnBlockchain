@@ -239,7 +239,7 @@ export default {
       // 是否解密
       decrypt_flag: true,
       // 表格
-      tableData: [],
+      tableData: [{}],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -332,6 +332,9 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.evidence.decryptFlag == 0) {
+                item.evidenceName = "*********";
+              }
               if (item.evidenceTime != null) {
                 item.evidenceTime =
                   item.evidenceTime.substring(0, 10) +

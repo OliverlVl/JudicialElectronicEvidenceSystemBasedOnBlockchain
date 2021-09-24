@@ -136,9 +136,6 @@
               <el-form-item label="文件大小:">
                 <span>{{ props.row.fileSize }} KB</span>
               </el-form-item>
-              <el-form-item label="文件哈希值:">
-                <span>{{ props.row.fileHash }}</span>
-              </el-form-item>
               <el-form-item label="存证编号:">
                 <span>{{ props.row.evidenceId }}</span>
               </el-form-item>
@@ -304,11 +301,11 @@ export default {
       notarization_status: [
         { label: "不限", value: "none" },
         {
-          label: "审核通过",
+          label: "公证成功",
           value: "3",
         },
         {
-          label: "审核不通过",
+          label: "公证失败",
           value: "4",
         },
       ],
@@ -449,6 +446,11 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (this.searchQuery.decryptFlag == 0) {
+                  item.evidenceName = "*********";
+                  item.fileSize = "*********";
+                  item.notarizationMoney = "*********";
+                }
                 if (item.notarizationEndTime != null) {
                   item.notarizationEndTime =
                     item.notarizationEndTime.substring(0, 10) +
@@ -483,6 +485,11 @@ export default {
           await notarmanageRecord(this.searchQuery).then((result) => {
             if (result.status) {
               result.data.forEach((item) => {
+                if (this.searchQuery.decryptFlag == 0) {
+                  item.evidenceName = "*********";
+                  item.fileSize = "*********";
+                  item.notarizationMoney = "*********";
+                }
                 if (item.notarizationEndTime != null) {
                   item.notarizationEndTime =
                     item.notarizationEndTime.substring(0, 10) +
@@ -520,6 +527,11 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (this.searchQuery.decryptFlag == 0) {
+                  item.evidenceName = "*********";
+                  item.fileSize = "*********";
+                  item.notarizationMoney = "*********";
+                }
                 if (item.notarizationEndTime != null) {
                   item.notarizationEndTime =
                     item.notarizationEndTime.substring(0, 10) +

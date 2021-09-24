@@ -94,7 +94,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -293,12 +292,17 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
-        console.log(111);
         await userQuery(this.userInfo).then((result) => {
           console.log(result);
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.userInfo.decryptFlag == 0) {
+                item.idCard = "*********";
+                item.remains = "*********";
+                item.storageSpace = "*********";
+                item.hasUsedStorage = "*********";
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;

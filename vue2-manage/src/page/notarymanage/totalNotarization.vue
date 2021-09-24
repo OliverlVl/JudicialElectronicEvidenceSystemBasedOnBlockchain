@@ -474,6 +474,11 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (this.notarization.decryptFlag == 0) {
+                  item.evidenceName = "*********";
+                  item.fileSize = "*********";
+                  item.notarizationMoney = "*********";
+                }
                 if (item.notarizationStartTime != null) {
                   item.notarizationStartTime =
                     item.notarizationStartTime.substring(0, 10) +
@@ -505,6 +510,11 @@ export default {
           await notarmanageRecord(this.notarization).then((result) => {
             if (result.status) {
               result.data.forEach((item) => {
+                if (this.notarization.decryptFlag == 0) {
+                  item.evidenceName = "*********";
+                  item.fileSize = "*********";
+                  item.notarizationMoney = "*********";
+                }
                 if (item.notarizationStartTime != null) {
                   item.notarizationStartTime =
                     item.notarizationStartTime.substring(0, 10) +
@@ -536,6 +546,11 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (this.notarization.decryptFlag == 0) {
+                  item.evidenceName = "*********";
+                  item.fileSize = "*********";
+                  item.notarizationMoney = "*********";
+                }
                 if (item.notarizationStartTime != null) {
                   item.notarizationStartTime =
                     item.notarizationStartTime.substring(0, 10) +

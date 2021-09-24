@@ -118,7 +118,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -330,6 +329,9 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.autMInfo.decryptFlag == 0) {
+                item.idCard = "********";
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;

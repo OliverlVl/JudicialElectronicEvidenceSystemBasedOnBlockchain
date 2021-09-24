@@ -369,6 +369,9 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if(this.notaryInfo.decryptFlag == 0){
+                item.idCard = "*********";
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
