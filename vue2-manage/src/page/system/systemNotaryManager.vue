@@ -6,6 +6,7 @@
         v-model="autMInfo.autNameWildcard"
         placeholder="请输入机构管理员名称"
         style="width: 390px; margin-left: 3%"
+        clearable
       >
         <el-button
           slot="append"
@@ -14,23 +15,46 @@
         ></el-button>
       </el-input>
       <el-button
-        type="primary"
+        type="danger"
         @click="searchVisible = true"
+        icon="el-icon-search"
         style="margin-left: 18px"
-        >高级搜索
+        plain
+      >
+        高级搜索
       </el-button>
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <el-dialog
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form label-width="200px">
+        <el-form-item label="机构管理员姓名:">
+          <el-input
+            v-model="autMInfo.autNameWildcard"
+            placeholder="请输入机构管理员姓名"
+            style="width: 240px"
+            clearable
+          ></el-input>
+        </el-form-item>
         <el-form-item label="机构管理员编号:">
           <el-input
             v-model="autMInfo.autManId"
             placeholder="请输入公证员编号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -39,6 +63,7 @@
             v-model="autMInfo.phoneNumberWildcard"
             placeholder="请输入手机号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -47,6 +72,7 @@
             v-model="autMInfo.idCard"
             placeholder="请输入身份证号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -55,14 +81,16 @@
             v-model="autMInfo.emailWildcard"
             placeholder="请输入邮箱"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="机构:">
+        <el-form-item label="所属机构:">
           <el-select
             v-model="autMInfo.organizationId"
             style="width: 240px"
-            placeholder="请选择"
+            placeholder="请选择所属机构"
+            clearable
           >
             <el-option
               v-for="item in orgName"
@@ -78,7 +106,8 @@
           <el-select
             v-model="autMInfo.sex"
             style="width: 240px"
-            placeholder="请选择"
+            placeholder="请选择性别"
+            clearable
           >
             <el-option
               v-for="item in sex_state"
@@ -90,16 +119,6 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -121,7 +140,7 @@
           prop="autManId"
         ></el-table-column>
         <el-table-column
-          label="机构管理员"
+          label="机构管理员姓名"
           align="center"
           prop="autName"
         ></el-table-column>
@@ -138,7 +157,6 @@
         <el-table-column
           label="性别"
           align="center"
-          width="100"
           prop="sex"
         ></el-table-column>
         <el-table-column
@@ -148,7 +166,6 @@
         ></el-table-column>
         <el-table-column
           label="身份证号"
-          width="200px"
           align="center"
           prop="idCard"
         ></el-table-column>
@@ -220,13 +237,13 @@ export default {
     async initData() {
       try {
         const orgQuery = {
-        organizationId: "none",
-        organizationIdNameWildcard: "none",
-        addressWildcard: "none",
-        phoneNumberWildcard: "none",
-        legalPeopleWildcard: "none",
-        emailWildcard: "none",
-      };
+          organizationId: "none",
+          organizationIdNameWildcard: "none",
+          addressWildcard: "none",
+          phoneNumberWildcard: "none",
+          legalPeopleWildcard: "none",
+          emailWildcard: "none",
+        };
         const query = {
           autManId: "none",
           autNameWildcard: "none",

@@ -3,9 +3,10 @@
     <head-top></head-top>
     <div class="search_container top-div-set">
       <el-input
-        v-model="evidence.evidenceNameWildcard"
-        placeholder="请输入证据名称"
+        v-model="evidence.usernameWildcard"
+        placeholder="请输入用户名称"
         style="width: 390px; margin-left: 3%"
+        clearable
       >
         <el-button
           slot="append"
@@ -15,17 +16,30 @@
       </el-input>
 
       <el-button
-        type="primary"
+        type="danger"
         @click="searchVisible = true"
+        icon="el-icon-search"
         style="margin-left: 18px"
-        >高级搜索
+        plain
+      >
+        高级搜索
       </el-button>
-      <!--<el-button @click="tryy()">尝试</el-button>-->
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <el-dialog
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form label-width="200px">
         <el-form-item label="存证时间:">
@@ -55,56 +69,39 @@
             placeholder="选择结束日期时间"
           ></el-date-picker>
         </el-form-item>
-
-        <el-form-item label="申请人:">
+        <el-form-item label="存证名称:">
+          <el-input
+            v-model="evidence.evidenceName"
+            placeholder="请输入存证名称"
+            style="width: 240px"
+            clearable
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="所属用户:">
           <el-input
             v-model="evidence.usernameWildcard"
-            placeholder="请输入申请人名称"
+            placeholder="请输入用户名称"
             style="width: 240px"
+            clearable
           ></el-input>
-        </el-form-item>
-
-        <el-form-item label="公证状态:">
-          <el-select
-            v-model="evidence.notarizationStatus"
-            style="width: 240px"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in notarization_state"
-              :key="item.state_value"
-              :label="item.state_label"
-              :value="item.state_value"
-            >
-            </el-option>
-          </el-select>
         </el-form-item>
 
         <el-form-item label="存证类型:">
           <el-select
             v-model="evidence.evidenceType"
             style="width: 240px"
-            placeholder="请选择"
+            placeholder="请选择存证类型"
+            clearable
           >
             <el-option
               v-for="item in evidence_type"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.evidenceType"
+              :label="item.evidenceTypeName"
+              :value="item.evidenceType"
             >
             </el-option>
           </el-select>
-        </el-form-item>
-
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
         </el-form-item>
 
       </el-form>
@@ -124,42 +121,48 @@
     <!-- 列表 -->
     <div class="table_container">
       <el-table :data="tableData" stripe style="width: 100%">
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="right" inline class="demo-table-expand">
-              <el-form-item label="文件哈希:">
-                <span>{{ props.row.fileHash }}</span>
-              </el-form-item>
-              <el-form-item label="证据保存区块ID:">
-                <span>{{ props.row.evidenceBlockchainId }}</span>
-              </el-form-item>
-              <el-form-item label="公证开始时间:">
-                <span>{{ props.row.notarizationStartTime }}</span>
-              </el-form-item>
-              <el-form-item label="公证金额:">
-                <span>{{ props.row.notarizationMoney }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
-        <el-table-column label="证据编号" align="center" prop="evidenceId"></el-table-column>
-        <el-table-column label="证据名称" align="center" prop="evidenceName"></el-table-column>
+        <el-table-column
+          label="存证编号"
+          align="center"
+          prop="evidenceId"
+        ></el-table-column>
+        <el-table-column
+          label="所属用户"
+          align="center"
+          prop="username"
+        ></el-table-column>
+        <el-table-column
+          label="存证名称"
+          align="center"
+          prop="evidenceName"
+        ></el-table-column>
+        <el-table-column
+          label="存证类型"
+          align="center"
+          prop="evidenceType"
+        ></el-table-column>
+        <el-table-column
+          label="存证时间"
+          align="center"
+          prop="evidenceTime"
+        ></el-table-column>
         <el-table-column
           label="上链时间"
-          align="center" 
+          align="center"
           prop="blockchainTime"
         ></el-table-column>
-        <el-table-column label="证据类型" align="center" prop="evidenceType"></el-table-column>
         <el-table-column
-          label="公证机构"
-          align="center" 
-          prop="organizationName"
+          label="存证区块链交易ID"
+          align="center"
+          prop="evidenceBlockchainId"
         ></el-table-column>
-        <el-table-column
-          label="公证状态"
-          align="center" 
-          prop="notarizationStatus"
-        ></el-table-column>
+        <el-table-column label="文件" align="center">
+          <template slot-scope="scope">
+            <el-button type="danger" size="small" @click="handleDown(scope.row)"
+              >点击下载</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页-->
       <div class="pagination">
@@ -219,45 +222,30 @@ export default {
       //存证类型选择器
       evidence_type: [
         {
-          label: "不限",
-          value: "none",
+          evidenceTypeName: "不限",
+          evidenceType: "none",
         },
       ],
       evidence: {
         evidenceId: "",
-        userId: "",
         usernameWildcard: "",
-        evidenceNameWildcard: "",
+        evidenceName: "",
         evidenceType: "",
         evidenceTimeStart: "none",
         evidenceTimeEnd: "none",
         blockchainTimeStart: "none",
         blockchainTimeEnd: "none",
-        notarizationStatus: "",
         decryptFlag: 1,
       },
       // 是否解密
       decrypt_flag: true,
       // 表格
-      tableData: [
-        {
-          evidenceId: "123456",
-          evidenceName: "房产证",
-          blockchainTime: "****/**/**",
-          evidenceType: "书面取证",
-          fileHash: "qwffsdfsadff",
-          evidenceBlockchainId: "654321",
-          organizationName: "111111",
-          notarizationStartTime: "****/**/**",
-          notarizationStatus: "审核成功",
-          notarizationMoney: 100,
-        },
-      ],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
-      autManId:"",
+      autManId: "",
     };
   },
   created() {
@@ -273,17 +261,15 @@ export default {
     async initData() {
       const query = {
         evidenceId: "none",
-        userId: "none",
         usernameWildcard: "none",
         fileSizeFloor: -1,
         fileSizeUpper: -1,
-        evidenceNameWildcard: "none",
+        evidenceName: "none",
         evidenceType: "none",
         evidenceTimeStart: "none",
         evidenceTimeEnd: "none",
         blockchainTimeStart: "none",
         blockchainTimeEnd: "none",
-        notarizationStatus: "none",
         decryptFlag: 1,
       };
       try {
@@ -306,7 +292,7 @@ export default {
             });
           }
         });
-        console.log(evidence_type);
+        console.log(this.evidence_type);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -343,6 +329,7 @@ export default {
           }
         });
         this.resetData();
+        console.log(this.tableData);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -353,25 +340,17 @@ export default {
         if (this.evidence.evidenceId == "") {
           this.evidence.evidenceId = "none";
         }
-        //用户编号
-        if (this.evidence.userId == "") {
-          this.evidence.userId = "none";
-        }
         //用户名
         if (this.evidence.usernameWildcard == "") {
           this.evidence.usernameWildcard = "none";
         }
         //存证名称
-        if (this.evidence.evidenceNameWildcard == "") {
-          this.evidence.evidenceNameWildcard = "none";
+        if (this.evidence.evidenceName == "") {
+          this.evidence.evidenceName = "none";
         }
         //存证类型
         if (this.evidence.evidenceType == "") {
           this.evidence.evidenceType = "none";
-        }
-        //公证状态
-        if (this.evidence.notarizationStatus == "") {
-          this.evidence.notarizationStatus = "none";
         }
         //加解密
         if (this.decrypt_flag) {
@@ -380,16 +359,16 @@ export default {
           this.evidence.decryptFlag = 0;
         }
         //时间
-        if (this.evidenceTimeStart != "none") {
+        if (this.timeValue1 != "") {
           this.evidence.evidenceTimeStart = this.timeValue1.getTime();
         }
-        if (this.blockchainTimeStart != "none") {
+        if (this.timeValue2 != "") {
           this.evidence.blockchainTimeStart = this.timeValue2.getTime();
         }
-        if (this.evidenceTimeEnd != "none") {
+        if (this.timeValue3 != "") {
           this.evidence.evidenceTimeEnd = this.timeValue3.getTime();
         }
-        if (this.blockchainTimeStart != "none") {
+        if (this.timeValue4 != "") {
           this.evidence.blockchainTimeEnd = this.timeValue4.getTime();
         }
         //alert(this.evidence.evidenceTimeEnd);
@@ -403,25 +382,17 @@ export default {
         if (this.evidence.evidenceId == "none") {
           this.evidence.evidenceId = "";
         }
-        //用户编号
-        if (this.evidence.userId == "none") {
-          this.evidence.userId = "";
-        }
         //用户名
         if (this.evidence.usernameWildcard == "none") {
           this.evidence.usernameWildcard = "";
         }
         //存证名称
-        if (this.evidence.evidenceNameWildcard == "none") {
-          this.evidence.evidenceNameWildcard = "";
+        if (this.evidence.evidenceName == "none") {
+          this.evidence.evidenceName = "";
         }
         //存证类型
         if (this.evidence.evidenceType == "none") {
           this.evidence.evidenceType = "";
-        }
-        //公证状态
-        if (this.evidence.notarizationStatus == "none") {
-          this.evidence.notarizationStatus = "";
         }
       } catch (error) {
         throw new Error(error.message);
@@ -442,6 +413,12 @@ export default {
         return "";
       }
     },
+
+    // 文件下载
+    async handleDown(row) {
+      window.location.href =
+        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+    },
   },
 };
 </script>
@@ -449,13 +426,13 @@ export default {
 <style lang="less">
 @import "../../style/mixin";
 .search_container {
-   padding: 20px;
+  padding: 20px;
 }
 .demo-table-expand {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 120px;
+  width: 160px;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
@@ -501,6 +478,6 @@ export default {
   text-decoration: underline;
 }
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

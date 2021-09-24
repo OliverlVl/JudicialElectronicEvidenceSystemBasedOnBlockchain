@@ -4,8 +4,9 @@
     <div class="search_container top-div-set">
       <el-input
         v-model="notaryInfo.notaryNameWildcard"
-        placeholder="请输入公证员"
+        placeholder="请输入公证员名"
         style="width: 390px; margin-left: 3%"
+        clearable
       >
         <el-button
           slot="append"
@@ -14,24 +15,63 @@
         ></el-button>
       </el-input>
       <el-button
-        type="primary"
+        type="danger"
         @click="searchVisible = true"
+        icon="el-icon-search"
         style="margin-left: 18px"
-        >高级搜索
+        plain
+      >
+        高级搜索
       </el-button>
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <el-dialog
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form label-width="200px">
+        <el-form-item label="公证员名:">
+          <el-input
+            v-model="notaryInfo.notaryNameWildcard"
+            placeholder="请输入公证员名"
+            style="width: 240px"
+            clearable
+          ></el-input>
+        </el-form-item>
         <el-form-item label="公证员编号:">
           <el-input
             v-model="notaryInfo.notaryId"
             placeholder="请输入公证员编号"
             style="width: 240px"
+            clearable
           ></el-input>
+        </el-form-item>
+
+        <el-form-item label="公证类型:">
+          <el-select
+            v-model="notaryInfo.notarizationType"
+            style="width: 240px"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in notarization_type"
+              :key="item.notarizationTypeId"
+              :label="item.notarizationType"
+              :value="item.notarizationType"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="手机号:">
@@ -39,6 +79,7 @@
             v-model="notaryInfo.phoneNumberWildcard"
             placeholder="请输入手机号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -47,6 +88,7 @@
             v-model="notaryInfo.jobNumberWildcard"
             placeholder="请输入工号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -55,6 +97,7 @@
             v-model="notaryInfo.idCard"
             placeholder="请输入身份证号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -63,6 +106,7 @@
             v-model="notaryInfo.emailWildcard"
             placeholder="请输入邮箱"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -71,6 +115,7 @@
             v-model="notaryInfo.sex"
             style="width: 240px"
             placeholder="请选择"
+            clearable
           >
             <el-option
               v-for="item in sex_state"
@@ -82,32 +127,6 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="公证类型:">
-          <el-select
-            v-model="notaryInfo.notarizationType"
-            style="width: 240px"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in notarizationType_state"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -149,12 +168,8 @@
           label="公证员"
           align="center"
           prop="notaryName"
-        ></el-table-column>       
-        <!-- <el-table-column
-          label="公证机构"
-          prop="organizationId"
-          align="center"
-        ></el-table-column> -->
+        ></el-table-column>
+
         <el-table-column
           label="公证类型"
           width="150px"
@@ -201,14 +216,14 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { notaQuery } from "@/api/getData";
+import { notaQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
       searchVisible: false,
       decrypt_flag: true,
       // 表格
-      tableData: [{}],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -225,6 +240,7 @@ export default {
         sex: "",
         notarizationType: "",
         decryptFlag: 1,
+        organizationId: sessionStorage.getItem("organizationId"),
       },
       sex_state: [
         {
@@ -236,10 +252,10 @@ export default {
           value: "1",
         },
       ],
-      notarizationType_state: [
+      notarization_type: [
         {
-          label: "不限",
-          value: "none",
+          notarizationTypeId: "none",
+          notarizationType: "不限",
         },
       ],
       autManId: "",
@@ -268,6 +284,7 @@ export default {
           sex: "none",
           notarizationType: "none",
           decryptFlag: 1,
+          organizationId: sessionStorage.getItem("organizationId"),
         };
         await notaQuery(query).then((result) => {
           if (result.status) {
@@ -278,6 +295,16 @@ export default {
             this.pageTotal = this.tableData.length;
           } else {
             throw new Error("获取数据失败");
+          }
+        });
+        console.log(this.tableData);
+        //获取公证类型
+        await noTypeQuery().then((typeres) => {
+          if (typeres.status) {
+            typeres.data.forEach((item) => {
+              this.notarization_type.push(item);
+            });
+            console.log(this.notarization_type);
           }
         });
       } catch (error) {
@@ -320,7 +347,10 @@ export default {
         this.notaryInfo.sex = "none";
       }
       //公证类型
-      if (this.notaryInfo.notarizationType == "") {
+      if (
+        this.notaryInfo.notarizationType == "" ||
+        this.notaryInfo.notarizationType == "不限"
+      ) {
         this.notaryInfo.notarizationType = "none";
       }
       //加解密

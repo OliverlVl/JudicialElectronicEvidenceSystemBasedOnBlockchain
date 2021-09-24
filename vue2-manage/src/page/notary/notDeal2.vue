@@ -15,17 +15,30 @@
       </el-input>
 
       <el-button
-        type="primary"
+        type="danger"
         @click="searchVisible = true"
+        icon="el-icon-search"
         style="margin-left: 18px"
-        >高级搜索
+        plain
+      >
+        高级搜索
       </el-button>
-      <!--<el-button @click="tryy()">尝试</el-button>-->
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <el-dialog
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form label-width="200px">
         <el-form-item label="存证名称:">
@@ -87,16 +100,6 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -158,7 +161,7 @@
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
               <el-form-item label="文件大小:">
-                <span>{{ props.row.fileSize }}</span>
+                <span>{{ props.row.fileSize }} KB</span>
               </el-form-item>
               <el-form-item label="文件哈希值:">
                 <span>{{ props.row.fileHash }}</span>
@@ -221,8 +224,8 @@
             <el-button
               size="small"
               type="primary"
-              @click="Watch(scope.row.evidenceId)"
-              >查看</el-button
+              @click="handleDown(scope.row)"
+              >下载</el-button
             >
             <el-button
               size="small"
@@ -461,13 +464,10 @@ export default {
         alert("操作失败" + result.message);
       }
     },
-    // 下载查看
-    async Watch(evidenceId) {
-      let result = await watchFile(evidenceId);
-      if (result.status == true) {
-      } else {
-        alert("操作失败" + result.message);
-      }
+    // 文件下载
+    async handleDown(row) {
+      window.location.href =
+        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
     },
     async handleSearch() {
       try {

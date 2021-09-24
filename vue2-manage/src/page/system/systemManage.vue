@@ -27,7 +27,8 @@
             <template slot="title"
               ><i class="el-icon-date"></i>记录查询</template
             >
-            <el-menu-item index="systemNotarization">公证记录</el-menu-item>
+            <el-menu-item index="systemNotarization">处理中公证记录</el-menu-item>
+            <el-menu-item index="systemNotarizationApply">已处理公证记录</el-menu-item>
             <el-menu-item index="systemEvidence">存证记录</el-menu-item>
 						<el-menu-item index="systemTrace">交易记录</el-menu-item>
           </el-submenu>

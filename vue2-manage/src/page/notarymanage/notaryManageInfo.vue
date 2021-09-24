@@ -8,6 +8,7 @@
           v-model="initInfor.autName"
           placeholder="请输入用户名"
           style="width: 440px"
+          :disabled="update"
         ></el-input>
       </el-form-item>
 
@@ -34,15 +35,17 @@
           v-model="initInfor.phoneNumber"
           placeholder="请输入手机号"
           style="width: 440px"
+          :disabled="update"
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="密码:" prop="pass" style="margin-bottom: 3.5%">
+      <el-form-item label="新密码:" prop="pass" style="margin-bottom: 3.5%">
         <el-input
-          v-model="initInfor.password"
+          v-model="initInfor.newPassword"
           placeholder="请输入密码"
           style="width: 440px"
           show-password
+          :disabled="update"
         ></el-input>
       </el-form-item>
 
@@ -51,6 +54,7 @@
           v-model="initInfor.email"
           placeholder="请输入邮箱"
           style="width: 440px"
+          :disabled="update"
         ></el-input>
       </el-form-item>
       <el-form-item label="性别:" prop="sex" style="margin-bottom: 3.5%">
@@ -58,6 +62,8 @@
           :popper-append-to-body="false"
           v-model="initInfor.sex"
           placeholder="请选择"
+          :disabled="update"
+           style="width: 440px"
         >
           <el-option
             v-for="item in sex"
@@ -68,11 +74,43 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item>
+        <el-button
+        id="updateId"
+        type="primary"
+        @click="
+          update = false;
+          updateVisible();
+        "
+        style="display: inline; width: 440px"
+        >修改</el-button
+      >
+      <el-button
+        id="cancelId"
+        type="primary"
+        @click="
+          update = true;
+          cancelAndSubmitVisible();
+        "
+        style="display: none; width: 205px"
+        >取消</el-button
+      >
+      <el-button
+        id="submitId"
+        type="primary"
+        @click="
+          update = true;
+          cancelAndSubmitVisible();
+          SubmitInfo();
+        "
+        style="display: none; width: 205px"
+        >保存</el-button
+      >
+      </el-form-item>
     </el-form>
-
-    <div class="table_container" style="margin-left: 45%">
-      <el-button type="primary" @click="SubmitInfo()">提交</el-button>
-    </div>
+    
+      
+  
   </div>
 </template>
 
@@ -85,6 +123,7 @@ export default {
     return {
       autManId: "",
       changeVisible: false,
+      update: true,
       oldPass: "",
       newPass: "",
       /*
@@ -143,6 +182,18 @@ export default {
     headTop,
   },
   methods: {
+    // 按钮可视化
+    updateVisible() {
+      document.getElementById("updateId").style.display = "none";
+      document.getElementById("cancelId").style.display = "inline";
+      document.getElementById("submitId").style.display = "inline";
+    },
+    cancelAndSubmitVisible() {
+      document.getElementById("updateId").style.display = "inline";
+      document.getElementById("cancelId").style.display = "none";
+      document.getElementById("submitId").style.display = "none";
+    },
+
     // 初始化数据
     async initData() {
       try {
@@ -175,23 +226,14 @@ export default {
     // 提交
     async SubmitInfo() {
       try {
-        const submitInfo = {
-          autManId: sessionStorage.getItem("autManId"),
-          phoneNumber: this.initInfor.phoneNumber,
-          email: this.initInfor.email,
-          newPassword: this.initInfor.password,
-          idCard:this.initInfor.idCard,
-          organizationId:this.initInfor.organizationId,
-          sex: this.initInfor.sex,
-        };
-        if (submitInfo.sex == "男") {
-          submitInfo.sex = "0";
+        
+        if (this.initInfor.sex == "男") {
+          this.initInfor.sex = "0";
         } else {
-          submitInfo.sex = "1";
+          this.initInfor.sex = "1";
         }
-        console.log("1111111");
-        console.log(submitInfo);
-        await autUpdate(submitInfo).then((result) => {
+        
+        await autUpdate(this.initInfor).then((result) => {
           if (result.status) {
             alert("修改成功");
           } else {

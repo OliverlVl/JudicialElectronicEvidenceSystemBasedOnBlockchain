@@ -15,13 +15,24 @@
       </el-input>
 
       <el-button
-        type="primary"
+        type="danger"
         @click="searchVisible = true"
+        icon="el-icon-search"
         style="margin-left: 18px"
-        >高级搜索
+        plain
+      >
+        高级搜索
       </el-button>
-      <!--<el-button @click="tryy()">尝试</el-button>-->
-      <!-- <el-divider style="color:red"></el-divider> -->
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <el-dialog
       title="高级搜索"
@@ -89,16 +100,6 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -125,7 +126,7 @@
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
               <el-form-item label="文件大小:">
-                <span>{{ props.row.fileSize }}</span>
+                <span>{{ props.row.fileSize }} KB</span>
               </el-form-item>
               <el-form-item label="存证编号:">
                 <span>{{ props.row.evidenceId }}</span>

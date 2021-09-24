@@ -14,18 +14,39 @@
         ></el-button>
       </el-input>
       <el-button
-        type="primary"
+        type="danger"
         @click="searchVisible = true"
+        icon="el-icon-search"
         style="margin-left: 18px"
-        >高级搜索
+        plain
+      >
+        高级搜索
       </el-button>
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <el-dialog
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form label-width="200px">
+        <el-form-item label="用户名:">
+          <el-input
+            v-model="userInfo.usernameWildcard"
+            placeholder="请输入用户名"
+            style="width: 240px"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="用户编号:">
           <el-input
             v-model="userInfo.userId"
@@ -74,16 +95,6 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -138,13 +149,11 @@
           width="100px"
           prop="hasUsedStorage"
         ></el-table-column>
+        <el-table-column label="/" align="center" width="20px"
+          >/</el-table-column
+        >
         <el-table-column
-          label="/"
-          align="center"
-          width="20px"
-        >/</el-table-column>
-        <el-table-column
-          label="存储空间"
+          label="总存储空间"
           align="left"
           width="100px"
           prop="storageSpace"
@@ -179,6 +188,7 @@ export default {
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
+      telephone: "",
       //用户信息
       userInfo: {
         userId: "",
@@ -199,12 +209,12 @@ export default {
           value: "1",
         },
       ],
-      manId: "",
+      autManId: "",
       // 加解密
     };
   },
   created() {
-    this.manId = localStorage.getItem("manId");
+    this.autManId = localStorage.getItem("autManId");
     this.initData();
   },
   computed: {},
@@ -232,9 +242,10 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            console.log("获取数据失败");
+            throw new Error("获取数据失败");
           }
         });
+        console.log(this.tableData);
       } catch (error) {
         throw new Error(error.message);
       }
@@ -282,7 +293,9 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
+        console.log(111);
         await userQuery(this.userInfo).then((result) => {
+          console.log(result);
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -290,12 +303,12 @@ export default {
             });
             this.pageTotal = this.tableData.length;
           } else {
-            console.log("获取数据失败");
+            throw new Error("获取数据失败");
           }
         });
         this.resetData();
       } catch (error) {
-        console.log(error.message);
+        throw new Error(error.message);
       }
     },
     resetData() {
@@ -339,13 +352,26 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 120px;
-  color: #99a9bf;
+  width: 35%;
+  color: #000000;
+  background-color: rgba(148, 224, 243, 0.15);
+  border-top: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
 }
 .demo-table-expand .el-form-item {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
+}
+.demo-table-expands {
+  font-size: 20px;
+  margin-bottom: 0%;
+}
+.demo-table-expands label {
+  width: 120px;
+  color: #000000;
+  font-size: 15px;
 }
 .table_container {
   padding: 20px;
@@ -385,6 +411,6 @@ export default {
   text-decoration: underline;
 }
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

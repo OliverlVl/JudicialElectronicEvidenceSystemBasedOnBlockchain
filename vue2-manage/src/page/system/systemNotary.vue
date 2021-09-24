@@ -4,8 +4,9 @@
     <div class="search_container top-div-set">
       <el-input
         v-model="notaryInfo.notaryNameWildcard"
-        placeholder="请输入公证员"
+        placeholder="请输入公证员名"
         style="width: 390px; margin-left: 3%"
+        clearable
       >
         <el-button
           slot="append"
@@ -14,24 +15,63 @@
         ></el-button>
       </el-input>
       <el-button
-        type="primary"
+        type="danger"
         @click="searchVisible = true"
+        icon="el-icon-search"
         style="margin-left: 18px"
-        >高级搜索
+        plain
+      >
+        高级搜索
       </el-button>
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <el-dialog
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form label-width="200px">
+        <el-form-item label="公证员名:">
+          <el-input
+            v-model="notaryInfo.notaryNameWildcard"
+            placeholder="请输入公证员名"
+            style="width: 240px"
+            clearable
+          ></el-input>
+        </el-form-item>
         <el-form-item label="公证员编号:">
           <el-input
             v-model="notaryInfo.notaryId"
             placeholder="请输入公证员编号"
             style="width: 240px"
+            clearable
           ></el-input>
+        </el-form-item>
+
+        <el-form-item label="公证类型:">
+          <el-select
+            v-model="notaryInfo.notarizationType"
+            style="width: 240px"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in notarization_type"
+              :key="item.notarizationTypeId"
+              :label="item.notarizationType"
+              :value="item.notarizationType"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="手机号:">
@@ -39,6 +79,7 @@
             v-model="notaryInfo.phoneNumberWildcard"
             placeholder="请输入手机号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -47,6 +88,7 @@
             v-model="notaryInfo.jobNumberWildcard"
             placeholder="请输入工号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -55,6 +97,7 @@
             v-model="notaryInfo.idCard"
             placeholder="请输入身份证号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -63,6 +106,7 @@
             v-model="notaryInfo.emailWildcard"
             placeholder="请输入邮箱"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -71,6 +115,7 @@
             v-model="notaryInfo.sex"
             style="width: 240px"
             placeholder="请选择"
+            clearable
           >
             <el-option
               v-for="item in sex_state"
@@ -82,32 +127,6 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="公证类型:">
-          <el-select
-            v-model="notaryInfo.notarizationType"
-            style="width: 240px"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in notarization_type"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-          </el-switch>
-        </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -126,36 +145,28 @@
         <el-table-column
           label="公证员编号"
           align="center"
-          width="140px"
           prop="notaryId"
         ></el-table-column>
         <el-table-column
           label="公证员"
           align="center"
-          width="140px"
           prop="notaryName"
         ></el-table-column>
-        <!-- <el-table-column
-          label="工号"
-          width="100px"
-          align="center"
-          prop="jobNumber"
-        ></el-table-column> -->
         <el-table-column
           label="所属公证机构"
-          width="180px"
           align="center"
-          prop="organizationId"
+          prop="organizationName"
         ></el-table-column>
+
         <el-table-column
           label="公证类型"
-          width="100px"
+          width="150px"
           align="center"
           prop="notarizationType"
         ></el-table-column>
         <el-table-column
           label="性别"
-          width="80px"
+          width="100px"
           align="center"
           prop="sex"
         ></el-table-column>
@@ -172,11 +183,9 @@
         ></el-table-column>
         <el-table-column
           label="邮箱"
-          width="180px"
           align="center"
           prop="email"
         ></el-table-column>
-        
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -202,20 +211,12 @@ export default {
       searchVisible: false,
       decrypt_flag: true,
       // 表格
-      tableData: [
-        {
-          jobNumber:"001",
-          notarizationType:"房产证公证",
-          email: "29*********@163.com",
-          sex: "男",
-          idCard: "350103xxxxxxxxxxxx",
-          phoneNumber: "135********",
-        },
-      ],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
       pageSize: 10,
+      telephone: "",
       //用户信息
       notaryInfo: {
         notaryId: "",
@@ -240,16 +241,16 @@ export default {
       ],
       notarization_type: [
         {
-          label: "不限",
-          value: "none",
+          notarizationTypeId: "none",
+          notarizationType: "不限",
         },
       ],
-      manId: "",
+      autManId: "",
       // 加解密
     };
   },
   created() {
-    this.manId = localStorage.getItem("manId");
+    this.autManId = localStorage.getItem("autManId");
     this.initData();
   },
   computed: {},
@@ -282,12 +283,14 @@ export default {
             throw new Error("获取数据失败");
           }
         });
+        console.log(this.tableData);
         //获取公证类型
         await noTypeQuery().then((typeres) => {
           if (typeres.status) {
             typeres.data.forEach((item) => {
               this.notarization_type.push(item);
             });
+            console.log(this.notarization_type);
           }
         });
       } catch (error) {
@@ -330,7 +333,10 @@ export default {
         this.notaryInfo.sex = "none";
       }
       //公证类型
-      if (this.notaryInfo.notarizationType == "") {
+      if (
+        this.notaryInfo.notarizationType == "" ||
+        this.notaryInfo.notarizationType == "不限"
+      ) {
         this.notaryInfo.notarizationType = "none";
       }
       //加解密
@@ -345,7 +351,7 @@ export default {
     async handleSearch() {
       try {
         this.dealData();
-        await userQuery(this.notaryInfo).then((result) => {
+        await notaQuery(this.notaryInfo).then((result) => {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -406,17 +412,15 @@ export default {
 .search_container {
   padding: 20px;
 }
-.demo-table-expand {
-  font-size: 0;
+.demo-table-expands {
+  font-size: 20px;
+  margin-bottom: 0%;
 }
-.demo-table-expand label {
+.demo-table-expands label {
   width: 120px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
+  color: #000000;
+
+  font-size: 15px;
 }
 .table_container {
   padding: 20px;
@@ -449,11 +453,13 @@ export default {
   height: 120px;
   display: block;
 }
+
 .a-style {
   color: #0500ee;
   cursor: pointer;
   text-decoration: underline;
 }
+
 .top-div-set {
   background: rgba(196, 196, 196, 0.5);
 }

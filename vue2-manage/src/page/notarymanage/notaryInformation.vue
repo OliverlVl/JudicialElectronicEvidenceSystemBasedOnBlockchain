@@ -22,6 +22,7 @@
       title="新增公证类型"
       :visible.sync="createTypeVisible"
       style="width: 60%; margin: 0 auto"
+      :append-to-body="true"
     >
       <el-form
         ref="createTypeData"
@@ -55,6 +56,7 @@
       title="修改公证类型"
       :visible.sync="updateTypeVisible"
       style="width: 60%; margin: 0 auto"
+      :append-to-body="true"
     >
       <el-form
         ref="updateTypeData"
@@ -135,24 +137,25 @@
     </el-dialog>
 
     <div class="info_container">
+      <el-col :span="12" :offset="2">
       <el-form
         :model="uploadData"
         :rules="rules"
         ref="uploadData"
-        label-width="30%"
+        label-width="50%"
         class="demo-formData"
       >
         <el-form-item label="公证类型" prop="notarizationType">
           <el-select
             v-model="uploadData.notarizationType"
-            style="width: 30%"
+            style="width: 100%"
             placeholder="请选择公证类型"
           >
             <el-option
               v-for="item in notarizationType"
               :key="item.notarizationTypeId"
               :label="item.notarizationType"
-              :value="item.notarizationTypeId"
+              :value="item.notarizationType"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -183,6 +186,7 @@
           <el-button @click="resetForm('uploadData')">重置</el-button>
         </el-form-item>
       </el-form>
+      </el-col>
       <div></div>
     </div>
   </div>
@@ -196,6 +200,7 @@ import {
   updateMoney,
   noTypeQuery,
 } from "@/api/getData";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -420,8 +425,7 @@ export default {
     submitForm() {
       this.formData = new FormData();
       this.$refs.upload.submit(); // 必须设置，这样才会上次文件，触发uploadFile()函数
-      this.formData.append("evidenceType", this.uploadData.evidenceType);
-      this.formData.append("evidenceName", this.uploadData.evidenceName);
+      this.formData.append("notarizationType", this.uploadData.notarizationType);
       this.$refs.uploadData.validate((valid) => {
         if (valid) {
           if (!this.isuploadfile) {
@@ -441,7 +445,7 @@ export default {
             };
             axios.defaults.baseURL = "http://127.0.0.1:8080";
             axios
-              .post("/aut/uplaodMaterial", this.formData, config)
+              .post("/aut/uploadMaterialFile", this.formData, config)
               .then((res) => {
                 let data = res.data;
                 if (data.status) {

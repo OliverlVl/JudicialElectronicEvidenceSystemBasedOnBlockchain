@@ -44,7 +44,8 @@ const systemManage = r => require.ensure([], () => r(require('@/page/system/syst
 const systemUser = r => require.ensure([], () => r(require('@/page/system/systemUser')), 'systemUser');//用户列表
 const systemNotary = r => require.ensure([], () => r(require('@/page/system/systemNotary')), 'systemNotary');//公证员列表
 const systemNotaryManager = r => require.ensure([], () => r(require('@/page/system/systemNotaryManager')), 'systemNotaryManager');//公证管理员列表
-const systemNotarization = r => require.ensure([], () => r(require('@/page/system/systemNotarization')), 'systemNotarization');//公证记录
+const systemNotarization = r => require.ensure([], () => r(require('@/page/system/systemNotarization')), 'systemNotarization');//处理中公证记录
+const systemNotarizationApply = r => require.ensure([], () => r(require('@/page/system/systemNotarizationApply')), 'systemNotarizationApply');//已处理公证记录
 const systemEvidence = r => require.ensure([], () => r(require('@/page/system/systemEvidence')), 'systemEvidence');//存证记录
 const systemTrace = r => require.ensure([], () => r(require('@/page/system/systemTrace')), 'systemTrace');//交易记录
 const systemManageInfo = r => require.ensure([], () => r(require('@/page/system/systemManageInfo')), 'systemManageInfo');//个人信息
@@ -209,7 +210,11 @@ const routes = [
 	}, {
 		path: '/systemNotarization',
 		component: systemNotarization,
-		meta: ['记录查询', '公证记录'],
+		meta: ['记录查询', '处理中公证记录'],
+	},{
+		path: '/systemNotarizationApply',
+		component: systemNotarizationApply,
+		meta: ['记录查询', '已处理公证记录'],
 	},{
 		path: '/systemEvidence',
 		component: systemEvidence,

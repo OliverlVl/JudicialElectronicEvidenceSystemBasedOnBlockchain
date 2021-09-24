@@ -794,6 +794,8 @@ export default {
           await autManagerLogin(this.autManagerLoginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("autManId", result.autManId);
+              sessionStorage.setItem("organizationId", result.organizationId);
+              console.log(result)
               this.$message({
                 type: "success",
                 message: "登入成功",

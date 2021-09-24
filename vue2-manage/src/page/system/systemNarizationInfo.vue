@@ -37,7 +37,7 @@
             <el-button
               type="primary"
               size="small"
-              @click="downloadMaterial(scope.row.MaterialId)"
+              @click="downloadMaterial(scope.row)"
               >下载文件</el-button
             >
           </template>
@@ -78,9 +78,7 @@ export default {
         { organization_id: "2", organization_name: "厦门公证处" },
       ],
       orgMaterialList: [
-        { notarizationType: "出生证材料" },
-        { notarizationType: "房产证材料" },
-        { notarizationType: "驾驶证材料" },
+
       ],
       // 获取数据
       pageTotal: 0,
@@ -124,34 +122,29 @@ export default {
       }
     },
     //查询申请材料
-    notarizationMaterialQuery() {
+    async notarizationMaterialQuery() {
       const query = {
         organizationId: this.organizationId,
       };
-      console.log(query.organizationId);
-      notarizationMaterial(query).then((result) => {
-        console.log(query.organizationId);
+      await notarizationMaterial(query).then((result) => {
         if (result.status) {
+          console.log(result)
           this.orgMaterialList = [];
           result.data.forEach((item) => {
             this.orgMaterialList.push(item);
           });
-          
         } else {
           console.log("获取材料失败");
         }
       });
+
     },
-    downloadMaterial(materialId) {
-      const query = {
-        MaterialId: materialId,
-      };
-      downloadMaterialFile(query).then((result) => {
-        if (result.status) {
-        } else {
-          console.log("下载材料失败");
-        }
-      });
+
+    downloadMaterial(row) {
+      console.log(row)
+      window.location.href =
+        "http://localhost:8080/downloadMaterialFile?materialId=" + row.materialId;
+      
     },
     // 处理导航页
     handlePageChange(val) {

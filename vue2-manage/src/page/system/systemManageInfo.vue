@@ -7,16 +7,16 @@
       style="margin-left: 20%; margin-top: 35px"
       :rules="rules"
     >
-      <el-form-item label="姓名:" style="margin-bottom:3.5%">
+      <el-form-item label="姓名:" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.username"
           placeholder="请输入姓名"
           style="width: 440px"
-          :disabled="true"
+          :disabled="update"
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="编号:" style="margin-bottom:3.5%">
+      <el-form-item label="编号:" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.manId"
           placeholder="请输入编号"
@@ -25,49 +25,80 @@
         ></el-input>
       </el-form-item>
 
-
-      <el-form-item label="手机号:" prop="phone" style="margin-bottom:3.5%"> 
+      <el-form-item label="手机号:" prop="phone" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.phoneNumber"
           placeholder="请输入手机号"
           style="width: 440px"
+          :disabled="update"
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="密码:" prop="pass" style="margin-bottom:3.5%">
+      <el-form-item label="密码:" prop="pass" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.password"
           placeholder="请输入密码"
           style="width: 440px"
+          :disabled="update"
           show-password
         ></el-input>
       </el-form-item>
 
-      <el-form-item label="邮箱:" prop="emails" style="margin-bottom:3.5%">
+      <el-form-item label="邮箱:" prop="emails" style="margin-bottom: 3.5%">
         <el-input
           v-model="initInfor.email"
           placeholder="请输入邮箱"
           style="width: 440px"
+          :disabled="update"
         ></el-input>
       </el-form-item>
-
+      <el-form-item>
+        <el-button
+          id="updateId"
+          type="primary"
+          @click="
+            update = false;
+            updateVisible();
+          "
+          style="display: inline; width: 440px"
+          >修改</el-button
+        >
+        <el-button
+          id="cancelId"
+          type="primary"
+          @click="
+            update = true;
+            cancelAndSubmitVisible();
+          "
+          style="display: none; width: 205px"
+          >取消</el-button
+        >
+        <el-button
+          id="submitId"
+          type="primary"
+          @click="
+            update = true;
+            cancelAndSubmitVisible();
+            SubmitInfo();
+          "
+          style="display: none; width: 205px"
+          >保存</el-button
+        >
+      </el-form-item>
     </el-form>
-
-    <div class="table_container" style="margin-left: 45%">
-      <el-button type="primary" @click="SubmitInfo()">提交</el-button>
-    </div>
   </div>
 </template>
 
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { notaQuery, noTypeQuery, notarregist } from "@/api/getData";
+import { notaQuery, noTypeQuery, notarregist, sysQuery } from "@/api/getData";
 export default {
   data() {
     return {
-      manId:"",
+      manId: "",
       changeVisible: false,
+      update: true,
       oldPass: "",
       newPass: "",
       info: {
@@ -122,17 +153,27 @@ export default {
     this.initData();
     //this.oldPass = this.initInfor.password;
   },
-  computed: {
-  },
+  computed: {},
   components: {
     headTop,
   },
   methods: {
+    // 按钮可视化
+    updateVisible() {
+      document.getElementById("updateId").style.display = "none";
+      document.getElementById("cancelId").style.display = "inline";
+      document.getElementById("submitId").style.display = "inline";
+    },
+    cancelAndSubmitVisible() {
+      document.getElementById("updateId").style.display = "inline";
+      document.getElementById("cancelId").style.display = "none";
+      document.getElementById("submitId").style.display = "none";
+    },
     // 初始化数据
     async initData() {
       try {
         const query = {
-          manId: this.manId,
+          manId: sessionStorage.getItem("manId"),
         };
         await sysQuery(query).then((result) => {
           if (result.status) {

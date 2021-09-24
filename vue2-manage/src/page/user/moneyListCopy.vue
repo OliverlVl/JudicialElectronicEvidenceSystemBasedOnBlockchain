@@ -15,13 +15,30 @@
         ></el-option>
       </el-select>
       <el-button
+      
         slot="append"
         icon="el-icon-search"
         @click="getTransactionData()"
       ></el-button>
-      <el-button type="primary" @click="searchVisible = true">
+      <el-button
+        type="danger"
+        @click="searchVisible = true"
+        icon="el-icon-search"
+        style="margin-left: 18px"
+        plain
+      >
         高级搜索
       </el-button>
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <div class="table_container">
       <el-table :data="tableData" style="width: 100%" stripe>
@@ -82,7 +99,7 @@
       :append-to-body="true"
     >
       <el-form ref="transaction" :model="transaction" label-width="200px">
-        <el-form-item label="交易类型" prop="transactionType">
+        <el-form-item label="交易类型">
           <el-select
             v-model="transaction.transactionType"
             style="width: 37.5%"
@@ -135,17 +152,7 @@
             style="width: 55%"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="明文/密文显示">
-          <el-switch
-            v-model="decrypt_flag"
-            active-text="明文"
-            inactive-text="密文"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          >
-            ></el-switch
-          >
-        </el-form-item>
+        
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -167,7 +174,7 @@ export default {
       transaction: {
         userId: sessionStorage.getItem("userId"),
         // 交易类型
-        transactionType: "none",
+        transactionType: "",
         //交易金额
         // 加解密：1 解密 0 加密
         decryptFlag: 1,
@@ -216,6 +223,10 @@ export default {
       // 交易类型
       transactionType: [
         {
+          value: "none",
+          label: "不限",
+        },
+        {
           value: "0",
           label: "充值",
         },
@@ -239,13 +250,6 @@ export default {
 
       // 表格
       tableData: [
-        {
-          blockchainTime: "",
-          transactionPeople: "/",
-          storageSize: "/",
-        },
-        {},
-        {},
       ],
       // 获取数据
       pageTotal: 0,
@@ -326,8 +330,9 @@ export default {
           this.transaction.transactionMoneyFloor = this.transactionMoneyFloor;
           this.transaction.transactionMoneyUpper = this.transactionMoneyUpper;
         }
-
-        if (this.decrypt_flag == false) {
+        if(this.decrypt_flag){
+          this.transaction.decryptFlag = 1;
+        }else{
           this.transaction.decryptFlag = 0;
         }
         // 请求数据
@@ -356,10 +361,12 @@ export default {
                 item.transactionPeople =
                   item.transactionPeople == "null" ? "null" : "******";
               }
-              item.transactionTime =
-                item.transactionTime.substring(0, 10) +
-                " " +
-                item.transactionTime.substring(11, 19);
+              if (item.transactionTime != null) {
+                item.transactionTime =
+                  item.transactionTime.substring(0, 10) +
+                  " " +
+                  item.transactionTime.substring(11, 19);
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -390,6 +397,7 @@ export default {
 @import "../../style/mixin";
 .search_container {
   padding: 20px;
+  font-size: 0px;
 }
 .demo-table-expand {
   font-size: 0;

@@ -15,28 +15,37 @@
           @click="getEvidenceData()"
         ></el-button>
       </el-input>
-
-      <!-- <el-button type="primary" @click="handleSearch()">搜索</el-button> -->
-      <el-button type="primary" @click="searchVisible = true">
+      <el-button
+        type="danger"
+        @click="searchVisible = true"
+        icon="el-icon-search"
+        style="margin-left: 18px"
+        plain
+      >
         高级搜索
       </el-button>
-      <el-button type="primary" @click="addEvidence()">新增存证</el-button>
+
+      <el-switch
+        v-model="decrypt_flag"
+        active-text="明文"
+        inactive-text="密文"
+        active-color="#13ce66"
+        inactive-color="#ff4949"
+        style="margin-left: 300px"
+      >
+      </el-switch>
     </div>
     <!-- 记录列表-->
     <div class="table_container">
       <el-table :data="tableData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form
-              label-position="right"
-              inline
-              class="demo-table-expand"
-            >
+            <el-form label-position="right" inline class="demo-table-expand">
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
               <el-form-item label="文件大小:">
-                <span>{{ props.row.fileSize }}</span>
+                <span>{{ props.row.fileSize }} KB</span>
               </el-form-item>
               <el-form-item label="存证区块链交易ID:">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
@@ -80,8 +89,8 @@
               @click="handlePublic(scope.row)"
               >申请公证</el-button
             >
-            <el-button size="small" @click="handleDown(scope.row)"
-              >下载查看</el-button
+            <el-button size="small" type="danger" @click="handleDown(scope.row)"
+              >文件下载</el-button
             >
           </template>
         </el-table-column>
@@ -164,6 +173,7 @@
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form ref="evidence" :model="evidence" label-width="200px">
         <el-form-item label="存证名称">
@@ -242,6 +252,7 @@ export default {
     return {
       searchVisible: false,
       notarPayVisible: false,
+      decrypt_flag: true,
       evidence: {
         evidenceId: "none",
         userId: sessionStorage.getItem("userId"),
@@ -383,10 +394,6 @@ export default {
         console.log(e);
       }
     },
-    // 新增存证路由跳转
-    addEvidence() {
-      this.$router.push("/addEvidence");
-    },
     // 获取公证机构列表
     async getAgent() {
       try {
@@ -440,8 +447,8 @@ export default {
 
     // 申请公证按钮
     async handlePublic(row) {
-;      this.dialogVisible_notarization = true;
-      this.notarization.evidenceId = row.evidenceId
+      this.dialogVisible_notarization = true;
+      this.notarization.evidenceId = row.evidenceId;
     },
 
     // 发送公证请求
@@ -505,19 +512,10 @@ export default {
       });
     },
 
-    // 证据查看
+    // 文件下载
     async handleDown(row) {
-      let evidenceId = row.evidenceId;
-      let query = { evidenceId: evidenceId };
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + evidenceId;
-
-      // console.log(query)
-      //   downloadUserFile(query).then(() => {
-
-      //   })
-      // window.open("http://localhost:8080/ipfs/" + row.storage_hash, "_blank"); // 新窗口打开外链接
-      // this.$router.push("http://localhost:8080/ipfs/"+row.storage_hash);
+        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
     },
 
     // 存证时间赋值
@@ -541,6 +539,11 @@ export default {
 
     // 搜索
     async getEvidenceData() {
+       if (this.decrypt_flag) {
+          this.evidence.decryptFlag = 1;
+        } else {
+          this.evidence.decryptFlag = 0;
+        }
       this.searchVisible = false;
       console.log(this.evidence.userId);
       //判断

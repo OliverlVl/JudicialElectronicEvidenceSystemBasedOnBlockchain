@@ -2,7 +2,7 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="head">信息修改</div>
-    <div  align="center">
+    <div align="center">
       <el-form
         label-width="100px"
         style="margin-top: 25px; width: 950px"
@@ -106,45 +106,41 @@
             </el-option>
           </el-select>
         </el-form-item>
-        
       </el-form>
-
     </div>
     <div align="center">
-              <el-button
-                id="updateId"
-                type="primary"
-                @click="
-                  update = false;
-                  updateVisible();
-                "
-                style="display: inline; width: 30%"
-
-                
-                >修改</el-button
-              >
-              <el-button
-                id="cancelId"
-                type="primary"
-                @click="
-                  update = true;
-                  cancelAndSubmitVisible();
-                "
-                style="display: none; width:30%"
-                >取消</el-button
-              >
-              <el-button
-                id="submitId"
-                type="primary"
-                @click="
-                  update = true;
-                  cancelAndSubmitVisible();
-                  SubmitInfo();
-                "
-                style="display: none; width: 30%"
-                >保存</el-button
-              >
-            </div>
+      <el-button
+        id="updateId"
+        type="primary"
+        @click="
+          update = false;
+          updateVisible();
+        "
+        style="display: inline; width: 30%"
+        >修改</el-button
+      >
+      <el-button
+        id="cancelId"
+        type="primary"
+        @click="
+          update = true;
+          cancelAndSubmitVisible();
+        "
+        style="display: none; width: 30%"
+        >取消</el-button
+      >
+      <el-button
+        id="submitId"
+        type="primary"
+        @click="
+          update = true;
+          cancelAndSubmitVisible();
+          SubmitInfo();
+        "
+        style="display: none; width: 30%"
+        >保存</el-button
+      >
+    </div>
     <!-- <div style="margin-left: 45%; margin-top: 2%">
       <el-button type="primary" @click="SubmitInfo()">确定</el-button>
     </div> -->
@@ -183,14 +179,18 @@
         >
       </div>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { notaQuery, noTypeQuery, notarregist, notaryUpdate } from "@/api/getData";
+import {
+  notaQuery,
+  noTypeQuery,
+  notarregist,
+  notaryUpdate,
+} from "@/api/getData";
 export default {
   data() {
     return {
@@ -224,7 +224,7 @@ export default {
     headTop,
   },
   methods: {
-     // 按钮可视化
+    // 按钮可视化
     updateVisible() {
       document.getElementById("updateId").style.display = "none";
       document.getElementById("cancelId").style.display = "inline";
@@ -248,12 +248,11 @@ export default {
           if (result.status) {
             console.log(result.data[0]);
             this.initInfor = result.data[0];
-            
           } else {
             console.log("获取数据失败");
           }
         });
-         //获取公证类型
+        //获取公证类型
         await noTypeQuery().then((typeres) => {
           if (typeres.status) {
             typeres.data.forEach((item) => {
@@ -265,7 +264,6 @@ export default {
         console.log(error.message);
       }
     },
-  
 
     // 处理导航页
     handlePageChange(val) {
@@ -277,11 +275,11 @@ export default {
     // 提交
     async SubmitInfo() {
       try {
-       if (this.initInfor.sex == "男") {
-        this.initInfor.sex = "0";
-      } else {
-        this.initInfor.sex = "1";
-      }
+        if (this.initInfor.sex == "男") {
+          this.initInfor.sex = "0";
+        } else {
+          this.initInfor.sex = "1";
+        }
 
         await notaryUpdate(this.initInfor).then((result) => {
           if (result.status) {
@@ -294,6 +292,8 @@ export default {
         throw new Error(error.message);
       }
     },
+
+    
     async ChangePass() {
       try {
         if (this.oldPass != this.initInfor.password) {

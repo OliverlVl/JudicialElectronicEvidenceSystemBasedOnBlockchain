@@ -139,7 +139,7 @@ export const notarmanageRecord = data => fetch('/aut/notarRecord',data, 'POST');
 /*
  * 	查询证据列表
  */
-export const evidenceQuery = data => fetch('/evidenceQuery',data, 'POST');
+export const evidenceQuery = data => fetch('/aut/evidenceQuery',data, 'POST');
 /**
 * 	存证类型查询
 */
@@ -296,6 +296,10 @@ export const sysTransQuery = data => fetch('/aut/transQuery',data, 'POST');
 
 
 
+/**
+* 	系统管理员查询交易记录
+*/
+export const sysQuery = data => fetch('/sys/sysQuery',data, 'POST');
 
 
 
