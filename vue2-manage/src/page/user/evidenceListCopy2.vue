@@ -146,7 +146,7 @@
         </el-form-item>
         <el-form-item label="申请事项">
           <el-input
-            placeholder="请输入申请事项"
+            placeholder="请输入申请事项描述"
             v-model="notarization.notarizationMatters"
             style="width: 50%"
             clearable
@@ -617,6 +617,11 @@ export default {
           done();
         })
         .catch((_) => {});
+    },
+  },
+   watch: {
+    $route() {
+      this.getEvidenceData();
     },
   },
 };

@@ -164,17 +164,17 @@
             }"
           >
             <el-table-column
-              label="个人公证次数"
+              label="公证次数"
               prop="notarizationCount"
               align="center"
             ></el-table-column>
             <el-table-column
-              label="个人公证成功次数"
+              label="公证成功次数"
               prop="notarizationSuccessCount"
               align="center"
             ></el-table-column>
             <el-table-column
-              label="个人公证收益"
+              label="公证金额"
               prop="notarizationTotalMoney"
               align="center"
             ></el-table-column>

@@ -226,7 +226,7 @@ export default {
     // 购买容量
     async memoryPay() {
       try {
-        this.memoryVisible=false;
+        this.memoryVisible = false;
         console.log(this.formData);
         memPay(this.formData).then((result) => {
           console.log(result);
@@ -236,7 +236,7 @@ export default {
               type: "success",
               message: "套餐购买成功",
             });
-
+            this.searchInfo();
           } else {
             //失败
             this.$message({
@@ -252,7 +252,7 @@ export default {
     async searchInfo() {
       const query = {
         userId: sessionStorage.getItem("userId"),
-        decryptFlag:1,
+        decryptFlag: 1,
       };
       userQuery(query).then((result) => {
         if (result.status) {
@@ -262,7 +262,6 @@ export default {
             this.hasUsedStorage = item.hasUsedStorage;
             this.storageSpace = item.storageSpace;
           });
-          
         }
         console.log(this.userInfo);
       });

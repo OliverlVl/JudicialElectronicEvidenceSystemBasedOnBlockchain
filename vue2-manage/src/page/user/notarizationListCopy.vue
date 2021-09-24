@@ -613,6 +613,12 @@ export default {
       // this.initData();
     },
   },
+
+  watch: {
+    $route() {
+      this.getNotarizationData();
+    },
+  },
 };
 </script>
 

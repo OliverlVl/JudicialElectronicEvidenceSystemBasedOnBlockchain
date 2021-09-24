@@ -5,7 +5,7 @@
       <label>请选择公证机构:&emsp;</label>
       <el-select
         v-model="organizationId"
-        placeholder="请选择"
+        placeholder="请选择公证机构"
         @change="notarizationMaterialQuery()"
       >
         <el-option
