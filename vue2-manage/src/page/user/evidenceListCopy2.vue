@@ -539,11 +539,11 @@ export default {
 
     // 搜索
     async getEvidenceData() {
-       if (this.decrypt_flag) {
-          this.evidence.decryptFlag = 1;
-        } else {
-          this.evidence.decryptFlag = 0;
-        }
+      if (this.decrypt_flag) {
+        this.evidence.decryptFlag = 1;
+      } else {
+        this.evidence.decryptFlag = 0;
+      }
       this.searchVisible = false;
       console.log(this.evidence.userId);
       //判断
@@ -566,6 +566,18 @@ export default {
             result.data.forEach((item) => {
               if (this.evidence.decryptFlag == 0) {
                 item.evidenceName = "**********";
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
               }
               this.tableData.push(item);
             });

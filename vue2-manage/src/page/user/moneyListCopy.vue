@@ -15,7 +15,6 @@
         ></el-option>
       </el-select>
       <el-button
-      
         slot="append"
         icon="el-icon-search"
         @click="getTransactionData()"
@@ -152,7 +151,6 @@
             style="width: 55%"
           ></el-date-picker>
         </el-form-item>
-        
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -249,8 +247,7 @@ export default {
       ],
 
       // 表格
-      tableData: [
-      ],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -330,14 +327,14 @@ export default {
           this.transaction.transactionMoneyFloor = this.transactionMoneyFloor;
           this.transaction.transactionMoneyUpper = this.transactionMoneyUpper;
         }
-        if(this.decrypt_flag){
+        if (this.decrypt_flag) {
           this.transaction.decryptFlag = 1;
-        }else{
+        } else {
           this.transaction.decryptFlag = 0;
         }
         // 请求数据
         this.transaction.userId = sessionStorage.getItem("userId");
-        
+
         await transQuery(this.transaction).then((result) => {
           console.log(this.transaction);
           console.log(result);
@@ -345,16 +342,16 @@ export default {
             this.tableData = [];
             result.data.forEach((item) => {
               if (item.blockchainTime == null) {
-                item.blockchainTime = "null";
+                item.blockchainTime = "暂无数据";
               }
               if (item.transactionBlockchainId == null) {
-                item.transactionBlockchainId = "null";
+                item.transactionBlockchainId = "暂无数据";
               }
               if (item.transactionPeople == null) {
-                item.transactionPeople = "null";
+                item.transactionPeople = "暂无数据";
               }
               if (item.storageSize == null) {
-                item.storageSize = "null";
+                item.storageSize = "暂无数据";
               }
               if (this.transaction.decryptFlag == 0) {
                 item.transactionMoney = "******";
@@ -366,6 +363,8 @@ export default {
                   item.transactionTime.substring(0, 10) +
                   " " +
                   item.transactionTime.substring(11, 19);
+              } else {
+                item.transactionTime = "暂无数据";
               }
               this.tableData.push(item);
             });
@@ -449,6 +448,6 @@ export default {
   text-decoration: underline;
 }
 .top-div-set {
-  background:rgba(196, 196, 196, 0.5)
+  background: rgba(196, 196, 196, 0.5);
 }
 </style>

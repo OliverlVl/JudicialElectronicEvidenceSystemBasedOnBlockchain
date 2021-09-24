@@ -432,6 +432,9 @@ export default {
           result.data.forEach((item, index) => {
             if (index < 15) {
               item["notaryRank"] = index + 1;
+              if (item.notarizationCount == null) {
+                item.notarizationCount = 0;
+              }
               this.noRank.push(item);
             }
           });

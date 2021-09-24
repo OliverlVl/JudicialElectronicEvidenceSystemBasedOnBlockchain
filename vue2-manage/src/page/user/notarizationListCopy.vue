@@ -105,6 +105,7 @@
         <el-table-column
           label="公证金额"
           align="center"
+          width="100"
           prop="notarizationMoney"
         ></el-table-column>
         <el-table-column
@@ -115,6 +116,7 @@
         <el-table-column
           label="公证状态"
           align="center"
+          width="120"
           prop="notarizationStatus"
         ></el-table-column>
         <el-table-column label="文件" align="center">
@@ -234,7 +236,6 @@
             style="width: 55%"
           ></el-date-picker>
         </el-form-item>
-        
       </el-form>
 
       <div slot="footer">
@@ -512,12 +513,41 @@ export default {
               if (item.notarizationInformation == null) {
                 item.notarizationInformation = "暂无数据";
               }
+
               if (item.notarizationEndTime == null) {
                 item.notarizationEndTime = "暂无数据";
+              } else {
+                item.notarizationEndTime =
+                  item.notarizationEndTime.substring(0, 10) +
+                  " " +
+                  item.notarizationEndTime.substring(11, 19);
               }
+
               if (item.transactionStatus == "未支付") {
                 item.notarizationStatus = "未支付";
               }
+
+              if (item.notarizationStartTime != null) {
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
+
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -532,7 +562,7 @@ export default {
       this.notarization.evidenceName = "";
       this.notarization.evidenceType = "";
       this.notarization.notarizationType = "";
-      //this.notarization.decryptFlag = 1;
+      this.notarization.decryptFlag = 1;
       this.notarization.notarizationStatus = "";
       this.notarization.organizationId = "";
     },
