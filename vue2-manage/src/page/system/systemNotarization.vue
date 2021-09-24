@@ -24,7 +24,7 @@
       >
         高级搜索
       </el-button>
-      
+
       <el-switch
         v-model="decrypt_flag"
         active-text="明文"
@@ -141,7 +141,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-       
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -386,6 +385,24 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (item.notarizationStartTime != null) {
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               if (item.notaryName == null) {
                 item.notaryName = "待公证人员处理";
               }
@@ -399,6 +416,24 @@ export default {
         await notarmanageRecord(query).then((result) => {
           if (result.status) {
             result.data.forEach((item) => {
+              if (item.notarizationStartTime != null) {
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -443,6 +478,24 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 if (item.notaryName == null) {
                   item.notaryName = "待公证人员处理";
                 }
@@ -456,6 +509,24 @@ export default {
           await notarmanageRecord(this.notarization).then((result) => {
             if (result.status) {
               result.data.forEach((item) => {
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 this.tableData.push(item);
               });
               this.pageTotal = this.tableData.length;
@@ -469,6 +540,24 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 if (item.notaryName == null) {
                   item.notaryName = "待公证人员处理";
                 }
@@ -570,7 +659,7 @@ export default {
         throw new Error(error.message);
       }
     },
-    
+
     // 文件下载
     async handleDown(row) {
       window.location.href =

@@ -154,7 +154,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -411,6 +410,30 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (item.notarizationEndTime != null) {
+                item.notarizationEndTime =
+                  item.notarizationEndTime.substring(0, 10) +
+                  " " +
+                  item.notarizationEndTime.substring(11, 19);
+              }
+              if (item.notarizationStartTime != null) {
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               this.tableData.push(item);
             });
           } else {
@@ -421,6 +444,30 @@ export default {
         await notarmanageRecord(query).then((result) => {
           if (result.status) {
             result.data.forEach((item) => {
+              if (item.notarizationEndTime != null) {
+                item.notarizationEndTime =
+                  item.notarizationEndTime.substring(0, 10) +
+                  " " +
+                  item.notarizationEndTime.substring(11, 19);
+              }
+              if (item.notarizationStartTime != null) {
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -465,6 +512,30 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (item.notarizationEndTime != null) {
+                  item.notarizationEndTime =
+                    item.notarizationEndTime.substring(0, 10) +
+                    " " +
+                    item.notarizationEndTime.substring(11, 19);
+                }
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 this.tableData.push(item);
               });
             } else {
@@ -472,10 +543,34 @@ export default {
             }
           });
           this.notarization.notarizationStatus = "4";
-         
+
           await notarmanageRecord(this.notarization).then((result) => {
             if (result.status) {
               result.data.forEach((item) => {
+                if (item.notarizationEndTime != null) {
+                  item.notarizationEndTime =
+                    item.notarizationEndTime.substring(0, 10) +
+                    " " +
+                    item.notarizationEndTime.substring(11, 19);
+                }
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 this.tableData.push(item);
               });
               this.pageTotal = this.tableData.length;
@@ -489,6 +584,30 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (item.notarizationEndTime != null) {
+                  item.notarizationEndTime =
+                    item.notarizationEndTime.substring(0, 10) +
+                    " " +
+                    item.notarizationEndTime.substring(11, 19);
+                }
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 this.tableData.push(item);
               });
               this.pageTotal = this.tableData.length;
@@ -513,7 +632,10 @@ export default {
           this.notarization.evidenceName = "none";
         }
         //公证类型
-        if (this.notarization.notarizationType == "" || this.notarization.notarizationType == "不限") {
+        if (
+          this.notarization.notarizationType == "" ||
+          this.notarization.notarizationType == "不限"
+        ) {
           this.notarization.notarizationType = "none";
         }
         //存证类型
@@ -591,7 +713,7 @@ export default {
         throw new Error(error.message);
       }
     },
-    
+
     // 文件下载
     async handleDown(row) {
       window.location.href =
