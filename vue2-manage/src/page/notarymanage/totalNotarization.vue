@@ -141,7 +141,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -206,7 +205,7 @@
           label="公证员"
           align="center"
           prop="notaryName"
-        ></el-table-column>  
+        ></el-table-column>
         <el-table-column
           label="存证名称"
           align="center"
@@ -383,6 +382,24 @@ export default {
             this.tableData = [];
             result.data.forEach((item) => {
               if (item.notaryName == null) {
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 item.notaryName = "待公证人员处理";
               }
               this.tableData.push(item);
@@ -395,6 +412,24 @@ export default {
         await notarmanageRecord(query).then((result) => {
           if (result.status) {
             result.data.forEach((item) => {
+              if (item.notarizationStartTime != null) {
+                item.notarizationStartTime =
+                  item.notarizationStartTime.substring(0, 10) +
+                  " " +
+                  item.notarizationStartTime.substring(11, 19);
+              }
+              if (item.evidenceTime != null) {
+                item.evidenceTime =
+                  item.evidenceTime.substring(0, 10) +
+                  " " +
+                  item.evidenceTime.substring(11, 19);
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
@@ -439,6 +474,24 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 if (item.notaryName == null) {
                   item.notaryName = "待公证人员处理";
                 }
@@ -452,6 +505,24 @@ export default {
           await notarmanageRecord(this.notarization).then((result) => {
             if (result.status) {
               result.data.forEach((item) => {
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 this.tableData.push(item);
               });
               this.pageTotal = this.tableData.length;
@@ -465,6 +536,24 @@ export default {
             if (result.status) {
               this.tableData = [];
               result.data.forEach((item) => {
+                if (item.notarizationStartTime != null) {
+                  item.notarizationStartTime =
+                    item.notarizationStartTime.substring(0, 10) +
+                    " " +
+                    item.notarizationStartTime.substring(11, 19);
+                }
+                if (item.evidenceTime != null) {
+                  item.evidenceTime =
+                    item.evidenceTime.substring(0, 10) +
+                    " " +
+                    item.evidenceTime.substring(11, 19);
+                }
+                if (item.blockchainTime != null) {
+                  item.blockchainTime =
+                    item.blockchainTime.substring(0, 10) +
+                    " " +
+                    item.blockchainTime.substring(11, 19);
+                }
                 if (item.notaryName == null) {
                   item.notaryName = "待公证人员处理";
                 }
@@ -493,7 +582,10 @@ export default {
           this.notarization.evidenceName = "none";
         }
         //公证类型
-        if (this.notarization.notarizationType == "" || this.notarization.notarizationType == "不限") {
+        if (
+          this.notarization.notarizationType == "" ||
+          this.notarization.notarizationType == "不限"
+        ) {
           this.notarization.notarizationType = "none";
         }
         //公证状态
@@ -569,7 +661,6 @@ export default {
       window.location.href =
         "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
     },
-
   },
 };
 </script>

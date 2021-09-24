@@ -99,7 +99,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -152,11 +151,7 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
-            <el-form
-              label-position="right"
-              inline
-              class="demo-table-expand"
-            >
+            <el-form label-position="right" inline class="demo-table-expand">
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
@@ -371,7 +366,7 @@ export default {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
-              if(item.notarizationStartTime!=null){
+              if (item.notarizationStartTime != null) {
                 item.notarizationStartTime =
                   item.notarizationStartTime.substring(0, 10) +
                   " " +
@@ -494,7 +489,7 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
-              if(item.notarizationStartTime!=null){
+              if (item.notarizationStartTime != null) {
                 item.notarizationStartTime =
                   item.notarizationStartTime.substring(0, 10) +
                   " " +
@@ -592,12 +587,12 @@ export default {
     },
   },
 
- // 监听路由跳转，刷新数据
-  watch:{
-    '$route' () {
+  // 监听路由跳转，刷新数据
+  watch: {
+    $route() {
       this.initData();
-    }
-  }
+    },
+  },
 };
 </script>
 
