@@ -111,14 +111,13 @@ export default {
     headTop,
   },
   created() {
-    this.userId = sessionStorage.getItem("userId"), 
-    this.initData();
+    (this.userId = sessionStorage.getItem("userId")), this.initData();
   },
   mounted() {
     this.initData();
   },
   watch: {
-    '$route'() {
+    $route() {
       this.initData();
     },
   },
@@ -166,15 +165,20 @@ export default {
       console.log(this.formData);
       userUpdate(this.formData).then((result) => {
         if (result.status) {
-          console.log("提交成功");
+          this.$message({
+            type: "success",
+            message: "修改成功!",
+          });
           this.initData();
         } else {
-          console.log("提交失败" + result.message);
+          this.$message({
+            type: "error",
+            message: "修改失败!",
+          });
         }
       });
     },
   },
-  
 };
 </script>
 

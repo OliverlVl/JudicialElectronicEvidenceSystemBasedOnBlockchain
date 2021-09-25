@@ -92,7 +92,13 @@
 <script>
 import headTop from "../../components/headTop";
 import { baseUrl, baseImgPath } from "@/config/env";
-import { notaQuery, noTypeQuery, notarregist, sysQuery } from "@/api/getData";
+import {
+  notaQuery,
+  noTypeQuery,
+  notarregist,
+  sysQuery,
+  sysUpdate,
+} from "@/api/getData";
 export default {
   data() {
     return {
@@ -205,17 +211,25 @@ export default {
     // 提交
     async SubmitInfo() {
       try {
-        const submitInfo = {
-          manId: this.manId,
-          phoneNumber: this.initInfor.phoneNumber,
-          email: this.initInfor.email,
-          password: this.initInfor.password,
-        };
-        await notarregist(submitInfo).then((result) => {
+        if (this.initInfor.sex == "男") {
+          this.initInfor.sex = "0";
+        } else {
+          this.initInfor.sex = "1";
+        }
+        this.initInfor.manId = sessionStorage.getItem("manId");
+        console.log();
+        await sysUpdate(this.initInfor).then((result) => {
           if (result.status) {
-            alert("修改成功");
+            this.$message({
+              type: "success",
+              message: "修改成功!",
+            });
+            this.initData();
           } else {
-            throw new Error("获取数据失败");
+            this.$message({
+              type: "error",
+              message: "修改失败!",
+            });
           }
         });
       } catch (error) {
