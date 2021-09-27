@@ -81,7 +81,7 @@
       </el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
-          <i class="el-icon-s-data title-set">交易统计</i>
+          <i class="el-icon-s-data title-set">平台公证统计</i>
 
           <el-form style="margin-left: 15%; margin-top: 10px; width: 200%">
             <el-form-item label="公证总次数:" class="demo-table-expands">
@@ -161,7 +161,7 @@
               align="center"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">查看公证记录</span>
+              <span style="font-size: 25px">已处理公证记录</span>
             </el-button>
             <br />
             <el-button
@@ -169,7 +169,7 @@
               @click="systemEvidence()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">查看存证记录</span>
+              <span style="font-size: 25px">存证记录</span>
             </el-button>
             <br />
             <el-button
@@ -177,7 +177,7 @@
               @click="systemTrace()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">查看交易记录</span>
+              <span style="font-size: 25px">交易记录</span>
             </el-button>
             <br />
             <el-button
@@ -185,7 +185,7 @@
               @click="notarizationInfo()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">查看申报材料信息</span>
+              <span style="font-size: 25px">申报材料信息</span>
             </el-button>
           </div>
         </div>
@@ -518,7 +518,7 @@ export default {
     },
     // 新增存证路由跳转
     systemNotary() {
-      this.$router.push("/systemNotary");
+      this.$router.push("/systemNotarizationApply");
     },
     systemEvidence() {
       this.$router.push("/systemEvidence");

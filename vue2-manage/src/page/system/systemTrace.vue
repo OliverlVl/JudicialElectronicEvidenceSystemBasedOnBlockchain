@@ -334,6 +334,16 @@ export default {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.transaction.decryptFlag == 0) {
+                var str = item.transactionMoney.split(":");
+                item.transactionMoney = str[2].substring(0, 6) + "******";
+                if (item.transactionPeople != null) {
+                  str = item.transactionPeople.split(":");
+                  item.transactionPeople = str[2].substring(0, 6) + "******";
+                } else {
+                  item.transactionPeople = "暂无数据";
+                }
+              }
               if (item.blockchainTime == null) {
                 item.blockchainTime = "null";
               }
@@ -345,13 +355,6 @@ export default {
               }
               if (item.storageSize == null) {
                 item.storageSize = "null";
-              }
-              if (this.transaction.decryptFlag == 0) {
-                item.transactionMoney = "******";
-                item.storageSize = "******";
-                item.userRemains = "******";
-                item.transactionPeople =
-                  item.transactionPeople == "null" ? "null" : "******";
               }
               if (item.transactionTime != null) {
                 item.transactionTime =

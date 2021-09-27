@@ -298,10 +298,12 @@ export default {
             this.tableData = [];
             result.data.forEach((item) => {
               if (this.userInfo.decryptFlag == 0) {
-                item.idCard = "*********";
-                item.remains = "*********";
-                item.storageSpace = "*********";
-                item.hasUsedStorage = "*********";
+                var str = item.idCard.split(":");
+                item.idCard = str[2].substring(0, 6) + "******";
+                str = item.storageSpace.split(":");
+                item.storageSpace = str[2].substring(0, 6) + "******";
+                str = item.hasUsedStorage.split(":");
+                item.hasUsedStorage = str[2].substring(0, 6) + "******";
               }
               this.tableData.push(item);
             });

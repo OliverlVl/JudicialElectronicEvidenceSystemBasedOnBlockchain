@@ -502,9 +502,12 @@ export default {
             console.log(result.data);
             result.data.forEach((item) => {
               if (this.notarization.decryptFlag == 0) {
-                item.evidenceName = "*********";
-                item.notarizationMoney = "*********";
-                item.fileSize = "*********";
+                var str = item.evidenceName.split(":");
+                item.evidenceName = str[2].substring(0,6)+"******";
+                str = item.notarizationMoney.split(":");
+                item.notarizationMoney = str[2].substring(0,6)+"******";
+                str = item.fileSize.split(":");
+                item.fileSize = str[2].substring(0,6)+"******";
               }
               if (item.notarizationBlockchainIdStart == null) {
                 item.notarizationBlockchainIdStart = "暂无数据";

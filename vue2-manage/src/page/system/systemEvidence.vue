@@ -329,12 +329,14 @@ export default {
       try {
         this.dealData();
         await evidenceQuery(this.evidence).then((result) => {
+          console.log(this.evidence.decryptFlag);
           if (result.status) {
-            if (this.evidence.decryptFlag == 0) {
-              item.evidenceName = "********";
-            }
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.evidence.decryptFlag == 0) {
+                var str = item.evidenceName.split(":");
+                item.evidenceName = str[2].substring(0, 6) + "******";
+              }
               if (item.evidenceTime != null) {
                 item.evidenceTime =
                   item.evidenceTime.substring(0, 10) +

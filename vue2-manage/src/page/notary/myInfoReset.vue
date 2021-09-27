@@ -188,7 +188,6 @@ import { baseUrl, baseImgPath } from "@/config/env";
 import {
   notaQuery,
   noTypeQuery,
-  notarregist,
   notaryUpdate,
 } from "@/api/getData";
 export default {
@@ -302,7 +301,7 @@ export default {
         const query = {
           password: this.newPass,
         };
-        await notarregist(query).then((result) => {
+        await notaryUpdate(query).then((result) => {
           if (result.status) {
             alert("修改成功");
           } else {

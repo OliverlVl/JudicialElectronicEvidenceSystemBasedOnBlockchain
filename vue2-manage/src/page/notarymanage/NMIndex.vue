@@ -81,7 +81,7 @@
       </el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
-          <i class="el-icon-s-data title-set">交易统计</i>
+          <i class="el-icon-s-data title-set">平台公证统计</i>
           <el-form style="margin-left: 15%; margin-top: 10px; width: 200%">
             <el-form-item label="公证总次数:" class="demo-table-expands">
               <span class="demo-table-expands" style="color: #ffffff">{{
@@ -164,17 +164,22 @@
             }"
           >
             <el-table-column
-              label="机构公证次数"
+              label="公证次数"
               prop="notarizationCount"
               align="center"
             ></el-table-column>
             <el-table-column
-              label="机构公证成功次数"
+              label="公证成功次数"
               prop="notarizationSuccessCount"
               align="center"
             ></el-table-column>
             <el-table-column
-              label="机构公证收益"
+              label="公证成功次数"
+              prop="notarizationFailedCount"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              label="公证收益"
               prop="notarizationTotalMoney"
               align="center"
             ></el-table-column>
@@ -186,7 +191,7 @@
               @click="bookDeal()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">已处理公证列表</span>
+              <span style="font-size: 25px">已处理列表</span>
             </el-button>
             <br />
 
@@ -195,7 +200,7 @@
               @click="notDeal2()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">待处理公证列表</span>
+              <span style="font-size: 25px">待处理列表</span>
             </el-button>
           </div>
         </div>
@@ -535,11 +540,11 @@ export default {
     },
     //跳转
     bookDeal() {
-      this.$router.push("/bookDeal");
+      this.$router.push("/totalNotarizationApply");
     },
     //跳转
     notDeal2() {
-      this.$router.push("/notDeal2");
+      this.$router.push("/totalNotarization");
     },
     //选择查询的公证类型数量
     async selChange() {

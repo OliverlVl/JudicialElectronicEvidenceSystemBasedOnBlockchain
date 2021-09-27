@@ -126,7 +126,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
@@ -369,8 +368,9 @@ export default {
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
-              if(this.notaryInfo.decryptFlag == 0){
-                item.idCard = "*********";
+              if (this.notaryInfo.decryptFlag == 0) {
+                var str = item.idCard.split(":");
+                item.idCard = str[2].substring(0, 6) + "******";
               }
               this.tableData.push(item);
             });

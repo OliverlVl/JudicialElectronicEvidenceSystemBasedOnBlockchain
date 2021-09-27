@@ -404,9 +404,12 @@ export default {
             this.tableData = [];
             result.data.forEach((item) => {
               if (this.searchQuery.decryptFlag == 0) {
-                item.evidenceName = "*********";
-                item.fileSize = "*********";
-                item.notarizationMoney = "*********";
+                var str = item.evidenceName.split(":");
+                item.evidenceName = str[2].substring(0, 6) + "******";
+                str = item.notarizationMoney.split(":");
+                item.notarizationMoney = str[2].substring(0, 6) + "******";
+                str = item.fileSize.split(":");
+                item.fileSize = str[2].substring(0, 6) + "******";
               }
               if (item.notarizationStartTime != null) {
                 item.notarizationStartTime =
@@ -425,6 +428,9 @@ export default {
                   item.blockchainTime.substring(0, 10) +
                   " " +
                   item.blockchainTime.substring(11, 19);
+              }
+              if (item.notarizationBlockchainIdStart == null) {
+                item.notarizationBlockchainIdStart = "暂无数据";
               }
               this.tableData.push(item);
               console.log(item);

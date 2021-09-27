@@ -355,7 +355,8 @@ export default {
             this.tableData = [];
             result.data.forEach((item) => {
               if (this.notaryInfo.decryptFlag == 0) {
-                item.idCard = "*********";
+                var str = item.idCard.split(":");
+                item.idCard = str[2].substring(0, 6) + "******";
               }
               this.tableData.push(item);
             });

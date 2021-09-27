@@ -1,7 +1,7 @@
 <template>
   <div class="fillcontain">
     <head-top></head-top>
-    <div class="search_container top-div-set" style="font-size:0px">
+    <div class="search_container top-div-set" style="font-size: 0px">
       <el-select
         v-model="transaction.transactionType"
         style="margin-left: 3%; width: 390px"
@@ -341,22 +341,27 @@ export default {
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
+              if (this.transaction.decryptFlag == 0) {
+                var str = item.transactionMoney.split(":");
+                item.transactionMoney = str[2].substring(0, 6) + "******";
+                if (item.transactionPeople != null) {
+                  str = item.transactionPeople.split(":");
+                  item.transactionPeople = str[2].substring(0, 6) + "******";
+                } else {
+                  item.transactionPeople = "暂无数据";
+                }
+              }
               if (item.blockchainTime == null) {
                 item.blockchainTime = "暂无数据";
               }
               if (item.transactionBlockchainId == null) {
                 item.transactionBlockchainId = "暂无数据";
               }
-              if (item.transactionPeople == null) {
-                item.transactionPeople = "暂无数据";
-              }
               if (item.storageSize == null) {
                 item.storageSize = "暂无数据";
               }
-              if (this.transaction.decryptFlag == 0) {
-                item.transactionMoney = "******";
-                item.transactionPeople =
-                  item.transactionPeople == "null" ? "null" : "******";
+              if (item.transactionPeople == null) {
+                item.transactionPeople = "暂无数据";
               }
               if (item.transactionTime != null) {
                 item.transactionTime =
@@ -396,7 +401,6 @@ export default {
 @import "../../style/mixin";
 .search_container {
   padding: 20px;
-  
 }
 .demo-table-expand {
   font-size: 0;

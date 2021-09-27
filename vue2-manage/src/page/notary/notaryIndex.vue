@@ -81,7 +81,7 @@
       </el-col>
       <el-col :span="6"
         ><div class="grid-content_2 bg-purple div-set">
-          <i class="el-icon-s-data title-set">交易统计</i>
+          <i class="el-icon-s-data title-set">平台公证统计</i>
           <el-form style="margin-left: 15%; margin-top: 10px; width: 200%">
             <el-form-item label="公证总次数:" class="demo-table-expands">
               <span class="demo-table-expands" style="color: #ffffff">{{
@@ -174,6 +174,11 @@
               align="center"
             ></el-table-column>
             <el-table-column
+              label="公证驳回次数"
+              prop="notarizationFailedCount"
+              align="center"
+            ></el-table-column>
+            <el-table-column
               label="公证金额"
               prop="notarizationTotalMoney"
               align="center"
@@ -186,7 +191,7 @@
               @click="bookDeal()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">查看可公证列表</span>
+              <span style="font-size: 25px">可公证列表</span>
             </el-button>
             <br />
 
@@ -195,7 +200,7 @@
               @click="notDeal2()"
               style="margin-top: 20px; width: 80%"
             >
-              <span style="font-size: 25px">待处理公证列表</span>
+              <span style="font-size: 25px">个人待处理公证列表</span>
             </el-button>
           </div>
         </div>
