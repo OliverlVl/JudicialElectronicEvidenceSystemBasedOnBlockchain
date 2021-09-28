@@ -95,6 +95,7 @@
         <el-table-column
           label="存证类型"
           align="center"
+          width="140"
           prop="evidenceType"
         ></el-table-column>
         <el-table-column
@@ -123,6 +124,14 @@
           <template slot-scope="scope">
             <el-button type="danger" size="small" @click="handleDown(scope.row)"
               >点击下载</el-button
+            >
+            <br /><br />
+            <el-button
+              v-if="scope.row.notarizationStatus == '公证成功'"
+              type="danger"
+              size="small"
+              @click="handlePublic(scope.row)"
+              >点击支付</el-button
             >
           </template>
         </el-table-column>
@@ -273,7 +282,6 @@ export default {
     return {
       searchVisible: false,
       notarPayVisible: false, //缴费
-
       // 搜索数据存放
       notarization: {
         userId: sessionStorage.getItem("userID"),
@@ -503,11 +511,11 @@ export default {
             result.data.forEach((item) => {
               if (this.notarization.decryptFlag == 0) {
                 var str = item.evidenceName.split(":");
-                item.evidenceName = str[2].substring(0,6)+"******";
+                item.evidenceName = str[2].substring(0, 6) + "******";
                 str = item.notarizationMoney.split(":");
-                item.notarizationMoney = str[2].substring(0,6)+"******";
+                item.notarizationMoney = str[2].substring(0, 6) + "******";
                 str = item.fileSize.split(":");
-                item.fileSize = str[2].substring(0,6)+"******";
+                item.fileSize = str[2].substring(0, 6) + "******";
               }
               if (item.notarizationBlockchainIdStart == null) {
                 item.notarizationBlockchainIdStart = "暂无数据";
@@ -551,7 +559,7 @@ export default {
                   " " +
                   item.blockchainTime.substring(11, 19);
               }
-
+              console.log(item.buttonStatus);
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;

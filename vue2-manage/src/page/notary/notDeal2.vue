@@ -444,7 +444,7 @@ export default {
           type: "success",
           message: "您已通过该公证申请，可在个人已完成列表中查看！",
         });
-
+        alert("已成功生成证书");
         this.initData();
       } else {
         alert("操作失败" + result.message);
