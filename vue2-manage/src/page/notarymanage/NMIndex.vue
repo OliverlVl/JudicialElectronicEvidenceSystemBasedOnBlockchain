@@ -174,7 +174,7 @@
               align="center"
             ></el-table-column>
             <el-table-column
-              label="公证成功次数"
+              label="公证驳回次数"
               prop="notarizationFailedCount"
               align="center"
             ></el-table-column>
