@@ -152,7 +152,7 @@ const routes = [
 		}, {
 			path: '/totalNotarization',
 			component: totalNotarization,
-			meta: ['公证管理', '待处理列表'],
+			meta: ['公证管理', '处理中列表'],
 		}, {
 			path: '/totalNotarizationApply',
 			component: totalNotarizationApply,
