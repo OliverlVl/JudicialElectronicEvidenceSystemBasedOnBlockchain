@@ -19,7 +19,7 @@
     </div>
     <div class="table_container">
       <el-table
-        :data="orgMaterialList"
+        :data="pageData"
         stripe
         border
         :show-header="status"
@@ -68,6 +68,7 @@ import {
 export default {
   data() {
     return {
+      pageData: [], // 分页数据
       //解密
       status: false,
       organizationId: "",
@@ -133,6 +134,8 @@ export default {
           result.data.forEach((item) => {
             this.orgMaterialList.push(item);
           });
+          this.pageTotal = this.orgMaterialList.length;
+          this.handlePageChange(1);
         } else {
           console.log("获取材料失败");
         }
@@ -146,12 +149,20 @@ export default {
         "http://localhost:8080/downloadMaterialFile?materialId=" + row.materialId;
       
     },
+
     // 处理导航页
     handlePageChange(val) {
-      console.log(val);
       this.pageIndex = val;
-      this.initData();
+      if (val * this.pageSize > this.pageTotal) {
+        this.pageData = this.orgMaterialList.slice((val - 1) * this.pageSize);
+      } else {
+        this.pageData = this.orgMaterialList.slice(
+          (val - 1) * this.pageSize,
+          val * this.pageSize
+        );
+      }
     },
+
   },
 };
 </script>
