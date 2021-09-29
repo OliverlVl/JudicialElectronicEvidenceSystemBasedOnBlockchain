@@ -159,7 +159,12 @@
       </span>
     </el-dialog>
     <!-- 申请缴费弹窗-->
-    <el-dialog title="公证缴费" :visible.sync="notarPayVisible" size="tiny">
+    <el-dialog
+      title="公证缴费"
+      :visible.sync="notarPayVisible"
+      size="tiny"
+      :append-to-body="true"
+    >
       <p style="">
         所需公证金额为：{{ notarization.notarizationMoney }}元，是否支付？
       </p>
@@ -566,9 +571,9 @@ export default {
             result.data.forEach((item) => {
               if (this.evidence.decryptFlag == 0) {
                 var str = item.evidenceName.split(":");
-                item.evidenceName = str[2].substring(0,6)+"******";
+                item.evidenceName = str[2].substring(0, 6) + "******";
                 str = item.fileSize.split(":");
-                item.fileSize = str[2].substring(0,6)+"******";
+                item.fileSize = str[2].substring(0, 6) + "******";
               }
               if (item.evidenceTime != null) {
                 item.evidenceTime =
@@ -621,7 +626,7 @@ export default {
         .catch((_) => {});
     },
   },
-   watch: {
+  watch: {
     $route() {
       this.getEvidenceData();
     },
