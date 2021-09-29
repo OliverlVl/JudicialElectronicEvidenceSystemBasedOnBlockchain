@@ -38,7 +38,7 @@
               type="primary"
               size="small"
               @click="downloadMaterial(scope.row)"
-              >下载文件</el-button
+              >申请材料下载</el-button
             >
           </template>
         </el-table-column>
@@ -171,18 +171,6 @@ export default {
 @import "../../style/mixin";
 .search_container {
   padding: 20px;
-}
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 120px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
 }
 .table_container {
   padding: 20px;

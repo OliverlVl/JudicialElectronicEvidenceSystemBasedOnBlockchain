@@ -23,7 +23,7 @@
           </el-submenu>
           <el-submenu index="3">
             <template slot="title"
-              ><i class="el-icon-date"></i>信息管理</template
+              ><i class="el-icon-s-data"></i>信息管理</template
             >
             <el-menu-item index="myInfoReset">个人信息</el-menu-item>
             <el-menu-item index="notarizationInfo">申报材料信息</el-menu-item>

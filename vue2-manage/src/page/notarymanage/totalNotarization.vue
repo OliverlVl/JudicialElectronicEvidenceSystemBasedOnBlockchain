@@ -169,8 +169,8 @@
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
-              <el-form-item label="文件大小:">
-                <span>{{ props.row.fileSize }} KB</span>
+              <el-form-item label="文件大小(KB):">
+                <span>{{ props.row.fileSize }}</span>
               </el-form-item>
               <el-form-item label="存证编号:">
                 <span>{{ props.row.evidenceId }}</span>
@@ -184,7 +184,7 @@
               <el-form-item label="申请事项:">
                 <span>{{ props.row.notarizationMatters }}</span>
               </el-form-item>
-              <el-form-item label="公证金额:">
+              <el-form-item label="公证金额(￥):">
                 <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
               <el-form-item label="存证区块链交易ID:">
@@ -196,6 +196,13 @@
             </el-form>
           </template>
         </el-table-column>
+        <el-table-column
+          type="index"
+          label="序号"
+          :index="indexMethod"
+          width="60px"
+          align="center"
+        ></el-table-column>
         <el-table-column
           label="申请人"
           align="center"
@@ -214,6 +221,7 @@
         <el-table-column
           label="存证类型"
           align="center"
+          width="120px"
           prop="evidenceType"
         ></el-table-column>
         <el-table-column
@@ -223,18 +231,20 @@
         ></el-table-column>
         <el-table-column
           label="公证申请时间"
+           width="160px"
           align="center"
           prop="notarizationStartTime"
         ></el-table-column>
         <el-table-column
           label="公证状态"
           align="center"
+          width="140px"
           prop="notarizationStatus"
         ></el-table-column>
-        <el-table-column label="文件" align="center">
+        <el-table-column label="文件" align="center" width="140px">
           <template slot-scope="scope">
             <el-button type="danger" size="small" @click="handleDown(scope.row)"
-              >点击下载</el-button
+              >下载公证材料</el-button
             >
           </template>
         </el-table-column>
@@ -361,6 +371,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index) {
+      // index 从 0 开始的
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
+    },
+
     // 初始化数据
     async initData() {
       try {

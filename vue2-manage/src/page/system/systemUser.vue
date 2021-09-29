@@ -110,14 +110,19 @@
     <div class="table_container">
       <el-table :data="pageData" stripe style="width: 100%">
         <el-table-column
+          type="index"
+          label="序号"
+          :index="indexMethod"
+          width="60px"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           label="用户编号"
           align="center"
-          width="160px"
           prop="userId"
         ></el-table-column>
         <el-table-column
           label="用户名"
-          width="160px"
           align="center"
           prop="username"
         ></el-table-column>
@@ -129,7 +134,7 @@
         <el-table-column
           label="性别"
           align="center"
-          width="100px"
+          width="50px"
           prop="sex"
         ></el-table-column>
         <el-table-column
@@ -144,17 +149,14 @@
         ></el-table-column>
         <el-table-column
           label="已用空间"
-          align="right"
-          width="100px"
+          align="center"
+          width="140px"
           prop="hasUsedStorage"
         ></el-table-column>
-        <el-table-column label="/" align="center" width="20px"
-          >/</el-table-column
-        >
         <el-table-column
-          label="总存储空间"
-          align="left"
-          width="100px"
+          label="总存储空间(GB)"
+          align="center"
+          width="140px"
           prop="storageSpace"
         ></el-table-column>
       </el-table>
@@ -222,6 +224,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index) {
+      // index 从 0 开始的
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
+    },
+
     // 初始化数据
     async initData() {
       try {

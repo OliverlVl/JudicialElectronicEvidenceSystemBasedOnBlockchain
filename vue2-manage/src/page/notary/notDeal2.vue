@@ -155,8 +155,8 @@
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
-              <el-form-item label="文件大小:">
-                <span>{{ props.row.fileSize }} KB</span>
+              <el-form-item label="文件大小(KB):">
+                <span>{{ props.row.fileSize }}</span>
               </el-form-item>
               <el-form-item label="存证编号:">
                 <span>{{ props.row.evidenceId }}</span>
@@ -173,7 +173,7 @@
               <el-form-item label="公证申请区块链交易ID:">
                 <span>{{ props.row.notarizationBlockchainIdStart }}</span>
               </el-form-item>
-              <el-form-item label="公证金额:">
+              <el-form-item label="公证金额(￥):">
                 <span>{{ props.row.notarizationMoney }}</span>
               </el-form-item>
               <el-form-item label="交易支付状态:">
@@ -182,17 +182,22 @@
             </el-form>
           </template>
         </el-table-column>
-        <!--<el-table-column label="存证编号" prop="evidenceId"></el-table-column>-->
+        <el-table-column
+          type="index"
+          label="序号"
+          :index="indexMethod"
+          width="60px"
+          align="center"
+        ></el-table-column>
         <el-table-column
           label="申请人"
-          width="140px"
           prop="username"
           align="center"
         ></el-table-column>
         <el-table-column
           label="存证类型"
-          width="140px"
           prop="evidenceType"
+          width="120px"
           align="center"
         ></el-table-column>
         <el-table-column
@@ -202,23 +207,24 @@
         ></el-table-column>
         <el-table-column
           label="公证类型"
-          width="140px"
           prop="notarizationType"
           align="center"
         ></el-table-column>
         <el-table-column
           label="公证申请时间"
+          width="160px"
           prop="notarizationStartTime"
           align="center"
         ></el-table-column>
-        <el-table-column label="操作" align="center" label-width="240px">
+        <el-table-column label="公证文件" width="140px" align="center">
           <template slot-scope="scope">
-            <el-button
-              size="small"
-              type="primary"
-              @click="handleDown(scope.row)"
-              >下载</el-button
+            <el-button type="primary" size="small" @click="handleDown(scope.row)"
+              >下载公证材料</el-button
             >
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="150px">
+          <template slot-scope="scope">
             <el-button
               size="small"
               type="success"
@@ -346,6 +352,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index) {
+      // index 从 0 开始的
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
+    },
+
     // 初始化数据
     async initData() {
       try {

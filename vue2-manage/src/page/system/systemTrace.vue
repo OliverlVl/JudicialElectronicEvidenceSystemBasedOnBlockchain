@@ -52,32 +52,43 @@
           </template>
         </el-table-column>
         <el-table-column
+          type="index"
+          label="序号"
+          :index="indexMethod"
+          width="60px"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           label="用户名"
-          width="100"
           prop="username"
+          align="center"
         ></el-table-column>
         <el-table-column
           label="交易编号"
+           align="center"
+           width="300px"
           prop="transactionId"
         ></el-table-column>
         <el-table-column
-          label="交易金额"
-          width="100"
+          label="交易金额(￥)"
+           align="center"
+          width="120px"
           prop="transactionMoney"
         ></el-table-column>
         <el-table-column
           label="交易时间"
-          width="200"
+           align="center"
           prop="transactionTime"
         ></el-table-column>
         <el-table-column
           label="区块链ID"
+           align="center"
           prop="transactionBlockchainId"
         ></el-table-column>
         <el-table-column
           label="交易类型"
+           align="center"
           prop="transactionType"
-          width="200"
         ></el-table-column>
       </el-table>
 
@@ -267,6 +278,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index){
+      // index 从 0 开始的
+      return (this.pageIndex -1)* this.pageSize + index +1;
+    },
+
     // 交易时间赋值
     selectTransactionTime() {
       let start = this.transactionTime[0];

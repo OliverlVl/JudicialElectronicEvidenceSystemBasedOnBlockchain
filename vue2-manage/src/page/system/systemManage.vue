@@ -16,7 +16,7 @@
 
           <el-submenu index="1">
             <template slot="title"
-              ><i class="el-icon-document"></i>成员管理</template
+              ><i class="el-icon-user-solid"></i>成员管理</template
             >
             <el-menu-item index="systemUser">用户列表</el-menu-item>
             <el-menu-item index="systemNotaryManager"
@@ -40,7 +40,7 @@
           </el-submenu>
           <el-submenu index="4">
             <template slot="title"
-              ><i class="el-icon-setting"></i>信息管理</template
+              ><i class="el-icon-s-data"></i>信息管理</template
             >
             <el-menu-item index="systemManageInfo">个人信息</el-menu-item>
             <el-menu-item index="systemNarizationInfo"

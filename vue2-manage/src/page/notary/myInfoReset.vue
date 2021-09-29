@@ -49,7 +49,7 @@
             v-model="initInfor.workYear"
             placeholder="请输入编号"
             style="width: 340px"
-            :disabled="true"
+            :disabled="update"
           ></el-input>
         </el-form-item>
 
@@ -58,7 +58,7 @@
             v-model="initInfor.position"
             placeholder="请输入编号"
             style="width: 340px"
-            :disabled="true"
+            :disabled="update"
           ></el-input>
         </el-form-item>
 
@@ -240,6 +240,7 @@ export default {
       try {
         const query = {
           notaryId: sessionStorage.getItem("notaryId"),
+          decryptFlag: 1,
           //notaryId: "1",
         };
         console.log(query);
@@ -330,18 +331,6 @@ export default {
 }
 .search_container {
   padding: 20px;
-}
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 120px;
-  color: #99a9bf;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
 }
 .table_container {
   padding: 10px;

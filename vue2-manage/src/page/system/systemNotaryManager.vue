@@ -134,6 +134,13 @@
     <div class="table_container">
       <el-table :data="pageData" stripe style="width: 100%">
         <el-table-column
+          type="index"
+          label="序号"
+          :index="indexMethod"
+          width="60px"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           label="机构管理员编号"
           align="center"
           prop="autManId"
@@ -156,6 +163,7 @@
         <el-table-column
           label="性别"
           align="center"
+          width="50px"
           prop="sex"
         ></el-table-column>
         <el-table-column
@@ -233,6 +241,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index){
+      // index 从 0 开始的
+      return (this.pageIndex -1)* this.pageSize + index +1;
+    },
+
     // 初始化数据
     async initData() {
       try {

@@ -8,7 +8,7 @@
           v-model="initInfor.autName"
           placeholder="请输入用户名"
           style="width: 440px"
-          :disabled="update"
+          :disabled="true"
         ></el-input>
       </el-form-item>
 
@@ -262,19 +262,6 @@ export default {
 }
 .search_container {
   padding: 20px;
-}
-.demo-table-expand {
-  font-size: 20px;
-}
-.demo-table-expand label {
-  width: 120px;
-  color: #000000;
-  font-size: 15px;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
 }
 .table_container {
   padding: 10px;

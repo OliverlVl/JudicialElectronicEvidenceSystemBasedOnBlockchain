@@ -44,8 +44,8 @@
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
-              <el-form-item label="文件大小:">
-                <span>{{ props.row.fileSize }} KB</span>
+              <el-form-item label="文件大小(KB):">
+                <span>{{ props.row.fileSize }}</span>
               </el-form-item>
               <el-form-item label="存证区块链交易ID:">
                 <span>{{ props.row.evidenceBlockchainId }}</span>
@@ -59,11 +59,14 @@
         <el-table-column
           type="index"
           label="序号"
-          width="70px"
+          :index="indexMethod"
+          width="60px"
+          align="center"
         ></el-table-column>
         <el-table-column
           label="存证编号"
           align="center"
+          width="300px"
           prop="evidenceId"
         ></el-table-column>
         <el-table-column
@@ -74,6 +77,7 @@
         <el-table-column
           label="存证类型"
           align="center"
+          width="120px"
           prop="evidenceType"
         ></el-table-column>
         <el-table-column
@@ -81,7 +85,7 @@
           align="center"
           prop="evidenceTime"
         ></el-table-column>
-        <el-table-column label="操作" align="center" width="360">
+        <el-table-column label="操作" align="center" width="220px">
           <template slot-scope="scope">
             <el-button
               size="small"
@@ -90,7 +94,7 @@
               >申请公证</el-button
             >
             <el-button size="small" type="danger" @click="handleDown(scope.row)"
-              >文件下载</el-button
+              >下载文件</el-button
             >
           </template>
         </el-table-column>
@@ -367,6 +371,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index){
+      // index 从 0 开始的
+      return (this.pageIndex -1)* this.pageSize + index +1;
+    },
+
     //获取存证类型
     getEvidenceType() {
       try {

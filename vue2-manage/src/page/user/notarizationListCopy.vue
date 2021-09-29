@@ -41,8 +41,8 @@
               <el-form-item label="文件目录:">
                 <span>{{ props.row.filePath }}</span>
               </el-form-item>
-              <el-form-item label="文件大小:">
-                <span>{{ props.row.fileSize }} KB</span>
+              <el-form-item label="文件大小(KB):">
+                <span>{{ props.row.fileSize }}</span>
               </el-form-item>
               <el-form-item label="存证时间:">
                 <span>{{ props.row.evidenceTime }}</span>
@@ -81,21 +81,26 @@
           </template>
         </el-table-column>
         <el-table-column
+          type="index"
+          label="序号"
+          :index="indexMethod"
+          width="60px"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           label="存证名称"
           align="center"
-          width="140"
           prop="evidenceName"
         ></el-table-column>
         <el-table-column
           label="公证类型"
           align="center"
-          width="140"
           prop="notarizationType"
         ></el-table-column>
         <el-table-column
           label="存证类型"
           align="center"
-          width="140"
+          width="120px"
           prop="evidenceType"
         ></el-table-column>
         <el-table-column
@@ -104,26 +109,27 @@
           prop="organizationName"
         ></el-table-column>
         <el-table-column
-          label="公证金额"
+          label="公证金额(￥)"
           align="center"
-          width="100"
+          width="120px"
           prop="notarizationMoney"
         ></el-table-column>
         <el-table-column
           label="公证申请时间"
           align="center"
+          width="160px"
           prop="notarizationStartTime"
         ></el-table-column>
         <el-table-column
           label="公证状态"
           align="center"
-          width="120"
+          width="140px"
           prop="notarizationStatus"
         ></el-table-column>
-        <el-table-column label="文件" align="center">
+        <el-table-column label="文件" align="center" width="140px">
           <template slot-scope="scope">
             <el-button type="danger" size="small" @click="handleDown(scope.row)"
-              >下载存证材料</el-button
+              >下载公证材料</el-button
             >
             <br v-if="scope.row.notarizationStatus == '公证成功'" />
             <br v-if="scope.row.notarizationStatus == '公证成功'" />
@@ -394,6 +400,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index) {
+      // index 从 0 开始的
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
+    },
+
     // 获取公证机构列表
     async getAgent() {
       try {
@@ -640,7 +652,6 @@ export default {
         );
       }
     },
-
   },
 
   watch: {

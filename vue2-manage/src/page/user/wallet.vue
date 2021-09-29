@@ -130,16 +130,19 @@
             <el-table-column
               type="index"
               label="序号"
-              width="100"
+              :index="indexMethod"
+              width="60px"
+              align="center"
             ></el-table-column>
             <el-table-column
               label="交易编号"
               align="center"
+              width="300px"
               prop="transactionId"
             ></el-table-column>
             <el-table-column
-              label="充值金额"
-              width="200"
+              label="充值金额(￥)"
+              width="120px"
               align="center"
               prop="transactionMoney"
             ></el-table-column>
@@ -185,18 +188,20 @@
             <el-table-column
               type="index"
               label="序号"
-              width="100"
+              :index="indexMethod"
+              width="60px"
               align="center"
             ></el-table-column>
             <el-table-column
               label="交易编号"
               align="center"
+              width="300px"
               prop="transactionId"
             ></el-table-column>
             <el-table-column
-              label="提现金额"
+              label="提现金额(￥)"
               align="center"
-              width="200"
+              width="120px"
               prop="transactionMoney"
             ></el-table-column>
             <el-table-column
@@ -241,18 +246,21 @@
             <el-table-column
               type="index"
               label="序号"
+              :index="indexMethod"
+              width="60px"
               align="center"
-              width="100"
             ></el-table-column>
             <el-table-column
               label="交易编号"
+              align="center"
+              width="300px"
               prop="transactionId"
             ></el-table-column>
             <el-table-column
-              label="转账金额"
+              label="转账金额(￥)"
               prop="transactionMoney"
               align="center"
-              width="150"
+              width="120px"
             ></el-table-column>
             <el-table-column
               label="转账时间"
@@ -372,6 +380,12 @@ export default {
   },
 
   methods: {
+    // 序号
+    indexMethod(index) {
+      // index 从 0 开始的
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
+    },
+
     // 交易时间赋值
     selectTransactionTime() {
       let start = this.transactionTime[0];
@@ -395,6 +409,7 @@ export default {
             // location.reload(); // 刷新页面
             // this.$router.go(0); // 刷新页面
             this.searchInfo();
+            this.getTransactionData();
           } else {
             //失败
             this.$message({
@@ -419,6 +434,7 @@ export default {
               message: "提现成功",
             });
             this.searchInfo();
+            this.getTransactionData();
           } else {
             //失败
             this.$message({
@@ -443,6 +459,7 @@ export default {
               message: "转账成功",
             });
             this.searchInfo();
+            this.getTransactionData();
           } else {
             //失败
             this.$message({
@@ -527,8 +544,15 @@ export default {
           val * this.pageSize
         );
       }
+    },  
+  },
+
+  watch: {
+    $route() {
+      this.getNotarizationData();
     },
   },
+
 };
 </script>
 

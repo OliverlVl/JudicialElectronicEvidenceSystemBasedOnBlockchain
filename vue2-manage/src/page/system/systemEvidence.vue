@@ -121,6 +121,13 @@
     <div class="table_container">
       <el-table :data="pageData" stripe style="width: 100%">
         <el-table-column
+          type="index"
+          label="序号"
+          :index="indexMethod"
+          width="60px"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           label="存证编号"
           align="center"
           prop="evidenceId"
@@ -138,16 +145,19 @@
         <el-table-column
           label="存证类型"
           align="center"
+          width="120px"
           prop="evidenceType"
         ></el-table-column>
         <el-table-column
           label="存证时间"
           align="center"
+          width="160px"
           prop="evidenceTime"
         ></el-table-column>
         <el-table-column
           label="上链时间"
           align="center"
+          width="160px"
           prop="blockchainTime"
         ></el-table-column>
         <el-table-column
@@ -155,10 +165,10 @@
           align="center"
           prop="evidenceBlockchainId"
         ></el-table-column>
-        <el-table-column label="文件" align="center">
+        <el-table-column label="文件" align="center" width="140px">
           <template slot-scope="scope">
             <el-button type="danger" size="small" @click="handleDown(scope.row)"
-              >点击下载</el-button
+              >下载存证材料</el-button
             >
           </template>
         </el-table-column>
@@ -257,6 +267,12 @@ export default {
     headTop,
   },
   methods: {
+    // 序号
+    indexMethod(index){
+      // index 从 0 开始的
+      return (this.pageIndex -1)* this.pageSize + index +1;
+    },
+
     // 初始化数据
     async initData() {
       const query = {
