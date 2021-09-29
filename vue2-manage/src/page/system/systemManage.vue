@@ -19,25 +19,33 @@
               ><i class="el-icon-document"></i>成员管理</template
             >
             <el-menu-item index="systemUser">用户列表</el-menu-item>
-            <el-menu-item index="systemNotaryManager">机构管理员列表</el-menu-item>
-            <el-menu-item index="systemNotary">公证员列表</el-menu-item>          
+            <el-menu-item index="systemNotaryManager"
+              >机构管理员列表</el-menu-item
+            >
+            <el-menu-item index="systemNotary">公证员列表</el-menu-item>
           </el-submenu>
 
           <el-submenu index="3">
             <template slot="title"
               ><i class="el-icon-date"></i>记录查询</template
             >
-            <el-menu-item index="systemNotarization">处理中公证记录</el-menu-item>
-            <el-menu-item index="systemNotarizationApply">已处理公证记录</el-menu-item>
+            <el-menu-item index="systemNotarization"
+              >处理中公证记录</el-menu-item
+            >
+            <el-menu-item index="systemNotarizationApply"
+              >已处理公证记录</el-menu-item
+            >
             <el-menu-item index="systemEvidence">存证记录</el-menu-item>
-						<el-menu-item index="systemTrace">交易记录</el-menu-item>
+            <el-menu-item index="systemTrace">交易记录</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
             <template slot="title"
               ><i class="el-icon-setting"></i>信息管理</template
             >
             <el-menu-item index="systemManageInfo">个人信息</el-menu-item>
-            <el-menu-item index="systemNarizationInfo">申报材料信息</el-menu-item>
+            <el-menu-item index="systemNarizationInfo"
+              >申报材料信息</el-menu-item
+            >
           </el-submenu>
         </el-menu>
       </el-col>
@@ -60,9 +68,6 @@ export default {
 };
 </script>
 
-
 <style lang="less" scoped>
 @import "../../style/mixin";
-.manage_page {
-}
 </style>
