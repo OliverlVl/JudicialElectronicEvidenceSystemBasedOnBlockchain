@@ -37,7 +37,7 @@
     </div>
     <!-- 记录列表-->
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%" stripe>
+      <el-table :data="pageData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="right" inline class="demo-table-expand">
@@ -255,6 +255,7 @@ import {
 export default {
   data() {
     return {
+      pageData:[],
       searchVisible: false,
       notarPayVisible: false,
       decrypt_flag: true,
@@ -334,21 +335,7 @@ export default {
       input_search: "",
       select: "",
       // 表格
-      tableData: [
-        // {
-        //   evidenceId: "12987122",
-        //   evidenceName: "文凭",
-        //   evidenceType: "文件存证",
-        //   evidenceTime: "2021-08-09",
-        //   filePath: "/XXX/XXX/XX",
-        //   fileSize: "10.5MB",
-        //   fileHash: "xjklfglksdf",
-        //   evidenceBlockchainId: "132135465476461",
-        //   blockchainTime: "2021-08-09",
-        // },
-        // {},
-        // {},
-      ],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -442,12 +429,6 @@ export default {
       } catch (e) {
         console.log(e);
       }
-    },
-
-    handlePageChange(val) {
-      console.log(val);
-      this.pageIndex = val;
-      // this.initData();
     },
 
     // 申请公证按钮
@@ -590,6 +571,7 @@ export default {
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
+            this.handlePageChange(1);
           } else {
             console.log("获取数据失败");
           }
@@ -601,21 +583,18 @@ export default {
       this.evidence.evidenceType = "";
     },
 
-    //时间戳转日期
-    // fmtDate(timestamp) {
-    //   if (timestamp) {
-    //     var time = new Date(timestamp);
-    //     var y = time.getFullYear(); //getFullYear方法以四位数字返回年份
-    //     var M = time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
-    //     var d = time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
-    //     var h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
-    //     var m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
-    //     var s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
-    //     return y + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
-    //   } else {
-    //     return "";
-    //   }
-    // },
+    // 处理导航页
+    handlePageChange(val) {
+      this.pageIndex = val;
+      if (val * this.pageSize > this.pageTotal) {
+        this.pageData = this.tableData.slice((val - 1) * this.pageSize);
+      } else {
+        this.pageData = this.tableData.slice(
+          (val - 1) * this.pageSize,
+          val * this.pageSize
+        );
+      }
+    },
 
     //关闭弹窗
     handleClose(done) {
