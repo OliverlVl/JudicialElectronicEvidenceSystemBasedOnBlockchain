@@ -126,7 +126,7 @@
           <el-button type="primary" @click="getTransactionData()">
             搜索
           </el-button>
-          <el-table :data="tableData" style="width: 100%" stripe>
+          <el-table :data="pageData" style="width: 100%" stripe>
             <el-table-column
               type="index"
               label="序号"
@@ -181,7 +181,7 @@
           <el-button type="primary" @click="getTransactionData()">
             搜索
           </el-button>
-          <el-table :data="tableData" style="width: 100%" stripe>
+          <el-table :data="pageData" style="width: 100%" stripe>
             <el-table-column
               type="index"
               label="序号"
@@ -237,7 +237,7 @@
           <el-button type="primary" @click="getTransactionData()">
             搜索
           </el-button>
-          <el-table :data="tableData" style="width: 100%" stripe>
+          <el-table :data="pageData" style="width: 100%" stripe>
             <el-table-column
               type="index"
               label="序号"
@@ -292,6 +292,7 @@ import { charge, withdraw, give, userQuery, transQuery } from "@/api/getData";
 export default {
   data() {
     return {
+      pageData: [],
       remains: "50",
       rechargeVisible: false,
       withdrawalVisible: false,
@@ -473,19 +474,20 @@ export default {
       try {
         // 请求数据
         await transQuery(this.transaction).then((result) => {
-          console.log(this.transaction)
+          console.log(this.transaction);
           if (result.status == true) {
             this.tableData = [];
-            console.log(result)
+            console.log(result);
             result.data.forEach((item) => {
-              // if (this.transaction.decryptFlag == 0) {
-              //   item.transactionMoney = "******";
-              // }
-              item.transactionTime = item.transactionTime.substring(0,10)+" "+item.transactionTime.substring(11,19)
-              this.tableData.push(item);     
-              console.log(item)
+              item.transactionTime =
+                item.transactionTime.substring(0, 10) +
+                " " +
+                item.transactionTime.substring(11, 19);
+              this.tableData.push(item);
+              console.log(item);
             });
             this.pageTotal = this.tableData.length;
+            this.handlePageChange(1);
           } else {
             console.log("获取交易数据失败");
           }
@@ -498,7 +500,7 @@ export default {
     async searchInfo() {
       const query = {
         userId: sessionStorage.getItem("userId"),
-        decryptFlag:1,
+        decryptFlag: 1,
       };
       console.log("获取用户数据");
       userQuery(query).then((result) => {
@@ -509,7 +511,6 @@ export default {
             this.hasUsedStorage = item.hasUsedStorage;
             this.storageSpace = item.storageSpace;
           });
-          
         }
       });
       //this.storageSpace = this.userInfo.storageSpace;
@@ -517,9 +518,15 @@ export default {
 
     // 处理导航页
     handlePageChange(val) {
-      console.log(val);
       this.pageIndex = val;
-      // this.initData();
+      if (val * this.pageSize > this.pageTotal) {
+        this.pageData = this.tableData.slice((val - 1) * this.pageSize);
+      } else {
+        this.pageData = this.tableData.slice(
+          (val - 1) * this.pageSize,
+          val * this.pageSize
+        );
+      }
     },
   },
 };

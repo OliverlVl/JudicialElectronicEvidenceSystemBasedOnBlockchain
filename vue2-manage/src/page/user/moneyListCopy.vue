@@ -40,7 +40,7 @@
       </el-switch>
     </div>
     <div class="table_container">
-      <el-table :data="tableData" style="width: 100%" stripe>
+      <el-table :data="pageData" style="width: 100%" stripe>
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="right" inline class="demo-table-expand">
@@ -168,6 +168,7 @@ import { transQuery } from "@/api/getData";
 export default {
   data() {
     return {
+      pageData:[],
       searchVisible: false,
       transaction: {
         userId: sessionStorage.getItem("userId"),
@@ -374,6 +375,7 @@ export default {
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
+            this.handlePageChange(1);
           } else {
             console.log("获取数据失败");
           }
@@ -389,10 +391,17 @@ export default {
 
     // 处理导航页
     handlePageChange(val) {
-      console.log(val);
       this.pageIndex = val;
-      // this.initData();
+      if (val * this.pageSize > this.pageTotal) {
+        this.pageData = this.tableData.slice((val - 1) * this.pageSize);
+      } else {
+        this.pageData = this.tableData.slice(
+          (val - 1) * this.pageSize,
+          val * this.pageSize
+        );
+      }
     },
+    
   },
 };
 </script>
