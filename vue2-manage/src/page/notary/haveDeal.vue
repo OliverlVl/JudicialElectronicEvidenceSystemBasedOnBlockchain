@@ -232,13 +232,7 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
-import {
-  notarRecord,
-  eviTypeQuery,
-  noTypeQuery,
-  notarmanageRecord,
-} from "@/api/getData";
+import { eviTypeQuery, noTypeQuery, notarmanageRecord } from "@/api/getData";
 export default {
   data() {
     return {

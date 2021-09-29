@@ -140,24 +140,7 @@
       </div>
     </el-dialog>
     <div class="table_container">
-      <el-table :data="tableData" stripe style="width: 100%">
-        <!--
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-form-item label="工号">
-                <span>{{ props.row.jobNumber }}</span>
-              </el-form-item>
-              <el-form-item label="公证类型">
-                <span>{{ props.row.notarizationType }}</span>
-              </el-form-item>
-              <el-form-item label="身份证号">
-                <span>{{ props.row.idCard }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
-        -->
+      <el-table :data="pageData" stripe style="width: 100%">
         <el-table-column
           label="公证员编号"
           align="center"
@@ -219,6 +202,7 @@ import { notaQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
+      pageData: [], // 分页数据
       searchVisible: false,
       decrypt_flag: true,
       // 表格
@@ -292,6 +276,7 @@ export default {
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
+            this.handlePageChange(1);
           } else {
             throw new Error("获取数据失败");
           }
@@ -310,12 +295,20 @@ export default {
         throw new Error(error.message);
       }
     },
+
     // 处理导航页
     handlePageChange(val) {
-      console.log(val);
       this.pageIndex = val;
-      this.initData();
+      if (val * this.pageSize > this.pageTotal) {
+        this.pageData = this.tableData.slice((val - 1) * this.pageSize);
+      } else {
+        this.pageData = this.tableData.slice(
+          (val - 1) * this.pageSize,
+          val * this.pageSize
+        );
+      }
     },
+
     dealData() {
       //用户编号
       if (this.notaryInfo.notaryId == "") {
@@ -375,6 +368,7 @@ export default {
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
+            this.handlePageChange(1);
           } else {
             throw new Error("获取数据失败");
           }

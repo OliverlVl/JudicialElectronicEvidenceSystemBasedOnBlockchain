@@ -170,7 +170,7 @@
 
     <!-- 列表 -->
     <div class="table_container">
-      <el-table :data="tableData" stripe style="width: 100%">
+      <el-table :data="pageData" stripe style="width: 100%">
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form
@@ -297,6 +297,7 @@ import { notarmanageRecord, eviTypeQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
+      pageData: [], // 分页数据
       searchVisible: false,
       //时间选择器
       timeValue1: "",
@@ -305,7 +306,7 @@ export default {
       timeValue4: "",
       moneyState: "",
       // 表格
-      tableData: [{}],
+      tableData: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -445,6 +446,8 @@ export default {
               }
               this.tableData.push(item);
             });
+            this.pageTotal = this.tableData.length;
+            this.handlePageChange(1);
           } else {
             throw new Error("获取数据失败");
           }
@@ -480,6 +483,7 @@ export default {
               this.tableData.push(item);
             });
             this.pageTotal = this.tableData.length;
+            this.handlePageChange(1);
           } else {
             throw new Error("获取数据失败");
           }
@@ -505,12 +509,20 @@ export default {
         throw new Error(error.message);
       }
     },
+
     // 处理导航页
     handlePageChange(val) {
-      console.log(val);
       this.pageIndex = val;
-      this.initData();
+      if (val * this.pageSize > this.pageTotal) {
+        this.pageData = this.tableData.slice((val - 1) * this.pageSize);
+      } else {
+        this.pageData = this.tableData.slice(
+          (val - 1) * this.pageSize,
+          val * this.pageSize
+        );
+      }
     },
+
     // 搜索
     async handleSearch() {
       try {
@@ -555,6 +567,8 @@ export default {
                 }
                 this.tableData.push(item);
               });
+              this.pageTotal = this.tableData.length;
+              this.handlePageChange(1);
             } else {
               throw new Error("获取数据失败");
             }
@@ -599,6 +613,7 @@ export default {
                 this.tableData.push(item);
               });
               this.pageTotal = this.tableData.length;
+              this.handlePageChange(1);
             } else {
               throw new Error("获取数据失败");
             }
@@ -644,6 +659,7 @@ export default {
                 this.tableData.push(item);
               });
               this.pageTotal = this.tableData.length;
+              this.handlePageChange(1);
             } else {
               throw new Error("获取数据失败");
             }
@@ -752,7 +768,7 @@ export default {
       window.location.href =
         "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
     },
-    
+
     // 公证证书下载
     handleCertificateDown(row) {
       window.location.href =

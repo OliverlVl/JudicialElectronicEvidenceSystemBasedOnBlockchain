@@ -19,7 +19,7 @@
     </div>
     <div class="table_container">
       <el-table
-        :data="orgMaterialList"
+        :data="pageData"
         stripe
         border
         :show-header="status"
@@ -68,6 +68,7 @@ import {
 export default {
   data() {
     return {
+      pageData: [], // 分页数据
       //解密
       status: false,
       organizationId: "",
@@ -77,9 +78,7 @@ export default {
         { organization_id: "1", organization_name: "福州公证处" },
         { organization_id: "2", organization_name: "厦门公证处" },
       ],
-      orgMaterialList: [
-
-      ],
+      orgMaterialList: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -128,29 +127,37 @@ export default {
       };
       await notarizationMaterial(query).then((result) => {
         if (result.status) {
-          console.log(result)
+          console.log(result);
           this.orgMaterialList = [];
           result.data.forEach((item) => {
             this.orgMaterialList.push(item);
           });
+          this.pageTotal = this.orgMaterialList.length;
+          this.handlePageChange(1);
         } else {
           console.log("获取材料失败");
         }
       });
-
     },
 
     downloadMaterial(row) {
-      console.log(row)
+      console.log(row);
       window.location.href =
-        "http://localhost:8080/downloadMaterialFile?materialId=" + row.materialId;
-      
+        "http://localhost:8080/downloadMaterialFile?materialId=" +
+        row.materialId;
     },
+
     // 处理导航页
     handlePageChange(val) {
-      console.log(val);
       this.pageIndex = val;
-      this.initData();
+      if (val * this.pageSize > this.pageTotal) {
+        this.pageData = this.orgMaterialList.slice((val - 1) * this.pageSize);
+      } else {
+        this.pageData = this.orgMaterialList.slice(
+          (val - 1) * this.pageSize,
+          val * this.pageSize
+        );
+      }
     },
   },
 };
