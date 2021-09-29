@@ -158,6 +158,7 @@
       title="高级搜索"
       :visible.sync="searchVisible"
       style="width: 100%"
+      :append-to-body="true"
     >
       <el-form ref="notarization" :model="notarization" label-width="200px">
         <el-form-item label="存证名称">

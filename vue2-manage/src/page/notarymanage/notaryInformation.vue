@@ -444,16 +444,18 @@ export default {
               },
             };
             axios.defaults.baseURL = "http://127.0.0.1:8080";
+            this.$message('文件开始上传，请稍等！');
             axios
               .post("/aut/uploadMaterialFile", this.formData, config)
               .then((res) => {
                 let data = res.data;
                 if (data.status) {
-                  // 清空数据
                   this.$message({
                     type: "success",
                     message: "材料上传成功",
                   });
+                  this.$refs.upload.clearFiles(); // 清除文件
+
                 } else {
                   this.$message({
                     type: "error",
@@ -476,8 +478,8 @@ export default {
     // 重置表单
     resetForm(formData) {
       this.$nextTick(() => {
-      this.$refs[formData].resetFields();
-      this.$refs.upload.clearFiles();
+        this.$refs[formData].resetFields(); // 清除字段
+        this.$refs.upload.clearFiles(); // 清除文件
       });
     },
   },

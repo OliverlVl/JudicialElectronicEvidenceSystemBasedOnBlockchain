@@ -51,7 +51,7 @@
               <div slot="tip" class="el-upload__tip">可以选个多个文件上传</div>
             </el-upload>
           </el-form-item>
-          <el-form-item >
+          <el-form-item>
             <el-button type="primary" @click="addEvidence()"
               >确定上传</el-button
             >
@@ -73,11 +73,12 @@ export default {
       uploadData: {
         evidenceType: "",
         evidenceName: "",
-        fileList: [],
       },
 
       rules: {
-        evidenceName: [{ required: true, message: "请输入存证名称",trigger: "blur" }],
+        evidenceName: [
+          { required: true, message: "请输入存证名称", trigger: "blur" },
+        ],
         evidenceType: [
           { required: true, message: "请选择存证类型", trigger: "change" },
         ],
@@ -146,6 +147,7 @@ export default {
               },
             };
             axios.defaults.baseURL = "http://127.0.0.1:8080";
+            this.$message('文件开始上传，请稍等！');
             axios
               .post("/user/addEvidence", this.formData, config)
               .then((res) => {
@@ -155,6 +157,8 @@ export default {
                     type: "success",
                     message: "存证上传成功",
                   });
+                  this.$refs.upload.clearFiles(); // 清除文件
+                  
                 } else {
                   this.$message({
                     type: "error",
@@ -177,11 +181,12 @@ export default {
     // 重置表单
     resetForm(formData) {
       this.$nextTick(() => {
-        this.$refs[formData].resetFields();
-        this.$refs.upload.clearFiles();
+        this.$refs[formData].resetFields(); // 清除字段
+        this.$refs.upload.clearFiles(); // 清除文件
       });
-     
     },
+
+
   },
 };
 </script>

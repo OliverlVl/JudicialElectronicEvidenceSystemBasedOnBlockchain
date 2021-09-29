@@ -115,17 +115,16 @@
 
     <!--公证成功弹窗-->
     <el-dialog
-      title="公证成功"
+      title="提示信息"
       :visible.sync="notarySuccessVisible"
       size="tiny"
+      style="width: 60%; margin: 0 auto"
+      :append-to-body="true"
     >
-      <span>回复信息：</span>
-      <el-input
-        placeholder="请输入内容"
-        v-model="notarizationInformation"
-        clearable
-        style="width: 80%"
-      ></el-input>
+      <spam
+        style="text-align: center; display: block; font-size: 20px; color: red"
+        >是否确定通过该公证申请?</spam
+      >
       <div slot="footer">
         <el-button @click="notarySuccessVisible = false">取 消</el-button>
         <el-button type="primary" @click="notarySuccess()">确 定</el-button>
@@ -133,13 +132,24 @@
     </el-dialog>
 
     <!--公证失败弹窗-->
-    <el-dialog title="公证失败" :visible.sync="notaryRefuseVisible" size="tiny">
-      <span>回复信息：</span>
+    <el-dialog
+      title="公证失败"
+      :visible.sync="notaryRefuseVisible"
+      size="tiny"
+      style="width: 80%; margin: 0 auto"
+      :append-to-body="true"
+    >
+      <span style="font-size: 18px;margin-left:10%">回复信息：</span>
+      <br/>
+      <br/>
       <el-input
-        placeholder="请输入内容"
+        type="textarea"
+        placeholder="请输入回复给客户的信息"
         v-model="notarizationInformation"
+        style="margin-left:10%;width:80%"
+        :rows="10"
         clearable
-        style="width: 80%"
+  
       ></el-input>
       <div slot="footer">
         <el-button @click="notaryRefuseVisible = false">取 消</el-button>
@@ -218,7 +228,10 @@
         ></el-table-column>
         <el-table-column label="公证文件" width="140px" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" size="small" @click="handleDown(scope.row)"
+            <el-button
+              type="primary"
+              size="small"
+              @click="handleDown(scope.row)"
               >下载公证材料</el-button
             >
           </template>
@@ -455,7 +468,7 @@ export default {
         evidenceId: this.evidenceId,
         notaryId: sessionStorage.getItem("notaryId"),
         acceptFlag: 1, // 成功标志
-        notarizationInformation: this.notarizationInformation,
+        notarizationInformation: "公证成功",
       };
 
       let result = await audit(query);
@@ -463,12 +476,11 @@ export default {
         this.notarySuccessVisible = false;
         this.$message({
           type: "success",
-          message: "您已通过该公证申请，可在个人已完成列表中查看！",
+          message: "您已通过该公证申请，已生成公证证书，可在个人已完成列表中下载查看！",
         });
-        alert("已成功生成证书");
         this.initData();
       } else {
-        alert("操作失败" + result.message);
+        alert("操作失败");
       }
     },
 
