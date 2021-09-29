@@ -431,12 +431,6 @@ export default {
       }
     },
 
-    handlePageChange(val) {
-      console.log(val);
-      this.pageIndex = val;
-      // this.initData();
-    },
-
     // 申请公证按钮
     async handlePublic(row) {
       this.dialogVisible_notarization = true;
