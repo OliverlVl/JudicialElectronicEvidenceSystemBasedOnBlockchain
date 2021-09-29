@@ -18,7 +18,7 @@
             <template slot="title"
               ><i class="el-icon-document"></i>公证管理</template
             >
-            <el-menu-item index="totalNotarization">待处理列表</el-menu-item>
+            <el-menu-item index="totalNotarization">处理中列表</el-menu-item>
             <el-menu-item index="totalNotarizationApply">已处理列表</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
