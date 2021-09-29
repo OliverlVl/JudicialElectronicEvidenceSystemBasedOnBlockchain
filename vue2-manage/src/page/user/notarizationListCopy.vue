@@ -123,7 +123,7 @@
         <el-table-column label="文件" align="center">
           <template slot-scope="scope">
             <el-button type="danger" size="small" @click="handleDown(scope.row)"
-              >下载存证文件</el-button
+              >下载存证材料</el-button
             >
             <br v-if="scope.row.notarizationStatus == '公证成功'" />
             <br v-if="scope.row.notarizationStatus == '公证成功'" />

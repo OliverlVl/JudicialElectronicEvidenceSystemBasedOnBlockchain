@@ -202,7 +202,16 @@
         <el-table-column label="文件" align="center">
           <template slot-scope="scope">
             <el-button type="danger" size="small" @click="handleDown(scope.row)"
-              >点击下载</el-button
+              >下载存证材料</el-button
+            >
+            <br v-if="scope.row.notarizationStatus == '公证成功'" />
+            <br v-if="scope.row.notarizationStatus == '公证成功'" />
+            <el-button
+              v-if="scope.row.notarizationStatus == '公证成功'"
+              type="success"
+              size="small"
+              @click="handleCertificateDown(scope.row)"
+              >公证证书下载</el-button
             >
           </template>
         </el-table-column>
@@ -668,11 +677,19 @@ export default {
     },
 
     // 文件下载
-    async handleDown(row) {
+    handleDown(row) {
       window.location.href =
         "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
     },
+
+    // 公证证书下载
+    handleCertificateDown(row) {
+      window.location.href =
+        "http://localhost:8080/downloadCertificateFile?evidenceId=" +
+        row.evidenceId;
+    },
   },
+
   // 监听路由跳转，刷新数据
   watch: {
     $route() {
