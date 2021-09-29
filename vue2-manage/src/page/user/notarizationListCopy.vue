@@ -631,20 +631,14 @@ export default {
     // 处理导航页
     handlePageChange(val) {
       this.pageIndex = val;
-      console.log(122311);
-      console.log(this.pageTotal);
       if (val * this.pageSize > this.pageTotal) {
         this.pageData = this.tableData.slice((val - 1) * this.pageSize);
-        console.log(this.pageData);
       } else {
         this.pageData = this.tableData.slice(
           (val - 1) * this.pageSize,
           val * this.pageSize
         );
       }
-
-      console.log(this.pageData);
-      // this.initData();
     },
   },
 
