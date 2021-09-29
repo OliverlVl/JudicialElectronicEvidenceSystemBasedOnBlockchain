@@ -150,9 +150,9 @@ export default {
     handlePageChange(val) {
       this.pageIndex = val;
       if (val * this.pageSize > this.pageTotal) {
-        this.pageData = this.tableData.slice((val - 1) * this.pageSize);
+        this.pageData = this.orgMaterialList.slice((val - 1) * this.pageSize);
       } else {
-        this.pageData = this.tableData.slice(
+        this.pageData = this.orgMaterialList.slice(
           (val - 1) * this.pageSize,
           val * this.pageSize
         );
