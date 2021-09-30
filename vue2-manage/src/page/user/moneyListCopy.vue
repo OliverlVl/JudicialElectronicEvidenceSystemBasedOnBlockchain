@@ -403,7 +403,7 @@ export default {
       if (this.transaction.transactionType == "none") {
         this.transaction.transactionType = "";
       }
-      this.notarization.decryptFlag = 1;
+      this.transaction.decryptFlag = 1;
     },
 
     // 处理导航页
@@ -432,7 +432,7 @@ export default {
   font-size: 0;
 }
 .demo-table-expand label {
-  width: 25%;
+  width: 160px;
   color: #99a9bf;
 }
 .demo-table-expand .el-form-item {
