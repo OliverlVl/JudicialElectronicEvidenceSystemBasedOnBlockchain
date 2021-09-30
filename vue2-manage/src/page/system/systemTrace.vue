@@ -109,7 +109,7 @@
       style="width: 100%"
       :append-to-body="true"
     >
-      <el-form ref="transaction" :model="transaction" label-width="200px">
+      <el-form ref="transaction" :model="transaction" label-width="25%">
         <el-form-item label="用户名">
           <el-input
             v-model="transaction.usernameWildcard"

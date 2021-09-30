@@ -297,7 +297,7 @@ export const sysTransQuery = data => fetch('/aut/transQuery',data, 'POST');
 /**
 * 	系统管理员查询交易记录
 */
-export const sysQuery = data => fetch('/sys/sysQuery',data, 'POST');
+export const sysQuery = data => fetch('/sys/query',data, 'POST');
 /**
 * 	公证员统计时间查询
 */

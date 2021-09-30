@@ -178,7 +178,7 @@
         :model="formRegister"
         :rules="rulesRegister"
         ref="formRegister"
-        label-width="100px"
+        label-width="200px"
         inline
       >
         <el-form-item label="用户名" prop="username">
@@ -243,7 +243,7 @@
         :model="notaryForm"
         :rules="rulesNotaryForm"
         ref="notaryForm"
-        label-width="100px"
+        label-width="200px"
         inline
       >
         <el-form-item label="用户名" prop="notaryName">
@@ -352,7 +352,7 @@
         :model="autManagerForm"
         :rules="rulesAutManagerForm"
         ref="autManagerForm"
-        label-width="100px"
+        label-width="200px"
         inline
       >
         <el-form-item label="用户名" prop="autName">
@@ -431,7 +431,7 @@
         :model="sysManagerForm"
         :rules="rulesSysManagerForm"
         ref="sysManagerForm"
-        label-width="100px"
+        label-width="200px"
         inline
       >
         <el-form-item label="用户名" prop="username">

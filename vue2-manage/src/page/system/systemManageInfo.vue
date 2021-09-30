@@ -3,20 +3,11 @@
     <head-top></head-top>
     <div class="head">信息修改</div>
     <el-form
-      label-width="200px"
+      label-width="25%"
       style="margin-left: 20%; margin-top: 35px"
       :rules="rules"
     >
-      <el-form-item label="姓名:" style="margin-bottom: 3.5%">
-        <el-input
-          v-model="initInfor.username"
-          placeholder="请输入姓名"
-          style="width: 440px"
-          :disabled="true"
-        ></el-input>
-      </el-form-item>
-
-      <el-form-item label="编号:" style="margin-bottom: 3.5%">
+    <el-form-item label="编号:" style="margin-bottom: 1.5%">
         <el-input
           v-model="initInfor.manId"
           placeholder="请输入编号"
@@ -24,8 +15,21 @@
           :disabled="true"
         ></el-input>
       </el-form-item>
-
-      <el-form-item label="手机号:" prop="phone" style="margin-bottom: 3.5%">
+      <el-form-item label="姓名:" style="margin-bottom: 1.5%">
+        <el-input
+          v-model="initInfor.username"
+          placeholder="请输入姓名"
+          style="width: 440px"
+          :disabled="update"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="性别:" style="margin-bottom: 1.5%">
+        <el-radio-group v-model="initInfor.sex" :disabled="update">
+          <el-radio label="0">男</el-radio>
+          <el-radio label="1">女</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="手机号:" prop="phone" style="margin-bottom: 1.5%">
         <el-input
           v-model="initInfor.phoneNumber"
           placeholder="请输入手机号"
@@ -33,23 +37,28 @@
           :disabled="update"
         ></el-input>
       </el-form-item>
-
-      <el-form-item label="密码:" prop="pass" style="margin-bottom: 3.5%">
+      <el-form-item label="身份证号:" style="margin-bottom: 1.5%">
         <el-input
-          v-model="initInfor.password"
-          placeholder="请输入密码"
+          v-model="initInfor.idCard"
           style="width: 440px"
           :disabled="update"
-          show-password
         ></el-input>
       </el-form-item>
-
-      <el-form-item label="邮箱:" prop="emails" style="margin-bottom: 3.5%">
+      <el-form-item label="邮箱:" prop="emails" style="margin-bottom: 1.5%">
         <el-input
           v-model="initInfor.email"
           placeholder="请输入邮箱"
           style="width: 440px"
           :disabled="update"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="新密码:" prop="pass" style="margin-bottom: 1.5%">
+        <el-input
+          v-model="initInfor.newPassword"
+          placeholder="请输入新密码"
+          style="width: 440px"
+          :disabled="update"
+          show-password
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -182,6 +191,7 @@ export default {
           manId: sessionStorage.getItem("manId"),
         };
         await sysQuery(query).then((result) => {
+          console.log(result);
           if (result.status) {
             this.initInfor = {};
             this.initInfor = result.data;
@@ -250,7 +260,7 @@ export default {
   background-color: lightblue;
   text-align: center;
   width: 100%;
-  font-size: 30px;
+  font-size: 40px;
 }
 .search_container {
   padding: 20px;

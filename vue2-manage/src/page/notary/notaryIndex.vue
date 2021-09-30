@@ -123,7 +123,7 @@
                 width="170%"
               ></el-table-column>
               <el-table-column
-                label="公证金额（元）"
+                label="公证金额(￥)"
                 prop="notarizationMoney"
                 align="center"
                 width="170%"
@@ -164,7 +164,7 @@
             }"
           >
             <el-table-column
-              label="公证次数"
+              label="公证总次数"
               prop="notarizationCount"
               align="center"
             ></el-table-column>
@@ -175,11 +175,11 @@
             ></el-table-column>
             <el-table-column
               label="公证驳回次数"
-              prop="notarizationFailedCount"
+              prop="notarizationFailCount"
               align="center"
             ></el-table-column>
             <el-table-column
-              label="公证金额"
+              label="公证金额(￥)"
               prop="notarizationTotalMoney"
               align="center"
             ></el-table-column>
@@ -491,6 +491,12 @@ export default {
     async selChange() {
       console.log(this.noType);
       console.log(this.noreqType);
+      //  清除数据
+      this.noTypeNum = {
+        totalCount: 0,
+        successCount: 0,
+        failedCount: 0,
+      };
       this.noType.forEach((item) => {
         if (this.noreqType == item.notarizationType) {
           this.noTypeNum = {
@@ -516,7 +522,7 @@ export default {
         const query = {
           timeFlag: "",
           decryptFlag: 1,
-          sort:0,
+          sort: 0,
         };
         //公证员统计时间查询
         await notStaTimeQuery().then((result) => {
@@ -537,7 +543,7 @@ export default {
         await notaStasQue(query).then((result) => {
           if (result.status) {
             this.notaInfo = [];
-            console.log(result)
+            console.log(result);
             result.data.forEach((item) => {
               if (sessionStorage.getItem("notaryId") == item.notstyId) {
                 this.notaInfo.push(item);
@@ -549,22 +555,22 @@ export default {
           }
         });
         await rankStasQue(query).then((result) => {
-        if (result.status) {
-          console.log(result);
-          result.data.forEach((item, index) => {
-            if (index < 15) {
-              item["notaryRank"] = index + 1;
-              if (item.notarizationCount == null) {
-                item.notarizationCount = 0;
+          if (result.status) {
+            console.log(result);
+            result.data.forEach((item, index) => {
+              if (index < 15) {
+                item["notaryRank"] = index + 1;
+                if (item.notarizationCount == null) {
+                  item.notarizationCount = 0;
+                }
+                this.noRank.push(item);
               }
-              this.noRank.push(item);
-            }
-          });
-        } else {
-          console.log("公证员排名查询失败");
-          console.log(result.message);
-        }
-      });
+            });
+          } else {
+            console.log("公证员排名查询失败");
+            console.log(result.message);
+          }
+        });
       } catch (error) {
         console.log("排名出错");
         console.log(error);

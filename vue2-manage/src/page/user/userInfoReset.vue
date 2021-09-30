@@ -1,14 +1,15 @@
 <template>
-  <div>
+  <div class="fillcontain">
     <head-top></head-top>
+    <div class="head">信息修改</div>
     <div class="info-set">
-      <el-row style="margin-top: 20px">
-        <el-col :span="12" :offset="2">
+      <el-row style="margin-top: 35px">
+        <el-col :span="12" :offset="4">
           <el-form
             :model="formData"
             :rules="rules"
             ref="formData"
-            label-width="200px"
+            label-width="25%"
           >
             <el-form-item label="用户名:">
               <el-input
@@ -184,9 +185,13 @@ export default {
 
 <style lang="less">
 @import "../../style/mixin";
-// .button_submit {
-//    margin-left: 10%;
-// }
+.head {
+  height: 7%;
+  background-color: lightblue;
+  text-align: center;
+  width: 100%;
+  font-size: 40px;
+}
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -221,6 +226,6 @@ export default {
   margin-left: 10%;
 }
 .info-set .el-form-item {
-  margin-bottom: 6.5%;
+  margin-bottom: 3.5%;
 }
 </style>

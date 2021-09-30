@@ -41,7 +41,7 @@
       style="width: 100%"
       :append-to-body="true"
     >
-      <el-form label-width="200px">
+      <el-form label-width="25%">
         <el-form-item label="存证时间:">
           <el-date-picker
             v-model="timeValue1"

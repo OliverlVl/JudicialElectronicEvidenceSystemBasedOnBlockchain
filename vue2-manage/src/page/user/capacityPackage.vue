@@ -171,22 +171,30 @@ export default {
       userInfo: {},
     };
   },
+
   //监听 formData.storageSize 字段 ，改变时执行函数
   watch: {
+    $route() {
+      this.searchInfo();
+    },
     "formData.storageSize": {
       handler: function () {
         switch (this.formData.storageSize) {
           case "200":
             this.formData.transactionMoney = 99;
+            this.formData.storageSize = 200 * 1024 * 1024;
             break;
           case "1024":
             this.formData.transactionMoney = 199;
+            this.formData.storageSize = 1024 * 1024 * 1024;
             break;
           case "2048":
             this.formData.transactionMoney = 249;
+            this.formData.storageSize = 2048 * 1024 * 1024;
             break;
           case "5120":
             this.formData.transactionMoney = 298;
+            this.formData.storageSize = 5120 * 1024 * 1024;
         }
       },
     },
@@ -259,8 +267,8 @@ export default {
           result.data.forEach((item) => {
             console.log(item);
             this.userInfo.remains = item.remains;
-            this.hasUsedStorage = item.hasUsedStorage;
-            this.storageSpace = item.storageSpace;
+            this.hasUsedStorage = item.hasUsedStorage / 1024 / 1024;
+            this.storageSpace = item.storageSpace / 1024 / 1024;
           });
         }
         console.log(this.userInfo);

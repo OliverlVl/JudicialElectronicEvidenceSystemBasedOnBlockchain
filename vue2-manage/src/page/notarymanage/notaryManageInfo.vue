@@ -2,17 +2,9 @@
   <div class="fillcontain">
     <head-top></head-top>
     <div class="head">信息修改</div>
-    <el-form label-width="200px" style="margin-left: 20%; margin-top: 35px">
-      <el-form-item label="用户名:" style="margin-bottom: 3.5%">
-        <el-input
-          v-model="initInfor.autName"
-          placeholder="请输入用户名"
-          style="width: 440px"
-          :disabled="true"
-        ></el-input>
-      </el-form-item>
-
-      <el-form-item label="编号:" style="margin-bottom: 3.5%">
+    <el-form label-width="25%" style="margin-left: 20%; margin-top: 35px">
+      
+      <el-form-item label="编号:" style="margin-bottom: 1.5%">
         <el-input
           v-model="initInfor.autManId"
           placeholder="请输入编号"
@@ -20,8 +12,7 @@
           :disabled="true"
         ></el-input>
       </el-form-item>
-
-      <el-form-item label="所属机构:" style="margin-bottom: 3.5%">
+      <el-form-item label="所属机构:" style="margin-bottom: 1.5%">
         <el-input
           v-model="initInfor.organizationName"
           placeholder="请选择所属机构"
@@ -29,8 +20,21 @@
           :disabled="true"
         ></el-input>
       </el-form-item>
-
-      <el-form-item label="手机号:" prop="phone" style="margin-bottom: 3.5%">
+      <el-form-item label="用户名:" style="margin-bottom: 1.5%">
+        <el-input
+          v-model="initInfor.autName"
+          placeholder="请输入用户名"
+          style="width: 440px"
+          :disabled="update"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="性别:" style="margin-bottom: 1.5%">
+        <el-radio-group v-model="initInfor.sex" :disabled="update">
+          <el-radio label="男">男</el-radio>
+          <el-radio label="女">女</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="手机号:" prop="phone" style="margin-bottom: 1.5%">
         <el-input
           v-model="initInfor.phoneNumber"
           placeholder="请输入手机号"
@@ -38,8 +42,22 @@
           :disabled="update"
         ></el-input>
       </el-form-item>
-
-      <el-form-item label="新密码:" prop="pass" style="margin-bottom: 3.5%">
+      <el-form-item label="身份证号:" prop="idCard" style="margin-bottom: 1.5%">
+        <el-input
+          v-model="initInfor.idCard"
+          style="width: 440px"
+          :disabled="update"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱:" prop="emails" style="margin-bottom: 1.5%">
+        <el-input
+          v-model="initInfor.email"
+          placeholder="请输入邮箱"
+          style="width: 440px"
+          :disabled="update"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="新密码:" prop="pass" style="margin-bottom: 1.5%">
         <el-input
           v-model="initInfor.newPassword"
           placeholder="请输入密码"
@@ -48,69 +66,40 @@
           :disabled="update"
         ></el-input>
       </el-form-item>
-
-      <el-form-item label="邮箱:" prop="emails" style="margin-bottom: 3.5%">
-        <el-input
-          v-model="initInfor.email"
-          placeholder="请输入邮箱"
-          style="width: 440px"
-          :disabled="update"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="性别:" prop="sex" style="margin-bottom: 3.5%">
-        <el-select
-          :popper-append-to-body="false"
-          v-model="initInfor.sex"
-          placeholder="请选择"
-          :disabled="update"
-           style="width: 440px"
-        >
-          <el-option
-            v-for="item in sex"
-            :key="item.label"
-            :label="item.key"
-            :value="item.key"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item>
         <el-button
-        id="updateId"
-        type="primary"
-        @click="
-          update = false;
-          updateVisible();
-        "
-        style="display: inline; width: 440px"
-        >修改</el-button
-      >
-      <el-button
-        id="cancelId"
-        type="primary"
-        @click="
-          update = true;
-          cancelAndSubmitVisible();
-        "
-        style="display: none; width: 205px"
-        >取消</el-button
-      >
-      <el-button
-        id="submitId"
-        type="primary"
-        @click="
-          update = true;
-          cancelAndSubmitVisible();
-          SubmitInfo();
-        "
-        style="display: none; width: 205px"
-        >保存</el-button
-      >
+          id="updateId"
+          type="primary"
+          @click="
+            update = false;
+            updateVisible();
+          "
+          style="display: inline; width: 440px"
+          >修改</el-button
+        >
+        <el-button
+          id="cancelId"
+          type="primary"
+          @click="
+            update = true;
+            cancelAndSubmitVisible();
+          "
+          style="display: none; width: 205px"
+          >取消</el-button
+        >
+        <el-button
+          id="submitId"
+          type="primary"
+          @click="
+            update = true;
+            cancelAndSubmitVisible();
+            SubmitInfo();
+          "
+          style="display: none; width: 205px"
+          >保存</el-button
+        >
       </el-form-item>
     </el-form>
-    
-      
-  
   </div>
 </template>
 
@@ -140,10 +129,7 @@ export default {
         notarizationType: "none",
       },*/
       initInfor: {},
-      sex: [
-        { label: "0", key: "男" },
-        { label: "1", key: "女" },
-      ],
+
       /*
       rules: {
         phone: [
@@ -226,17 +212,24 @@ export default {
     // 提交
     async SubmitInfo() {
       try {
-        
         if (this.initInfor.sex == "男") {
           this.initInfor.sex = "0";
         } else {
           this.initInfor.sex = "1";
         }
-        
+
         await autUpdate(this.initInfor).then((result) => {
           if (result.status) {
-            alert("修改成功");
+            this.$message({
+              type: "success",
+              message: "修改成功!",
+            });
+            this.initData();
           } else {
+            this.$message({
+              type: "error",
+              message: "修改失败!",
+            });
             console.log(result.message);
           }
         });
@@ -258,7 +251,7 @@ export default {
   background-color: lightblue;
   text-align: center;
   width: 100%;
-  font-size: 30px;
+  font-size: 40px;
 }
 .search_container {
   padding: 20px;

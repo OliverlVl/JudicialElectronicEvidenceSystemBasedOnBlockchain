@@ -40,7 +40,7 @@
       style="width: 100%"
       :append-to-body="true"
     >
-      <el-form label-width="200px">
+      <el-form label-width="35%">
         <el-form-item label="机构管理员姓名:">
           <el-input
             v-model="autMInfo.autNameWildcard"

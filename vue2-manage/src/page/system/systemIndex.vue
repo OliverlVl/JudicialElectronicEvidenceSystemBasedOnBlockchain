@@ -124,7 +124,7 @@
                 width="170%"
               ></el-table-column>
               <el-table-column
-                label="公证金额（元）"
+                label="公证金额(￥)"
                 prop="notarizationMoney"
                 align="center"
                 width="170%"
@@ -532,6 +532,12 @@ export default {
     async selChange() {
       console.log(this.noType);
       console.log(this.noreqType);
+      //  清除数据
+      this.noTypeNum = {
+        totalCount: 0,
+        successCount: 0,
+        failedCount: 0,
+      };
       this.noType.forEach((item) => {
         if (this.noreqType == item.notarizationType) {
           this.noTypeNum = {

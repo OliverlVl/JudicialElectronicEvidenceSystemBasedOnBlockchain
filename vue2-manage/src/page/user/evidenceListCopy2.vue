@@ -119,7 +119,7 @@
       :before-close="handleClose"
       :append-to-body="true"
     >
-      <el-form ref="notarization" :model="notarization" label-width="100px">
+      <el-form ref="notarization" :model="notarization" label-width="30%">
         <el-form-item label="公证类型">
           <el-select
             v-model="notarization.notarizationType"
@@ -184,7 +184,7 @@
       style="width: 100%"
       :append-to-body="true"
     >
-      <el-form ref="evidence" :model="evidence" label-width="200px">
+      <el-form ref="evidence" :model="evidence" label-width="25%">
         <el-form-item label="存证名称">
           <el-input
             v-model="evidence.evidenceName"
@@ -464,6 +464,7 @@ export default {
 
             //
             this.dialogVisible_notarization = false;
+            this.getEvidenceData();
             //
             this.notarPayVisible = true;
           } else {

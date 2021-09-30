@@ -160,7 +160,7 @@
       style="width: 100%"
       :append-to-body="true"
     >
-      <el-form ref="notarization" :model="notarization" label-width="200px">
+      <el-form ref="notarization" :model="notarization" label-width="25%">
         <el-form-item label="存证名称">
           <el-input
             v-model="notarization.evidenceName"
