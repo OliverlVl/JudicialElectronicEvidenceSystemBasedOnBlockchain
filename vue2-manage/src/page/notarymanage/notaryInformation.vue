@@ -454,6 +454,7 @@ export default {
                     type: "success",
                     message: "材料上传成功",
                   });
+                  this.isuploadfile = false;
                   this.$refs.upload.clearFiles(); // 清除文件
 
                 } else {

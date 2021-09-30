@@ -19,6 +19,9 @@
               ><i class="el-icon-user-solid"></i>成员管理</template
             >
             <el-menu-item index="systemUser">用户列表</el-menu-item>
+            <el-menu-item index="systemOrganization"
+              >机构列表</el-menu-item
+            >
             <el-menu-item index="systemNotaryManager"
               >机构管理员列表</el-menu-item
             >

@@ -358,6 +358,7 @@ export default {
         //获取组织名
         await orgaQuery(orgQuery).then((result) => {
           if (result.status) {
+            console.log(result)
             this.orgName = [];
             result.data.forEach((item) => {
               this.orgName.push(item);

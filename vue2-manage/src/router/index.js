@@ -43,7 +43,8 @@ const NMNotarizationInfo = r => require.ensure([], () => r(require('@/page/notar
 const systemManage = r => require.ensure([], () => r(require('@/page/system/systemManage')), 'systemManage');//首页
 const systemUser = r => require.ensure([], () => r(require('@/page/system/systemUser')), 'systemUser');//用户列表
 const systemNotary = r => require.ensure([], () => r(require('@/page/system/systemNotary')), 'systemNotary');//公证员列表
-const systemNotaryManager = r => require.ensure([], () => r(require('@/page/system/systemNotaryManager')), 'systemNotaryManager');//公证管理员列表
+const systemNotaryManager = r => require.ensure([], () => r(require('@/page/system/systemNotaryManager')), 'systemNotaryManager');// 公证管理员列表
+const systemOrganization = r => require.ensure([], () => r(require('@/page/system/systemOrganization')), 'systemNotaryManager');// 机构列表
 const systemNotarization = r => require.ensure([], () => r(require('@/page/system/systemNotarization')), 'systemNotarization');//处理中公证记录
 const systemNotarizationApply = r => require.ensure([], () => r(require('@/page/system/systemNotarizationApply')), 'systemNotarizationApply');//已处理公证记录
 const systemEvidence = r => require.ensure([], () => r(require('@/page/system/systemEvidence')), 'systemEvidence');//存证记录
@@ -203,6 +204,11 @@ const routes = [
 		path: '/systemNotary',
 		component: systemNotary,
 		meta: ['成员管理', '公证员列表'],
+		
+	},{
+		path: '/systemOrganization',
+		component: systemOrganization,
+		meta: ['成员管理', '机构列表'],
 	}, {
 		path: '/systemNotaryManager',
 		component: systemNotaryManager,

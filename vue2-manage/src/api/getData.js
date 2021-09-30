@@ -11,16 +11,15 @@ export const userLogin = data => fetch('/user/login', data, 'POST');
  * 公证员登陆
  */
 
- export const notaryLogin = data => fetch('/notar/login', data, 'POST');
+export const notaryLogin = data => fetch('/notar/login', data, 'POST');
 /**
  * 机构管理员登陆
  */
 
- export const autManagerLogin = data => fetch('/aut/login', data, 'POST');
+export const autManagerLogin = data => fetch('/aut/login', data, 'POST');
  /**
  * 系统管理员登陆
  */
-
 export const sysManagerLogin = data => fetch('/sys/login', data, 'POST');
 
 /**
@@ -28,22 +27,27 @@ export const sysManagerLogin = data => fetch('/sys/login', data, 'POST');
  */
 
 export const regist = data => fetch('/user/regist', data, 'POST');
+
 /**
  * 公证员注册
  */
-
- export const notaryRegist = data => fetch('/notar/regist', data, 'POST');
+export const notaryRegist = data => fetch('/notar/regist', data, 'POST');
 
  /**
  * 机构管理员注册
  */
+export const autManagerRegist = data => fetch('/aut/regist', data, 'POST');
 
-  export const autManagerRegist = data => fetch('/aut/regist', data, 'POST');
-
-  /**
+/**
  * 系统管理员注册
  */
- export const sysManagerRegist = data => fetch('/sys/regist', data, 'POST');
+export const sysManagerRegist = data => fetch('/sys/regist', data, 'POST');
+
+/**
+ * 添加机构
+ */
+export const addOrganization = data => fetch('/organizationGen', data, 'POST');
+ 
 
 /**
  * 获取存证类型
@@ -63,7 +67,7 @@ export const userEvidenceQuery = data => fetch('/user/evidenceQuery', data, 'POS
 /**
  * 公证机构查询
  */
- export const orgaQuery = data => fetch('/aut/orgaQuery', data, 'POST');
+export const orgaQuery = data => fetch('/aut/orgaQuery', data, 'POST');
 
  /**
  * 公证类型查询
@@ -73,7 +77,7 @@ export const noTypeQuery = data => fetch('/noTypeQuery', data, 'POST');
 /**
  * 公证请求
  */
- export const notarReq = data => fetch('/user/notarReq', data, 'POST');
+export const notarReq = data => fetch('/user/notarReq', data, 'POST');
 
  /**
  * 公证缴费
@@ -83,12 +87,12 @@ export const notarPay = data => fetch('/user/notarPay', data, 'POST');
  /**
  * 用户公证申请记录查询
  */
-  export const userNotarRecord = data => fetch('/user/notarRecord', data, 'POST');
+export const userNotarRecord = data => fetch('/user/notarRecord', data, 'POST');
 
  /**
  * 用户公证申请记录查询
  */
-  export const downloadUserFile = data => fetch('/downloadUserFile', data, 'POST');
+export const downloadUserFile = data => fetch('/downloadUserFile', data, 'POST');
   
 
 

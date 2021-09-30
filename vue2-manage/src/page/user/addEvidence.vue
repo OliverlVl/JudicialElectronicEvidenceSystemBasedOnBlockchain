@@ -157,6 +157,7 @@ export default {
                     type: "success",
                     message: "存证上传成功",
                   });
+                  this.isuploadfile = false;
                   this.$refs.upload.clearFiles(); // 清除文件
                   
                 } else {

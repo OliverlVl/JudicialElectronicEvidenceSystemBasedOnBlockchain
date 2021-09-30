@@ -41,21 +41,6 @@
     </div>
     <div class="table_container">
       <el-table :data="pageData" style="width: 100%" stripe>
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="right" inline class="demo-table-expand">
-              <el-form-item label="上链时间:">
-                <span>{{ props.row.blockchainTime }}</span>
-              </el-form-item>
-              <el-form-item label="交易对象:">
-                <span>{{ props.row.transactionPeople }}</span>
-              </el-form-item>
-              <el-form-item label="购买存储空间大小(KB)):">
-                <span>{{ props.row.storageSize }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
         <el-table-column
           type="index"
           label="序号"
@@ -66,7 +51,7 @@
         <el-table-column
           label="交易编号"
           align="center"
-          width="300px"
+          width="150px"
           prop="transactionId"
         ></el-table-column>
         <el-table-column
@@ -75,10 +60,23 @@
           width="120px"
           prop="transactionMoney"
         ></el-table-column>
+                <el-table-column
+          label="交易类型"
+          align="center"
+          width="140px"
+          prop="transactionType"
+        ></el-table-column>
         <el-table-column
           label="交易时间"
           align="center"
+          width="160px"
           prop="transactionTime"
+        ></el-table-column>
+        <el-table-column
+          label="上链时间:"
+          align="center"
+          width="160px"
+          prop="blockchainTime"
         ></el-table-column>
         <el-table-column
           label="区块链ID"
@@ -86,9 +84,15 @@
           prop="transactionBlockchainId"
         ></el-table-column>
         <el-table-column
-          label="交易类型"
+          label="交易对象"
           align="center"
-          prop="transactionType"
+          prop="transactionPeople"
+        ></el-table-column>
+        <el-table-column
+          label="购买存储空间大小(GB)"
+          align="center"
+          width="170px"
+          prop="storageSize"
         ></el-table-column>
       </el-table>
 
@@ -101,7 +105,9 @@
           :total="pageTotal"
           @current-change="handlePageChange"
         ></el-pagination>
+        <span style="float:right">注："/"表示没有数据</span>
       </div>
+
     </div>
     <el-dialog
       title="高级搜索"
@@ -180,7 +186,7 @@ import { transQuery } from "@/api/getData";
 export default {
   data() {
     return {
-      pageData:[],
+      pageData: [],
       searchVisible: false,
       transaction: {
         userId: sessionStorage.getItem("userId"),
@@ -277,9 +283,9 @@ export default {
   },
   methods: {
     // 序号
-    indexMethod(index){
+    indexMethod(index) {
       // index 从 0 开始的
-      return (this.pageIndex -1)* this.pageSize + index +1;
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
     // 交易时间赋值
     selectTransactionTime() {
@@ -366,7 +372,7 @@ export default {
                   str = item.transactionPeople.split(":");
                   item.transactionPeople = str[2].substring(0, 6) + "******";
                 } else {
-                  item.transactionPeople = "暂无数据";
+                  item.transactionPeople = "/";
                 }
               }
               if (item.blockchainTime == null) {
@@ -376,10 +382,13 @@ export default {
                 item.transactionBlockchainId = "暂无数据";
               }
               if (item.storageSize == null) {
-                item.storageSize = "暂无数据";
+                item.storageSize = "/";
+              }else{
+                item.storageSize = item.storageSize/1024/1024
               }
+
               if (item.transactionPeople == null) {
-                item.transactionPeople = "暂无数据";
+                item.transactionPeople = "/";
               }
               if (item.transactionTime != null) {
                 item.transactionTime =
@@ -418,7 +427,11 @@ export default {
         );
       }
     },
-    
+  },
+  watch: {
+    $route() {
+      this.getTransactionData();
+    },
   },
 };
 </script>
