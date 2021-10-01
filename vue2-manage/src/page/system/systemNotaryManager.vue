@@ -281,7 +281,15 @@ export default {
     },
 
     dealData() {
-      //加解密
+      // 公证机构
+      if (this.autMInfo.organizationId == "") {
+        this.autMInfo.organizationId = "none";
+      }
+      // 性别
+      if (this.autMInfo.sex == "") {
+        this.autMInfo.sex = "none";
+      }
+      // 加解密
       if (this.decrypt_flag) {
         this.autMInfo.decryptFlag = 1;
       } else {
@@ -309,8 +317,19 @@ export default {
             console.log(result.message);
           }
         });
+        this.resetData();
       } catch (error) {
         throw new Error(error.message);
+      }
+    },
+    resetData() {
+      // 公证机构
+      if (this.autMInfo.organizationId == "none") {
+        this.autMInfo.organizationId = "";
+      }
+      // 性别
+      if (this.autMInfo.sex == "none") {
+        this.autMInfo.sex = "";
       }
     },
   },

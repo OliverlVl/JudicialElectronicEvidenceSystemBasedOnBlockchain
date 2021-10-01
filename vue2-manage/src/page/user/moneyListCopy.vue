@@ -6,6 +6,7 @@
         v-model="transaction.transactionType"
         style="margin-left: 3%; width: 390px"
         placeholder="请选择交易类型"
+        clearable
       >
         <el-option
           v-for="item in transactionType"
@@ -60,7 +61,7 @@
           width="120px"
           prop="transactionMoney"
         ></el-table-column>
-                <el-table-column
+        <el-table-column
           label="交易类型"
           align="center"
           width="140px"
@@ -105,9 +106,8 @@
           :total="pageTotal"
           @current-change="handlePageChange"
         ></el-pagination>
-        <span style="float:right">注："/"表示没有数据</span>
+        <span style="float: right">注："/"表示没有数据</span>
       </div>
-
     </div>
     <el-dialog
       title="高级搜索"
@@ -121,6 +121,7 @@
             v-model="transaction.transactionType"
             style="width: 37.5%"
             placeholder="请选择交易类型"
+            clearable
           >
             <el-option
               v-for="item in transactionType"
@@ -132,12 +133,20 @@
         </el-form-item>
         <el-form-item label="交易金额">
           <el-col :span="4">
-            <el-input v-model="transactionMoneyFloor" placeholder="最低金额">
+            <el-input
+              v-model="transactionMoneyFloor"
+              placeholder="最低金额"
+              clearable
+            >
             </el-input>
           </el-col>
           <el-col class="line" :span="1" align="middle">-</el-col>
           <el-col :span="4">
-            <el-input v-model="transactionMoneyUpper" placeholder="最高金额">
+            <el-input
+              v-model="transactionMoneyUpper"
+              placeholder="最高金额"
+              clearable
+            >
             </el-input>
           </el-col>
         </el-form-item>
@@ -190,13 +199,7 @@ export default {
       searchVisible: false,
       transaction: {
         userId: sessionStorage.getItem("userId"),
-        // 交易类型
-        transactionType: "",
-        //交易金额
-        // 加解密：1 解密 0 加密
         decryptFlag: 1,
-        //上链时间
-        // 交易时间
       },
       //
       decrypt_flag: true,
@@ -287,46 +290,57 @@ export default {
       // index 从 0 开始的
       return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
+
     // 交易时间赋值
     selectTransactionTime() {
-      let start = this.transactionTime[0];
-      let end = this.transactionTime[1];
-      this.transaction.transactionTimeStart = start.getTime();
-      // start.getFullYear() +
-      // "-" +
-      // (start.getMonth() + 1) +
-      // "-" +
-      // start.getDate() +
-      // " " +
-      // start.getHours() +
-      // ":" +
-      // start.getMinutes() +
-      // ":" +
-      // start.getSeconds();
-      this.transaction.transactionTimeEnd = end.getTime();
-      console.log(this.transaction.transactionTimeStart);
+      if (this.transactionTime != null) {
+        let start = this.transactionTime[0];
+        let end = this.transactionTime[1];
+        this.transaction.transactionTimeStart = start.getTime();
+        this.transaction.transactionTimeEnd = end.getTime();
+      } else {
+        delete this.transaction.transactionTimeStart;
+        delete this.transaction.transactionTimeEnd;
+      }
     },
 
     // 上链时间赋值
     selectBlockchainTime() {
-      let start = this.blockchainTime[0];
-      let end = this.blockchainTime[1];
-      this.transaction.blockchainTimeStart = start.getTime();
-      console.log(this.transaction.blockchainTimeStart);
-      this.transaction.blockchainTimeEnd = end.getTime();
-      console.log(this.transaction.blockchainTimeEnd);
+      if (this.blockchainTime != null) {
+        let start = this.blockchainTime[0];
+        let end = this.blockchainTime[1];
+        this.transaction.blockchainTimeStart = start.getTime();
+        this.transaction.blockchainTimeEnd = end.getTime();
+      } else {
+        delete this.transaction.blockchainTimeStart;
+        delete this.transaction.blockchainTimeEnd;
+      }
+    },
+
+    dealData() {
+      // 交易类型
+      if (this.transaction.transactionType == "") {
+        this.transaction.transactionType = "none";
+      }
+      // 加解密
+      if (this.decrypt_flag) {
+        this.transaction.decryptFlag = 1;
+      } else {
+        this.transaction.decryptFlag = 0;
+      }
+    },
+    resetData() {
+      if (this.transaction.transactionType == "none") {
+        this.transaction.transactionType == "";
+      }
     },
 
     // 获取数据
     async getTransactionData() {
       try {
+        this.dealData();
         // 关闭弹窗
         this.searchVisible = false;
-        // 判断
-        if (this.transaction.transactionType == "") {
-          this.transaction.transactionType = "none";
-        }
-
         if (
           this.transactionMoneyFloor != "" &&
           this.transactionMoneyUpper != ""
@@ -351,14 +365,7 @@ export default {
           this.transaction.transactionMoneyFloor = this.transactionMoneyFloor;
           this.transaction.transactionMoneyUpper = this.transactionMoneyUpper;
         }
-        if (this.decrypt_flag) {
-          this.transaction.decryptFlag = 1;
-        } else {
-          this.transaction.decryptFlag = 0;
-        }
         // 请求数据
-        this.transaction.userId = sessionStorage.getItem("userId");
-
         await transQuery(this.transaction).then((result) => {
           console.log(this.transaction);
           console.log(result);
@@ -383,8 +390,8 @@ export default {
               }
               if (item.storageSize == null) {
                 item.storageSize = "/";
-              }else{
-                item.storageSize = item.storageSize/1024/1024
+              } else {
+                item.storageSize = item.storageSize / 1024 / 1024;
               }
 
               if (item.transactionPeople == null) {
@@ -409,10 +416,7 @@ export default {
       } catch (error) {
         throw new Error(error.message);
       }
-      if (this.transaction.transactionType == "none") {
-        this.transaction.transactionType = "";
-      }
-      this.transaction.decryptFlag = 1;
+      this.resetData();
     },
 
     // 处理导航页

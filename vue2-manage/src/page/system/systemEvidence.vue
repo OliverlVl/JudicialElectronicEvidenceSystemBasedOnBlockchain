@@ -260,9 +260,9 @@ export default {
   },
   methods: {
     // 序号
-    indexMethod(index){
+    indexMethod(index) {
       // index 从 0 开始的
-      return (this.pageIndex -1)* this.pageSize + index +1;
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
 
     //获取存证类型
@@ -329,41 +329,53 @@ export default {
             throw new Error("获取数据失败");
           }
         });
+        this.resetData();
       } catch (error) {
         throw new Error(error.message);
       }
     },
     dealData() {
       try {
-        //加解密
+        // 存证类型
+        if (this.evidence.evidenceType == "") {
+          this.evidence.evidenceType = "none";
+        }
+        // 加解密
         if (this.decrypt_flag) {
           this.evidence.decryptFlag = 1;
         } else {
           this.evidence.decryptFlag = 0;
         }
-        //时间
+        // 时间
         if (this.timeValue1 != "" && this.timeValue1 != null) {
           this.evidence.evidenceTimeStart = this.timeValue1.getTime();
-        }else {
+        } else {
           delete this.evidence.evidenceTimeStart;
         }
-        if (this.timeValue2 != ""&& this.timeValue2 != null) {
+        if (this.timeValue2 != "" && this.timeValue2 != null) {
           this.evidence.evidenceTimeEnd = this.timeValue2.getTime();
-        }else {
+        } else {
           delete this.evidence.evidenceTimeEnd;
         }
         if (this.timeValue3 != "" && this.timeValue3 != null) {
           this.evidence.blockchainTimeStart = this.timeValue3.getTime();
-        }else {
+        } else {
           delete this.evidence.blockchainTimeStart;
         }
-        if (this.timeValue4 != ""&& this.timeValue4 != null) {
+        if (this.timeValue4 != "" && this.timeValue4 != null) {
           this.evidence.blockchainTimeEnd = this.timeValue4.getTime();
-        }else {
+        } else {
           delete this.evidence.blockchainTimeEnd;
         }
       } catch (error) {
         throw new Error(error.message);
+      }
+    },
+
+    resetData() {
+      // 存证类型
+      if (this.evidence.evidenceType == "none") {
+        this.evidence.evidenceType = "";
       }
     },
 

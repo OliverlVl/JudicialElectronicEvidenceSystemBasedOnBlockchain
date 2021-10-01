@@ -759,6 +759,7 @@ export default {
           await userLogin(this.loginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("userId", result.userId);
+              sessionStorage.setItem("username",this.loginForm.username);
               this.$message({
                 type: "success",
                 message: "登入成功",

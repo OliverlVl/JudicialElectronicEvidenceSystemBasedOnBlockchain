@@ -63,6 +63,7 @@
             v-model="notaryInfo.notarizationType"
             style="width: 240px"
             placeholder="请选择"
+            clearable
           >
             <el-option
               v-for="item in notarization_type"
@@ -288,6 +289,10 @@ export default {
     },
 
     dealData() {
+      // 性别
+      if (this.notaryInfo.sex == "") {
+        this.notaryInfo.sex = "none";
+      }
       //公证类型
       if (
         this.notaryInfo.notarizationType == "" ||
@@ -329,6 +334,10 @@ export default {
     },
     // 数据重置
     resetData() {
+      // 性别
+      if (this.notaryInfo.sex == "none") {
+        this.notaryInfo.sex = "";
+      }
       //公证类型
       if (this.notaryInfo.notarizationType == "none") {
         this.notaryInfo.notarizationType = "不限";

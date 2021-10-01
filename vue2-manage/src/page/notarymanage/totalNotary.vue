@@ -11,7 +11,7 @@
         <el-button
           slot="append"
           icon="el-icon-search"
-          @click="handleSearch()"
+          @click="getNotaryData()"
         ></el-button>
       </el-input>
       <el-button
@@ -131,7 +131,7 @@
         <el-button @click="searchVisible = false">取 消</el-button>
         <el-button
           @click="
-            handleSearch();
+            getNotaryData();
             searchVisible = false;
           "
           type="primary"
@@ -219,14 +219,6 @@ export default {
       telephone: "",
       //用户信息
       notaryInfo: {
-        notaryId: "",
-        notaryNameWildcard: "",
-        phoneNumberWildcard: "",
-        jobNumberWildcard: "",
-        idCard: "",
-        emailWildcard: "",
-        sex: "",
-        notarizationType: "",
         decryptFlag: 1,
         organizationId: sessionStorage.getItem("organizationId"),
       },
@@ -251,8 +243,8 @@ export default {
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
-    this.initData();
+    this.getNotaryData();
+    this.getNotarizationType();
   },
   computed: {},
   components: {
@@ -260,51 +252,21 @@ export default {
   },
   methods: {
     // 序号
-    indexMethod(index){
+    indexMethod(index) {
       // index 从 0 开始的
-      return (this.pageIndex -1)* this.pageSize + index +1;
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
 
-    // 初始化数据
-    async initData() {
-      try {
-        const query = {
-          notaryId: "none",
-          notaryNameWildcard: "none",
-          phoneNumberWildcard: "none",
-          jobNumberWildcard: "none",
-          idCard: "none",
-          emailWildcard: "none",
-          sex: "none",
-          notarizationType: "none",
-          decryptFlag: 1,
-          organizationId: sessionStorage.getItem("organizationId"),
-        };
-        await notaQuery(query).then((result) => {
-          if (result.status) {
-            this.tableData = [];
-            result.data.forEach((item) => {
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-            this.handlePageChange(1);
-          } else {
-            throw new Error("获取数据失败");
-          }
-        });
-        console.log(this.tableData);
-        //获取公证类型
-        await noTypeQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.notarization_type.push(item);
-            });
-            console.log(this.notarization_type);
-          }
-        });
-      } catch (error) {
-        throw new Error(error.message);
-      }
+    // 获取公证类型
+    getNotarizationType() {
+      noTypeQuery().then((typeres) => {
+        if (typeres.status) {
+          typeres.data.forEach((item) => {
+            this.notarization_type.push(item);
+          });
+          console.log(this.notarization_type);
+        }
+      });
     },
 
     // 处理导航页
@@ -321,30 +283,6 @@ export default {
     },
 
     dealData() {
-      //用户编号
-      if (this.notaryInfo.notaryId == "") {
-        this.notaryInfo.notaryId = "none";
-      }
-      //用户名
-      if (this.notaryInfo.notaryNameWildcard == "") {
-        this.notaryInfo.notaryNameWildcard = "none";
-      }
-      //电话号码
-      if (this.notaryInfo.phoneNumberWildcard == "") {
-        this.notaryInfo.phoneNumberWildcard = "none";
-      }
-      //工号
-      if (this.notaryInfo.jobNumberWildcard == "") {
-        this.notaryInfo.jobNumberWildcard = "none";
-      }
-      //身份证号
-      if (this.notaryInfo.idCard == "") {
-        this.notaryInfo.idCard = "none";
-      }
-      //邮箱
-      if (this.notaryInfo.emailWildcard == "") {
-        this.notaryInfo.emailWildcard = "none";
-      }
       //性别
       if (this.notaryInfo.sex == "") {
         this.notaryInfo.sex = "none";
@@ -362,10 +300,9 @@ export default {
       } else {
         this.notaryInfo.decryptFlag = 0;
       }
-      //alert(this.notaryInfo.decryptFlag);
     },
-    // 搜索
-    async handleSearch() {
+    // 获取数据
+    async getNotaryData() {
       try {
         this.dealData();
         await notaQuery(this.notaryInfo).then((result) => {
@@ -390,30 +327,6 @@ export default {
       }
     },
     resetData() {
-      //用户编号
-      if (this.notaryInfo.notaryId == "none") {
-        this.notaryInfo.notaryId = "";
-      }
-      //用户名
-      if (this.notaryInfo.notaryNameWildcard == "none") {
-        this.notaryInfo.notaryNameWildcard = "";
-      }
-      //电话号码
-      if (this.notaryInfo.phoneNumberWildcard == "none") {
-        this.notaryInfo.phoneNumberWildcard = "";
-      }
-      //工号
-      if (this.notaryInfo.jobNumberWildcard == "none") {
-        this.notaryInfo.jobNumberWildcard = "";
-      }
-      //身份证号
-      if (this.notaryInfo.idCard == "none") {
-        this.notaryInfo.idCard = "";
-      }
-      //邮箱
-      if (this.notaryInfo.emailWildcard == "none") {
-        this.notaryInfo.emailWildcard = "";
-      }
       //性别
       if (this.notaryInfo.sex == "none") {
         this.notaryInfo.sex = "";

@@ -6,6 +6,7 @@
         v-model="transaction.usernameWildcard"
         style="margin-left: 3%; width: 390px"
         placeholder="请输入用户名"
+        clearable
       >
         <el-button
           slot="append"
@@ -242,8 +243,8 @@ export default {
           },
         ],
       },
-      transactionTime: "",
-      blockchainTime: "",
+      transactionTime: null,
+      blockchainTime: null,
       transactionMoneyFloor: "",
       transactionMoneyUpper: "",
 
@@ -300,7 +301,7 @@ export default {
 
     // 交易时间赋值
     selectTransactionTime() {
-      if (this.transactionTime != "" && this.transactionTime != null) {
+      if (this.transactionTime != null) {
         let start = this.transactionTime[0];
         let end = this.transactionTime[1];
         this.transaction.transactionTimeStart = start.getTime();
@@ -313,7 +314,7 @@ export default {
 
     // 上链时间赋值
     selectBlockchainTime() {
-      if (this.blockchainTime != "" && this.blockchainTime != null) {
+      if (this.blockchainTime != null) {
         let start = this.blockchainTime[0];
         let end = this.blockchainTime[1];
         this.transaction.blockchainTimeStart = start.getTime();
@@ -324,9 +325,28 @@ export default {
       }
     },
 
+    dealData() {
+      // 交易类型
+        if (this.transaction.transactionType == "") {
+          this.transaction.transactionType = "none";
+        }
+      // 加解密
+      if (this.decrypt_flag) {
+        this.transaction.decryptFlag = 1;
+      } else {
+        this.transaction.decryptFlag = 0;
+      }
+    },
+    resetData() {
+      if (this.transaction.transactionType == "none") {
+        this.transaction.transactionType == "";
+      }
+    },
+
     // 获取数据
     async getTransactionData() {
       try {
+         this.dealData();
         // 关闭弹窗
         this.searchVisible = false;
         if (
@@ -352,11 +372,6 @@ export default {
           }
           this.transaction.transactionMoneyFloor = this.transactionMoneyFloor;
           this.transaction.transactionMoneyUpper = this.transactionMoneyUpper;
-        }
-        if (this.decrypt_flag) {
-          this.transaction.decryptFlag = 1;
-        } else {
-          this.transaction.decryptFlag = 0;
         }
         await sysTransQuery(this.transaction).then((result) => {
           console.log(this.transaction);
@@ -403,12 +418,7 @@ export default {
             console.log("获取数据失败");
           }
         });
-        if (this.transaction.transactionType == "none") {
-          this.transaction.transactionType = "";
-        }
-        if (this.transaction.usernameWildcard == "none") {
-          this.transaction.usernameWildcard = "";
-        }
+        this.resetData();
       } catch (error) {
         throw new Error(error.message);
       }
