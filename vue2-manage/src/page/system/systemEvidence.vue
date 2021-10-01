@@ -11,7 +11,7 @@
         <el-button
           slot="append"
           icon="el-icon-search"
-          @click="handleSearch()"
+          @click="getEvidenceData()"
         ></el-button>
       </el-input>
 
@@ -108,7 +108,7 @@
         <el-button @click="searchVisible = false">取 消</el-button>
         <el-button
           @click="
-            handleSearch();
+            getEvidenceData();
             searchVisible = false;
           "
           type="primary"
@@ -237,14 +237,6 @@ export default {
         },
       ],
       evidence: {
-        evidenceId: "",
-        usernameWildcard: "",
-        evidenceName: "",
-        evidenceType: "",
-        evidenceTimeStart: "none",
-        evidenceTimeEnd: "none",
-        blockchainTimeStart: "none",
-        blockchainTimeEnd: "none",
         decryptFlag: 1,
       },
       // 是否解密
@@ -254,13 +246,13 @@ export default {
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
-      pageSize: 5,
+      pageSize: 10,
       autManId: "",
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
-    this.initData();
+    this.getEvidenceData();
+    this.getEvidenceType();
   },
   computed: {},
   components: {
@@ -273,58 +265,15 @@ export default {
       return (this.pageIndex -1)* this.pageSize + index +1;
     },
 
-    // 初始化数据
-    async initData() {
-      const query = {
-        evidenceId: "none",
-        usernameWildcard: "none",
-        fileSizeFloor: -1,
-        fileSizeUpper: -1,
-        evidenceName: "none",
-        evidenceType: "none",
-        evidenceTimeStart: "none",
-        evidenceTimeEnd: "none",
-        blockchainTimeStart: "none",
-        blockchainTimeEnd: "none",
-        decryptFlag: 1,
-      };
-      try {
-        await evidenceQuery(query).then((result) => {
-          if (result.status) {
-            this.tableData = [];
-            result.data.forEach((item) => {
-              if (item.evidenceTime != null) {
-                item.evidenceTime =
-                  item.evidenceTime.substring(0, 10) +
-                  " " +
-                  item.evidenceTime.substring(11, 19);
-              }
-              if (item.blockchainTime != null) {
-                item.blockchainTime =
-                  item.blockchainTime.substring(0, 10) +
-                  " " +
-                  item.blockchainTime.substring(11, 19);
-              }
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-            this.handlePageChange(1);
-          } else {
-            throw new Error("获取数据失败");
-          }
-        });
-        //获取存证类型
-        await eviTypeQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.evidence_type.push(item);
-            });
-          }
-        });
-        console.log(this.evidence_type);
-      } catch (error) {
-        throw new Error(error.message);
-      }
+    //获取存证类型
+    getEvidenceType() {
+      eviTypeQuery().then((typeres) => {
+        if (typeres.status) {
+          typeres.data.forEach((item) => {
+            this.evidence_type.push(item);
+          });
+        }
+      });
     },
 
     // 处理导航页
@@ -346,15 +295,13 @@ export default {
       let end = this.value_time[1];
       this.start_time = this.fmtDate(start.getTime());
       this.end_time = this.fmtDate(end.getTime());
-      //   console.log(end);
-      //   console.log(end.getTime());
     },
-    // 搜索
-    async handleSearch() {
+
+    // 获取数据
+    async getEvidenceData() {
       try {
         this.dealData();
         await evidenceQuery(this.evidence).then((result) => {
-          console.log(this.evidence.decryptFlag);
           if (result.status) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -382,30 +329,12 @@ export default {
             throw new Error("获取数据失败");
           }
         });
-        this.resetData();
-        console.log(this.tableData);
       } catch (error) {
         throw new Error(error.message);
       }
     },
     dealData() {
       try {
-        //存证编号
-        if (this.evidence.evidenceId == "") {
-          this.evidence.evidenceId = "none";
-        }
-        //用户名
-        if (this.evidence.usernameWildcard == "") {
-          this.evidence.usernameWildcard = "none";
-        }
-        //存证名称
-        if (this.evidence.evidenceName == "") {
-          this.evidence.evidenceName = "none";
-        }
-        //存证类型
-        if (this.evidence.evidenceType == "") {
-          this.evidence.evidenceType = "none";
-        }
         //加解密
         if (this.decrypt_flag) {
           this.evidence.decryptFlag = 1;
@@ -413,45 +342,31 @@ export default {
           this.evidence.decryptFlag = 0;
         }
         //时间
-        if (this.timeValue1 != "") {
+        if (this.timeValue1 != "" && this.timeValue1 != null) {
           this.evidence.evidenceTimeStart = this.timeValue1.getTime();
+        }else {
+          delete this.evidence.evidenceTimeStart;
         }
-        if (this.timeValue2 != "") {
-          this.evidence.blockchainTimeStart = this.timeValue2.getTime();
+        if (this.timeValue2 != ""&& this.timeValue2 != null) {
+          this.evidence.evidenceTimeEnd = this.timeValue2.getTime();
+        }else {
+          delete this.evidence.evidenceTimeEnd;
         }
-        if (this.timeValue3 != "") {
-          this.evidence.evidenceTimeEnd = this.timeValue3.getTime();
+        if (this.timeValue3 != "" && this.timeValue3 != null) {
+          this.evidence.blockchainTimeStart = this.timeValue3.getTime();
+        }else {
+          delete this.evidence.blockchainTimeStart;
         }
-        if (this.timeValue4 != "") {
+        if (this.timeValue4 != ""&& this.timeValue4 != null) {
           this.evidence.blockchainTimeEnd = this.timeValue4.getTime();
-        }
-        //alert(this.evidence.evidenceTimeEnd);
-      } catch (error) {
-        throw new Error(error.message);
-      }
-    },
-    resetData() {
-      try {
-        //存证编号
-        if (this.evidence.evidenceId == "none") {
-          this.evidence.evidenceId = "";
-        }
-        //用户名
-        if (this.evidence.usernameWildcard == "none") {
-          this.evidence.usernameWildcard = "";
-        }
-        //存证名称
-        if (this.evidence.evidenceName == "none") {
-          this.evidence.evidenceName = "";
-        }
-        //存证类型
-        if (this.evidence.evidenceType == "none") {
-          this.evidence.evidenceType = "";
+        }else {
+          delete this.evidence.blockchainTimeEnd;
         }
       } catch (error) {
         throw new Error(error.message);
       }
     },
+
     //时间戳转日期
     fmtDate(timestamp) {
       if (timestamp) {

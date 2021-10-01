@@ -11,7 +11,7 @@
         <el-button
           slot="append"
           icon="el-icon-search"
-          @click="handleSearch()"
+          @click="getNotaryManagerData()"
         ></el-button>
       </el-input>
       <el-button
@@ -123,7 +123,7 @@
         <el-button @click="searchVisible = false">取 消</el-button>
         <el-button
           @click="
-            handleSearch();
+            getNotaryManagerData();
             searchVisible = false;
           "
           type="primary"
@@ -194,7 +194,6 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
 import { autmanQuery, orgaQuery } from "@/api/getData";
 export default {
   data() {
@@ -211,13 +210,6 @@ export default {
       pageSize: 10,
       //用户信息
       autMInfo: {
-        autManId: "",
-        autNameWildcard: "",
-        phoneNumberWildcard: "",
-        idCard: "",
-        emailWildcard: "",
-        sex: "",
-        organizationId: "",
         decryptFlag: 1,
       },
       sex_state: [
@@ -235,7 +227,8 @@ export default {
   },
   created() {
     this.manId = localStorage.getItem("manId");
-    this.initData();
+    this.getAgent();
+    this.getNotaryManagerData();
   },
   computed: {},
   components: {
@@ -243,13 +236,13 @@ export default {
   },
   methods: {
     // 序号
-    indexMethod(index){
+    indexMethod(index) {
       // index 从 0 开始的
-      return (this.pageIndex -1)* this.pageSize + index +1;
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
 
-    // 初始化数据
-    async initData() {
+    // 获取公证机构列表
+    getAgent() {
       try {
         const orgQuery = {
           organizationId: "none",
@@ -259,30 +252,7 @@ export default {
           legalPeopleWildcard: "none",
           emailWildcard: "none",
         };
-        const query = {
-          autManId: "none",
-          autNameWildcard: "none",
-          phoneNumberWildcard: "none",
-          idCard: "none",
-          emailWildcard: "none",
-          sex: "none",
-          organizationId: "none",
-          decryptFlag: 1,
-        };
-        await autmanQuery(query).then((result) => {
-          if (result.status) {
-            this.tableData = [];
-            result.data.forEach((item) => {
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-            this.handlePageChange(1);
-          } else {
-            console.log("获取数据失败");
-          }
-        });
-        //获取组织名
-        await orgaQuery(orgQuery).then((result) => {
+        orgaQuery(orgQuery).then((result) => {
           if (result.status) {
             this.orgName = [];
             result.data.forEach((item) => {
@@ -292,8 +262,8 @@ export default {
             console.log("获取机构名失败失败");
           }
         });
-      } catch (error) {
-        throw new Error(error.message);
+      } catch (e) {
+        console.log(e);
       }
     },
 
@@ -311,34 +281,6 @@ export default {
     },
 
     dealData() {
-      //用户编号
-      if (this.autMInfo.autManId == "") {
-        this.autMInfo.autManId = "none";
-      }
-      //用户名
-      if (this.autMInfo.autNameWildcard == "") {
-        this.autMInfo.autNameWildcard = "none";
-      }
-      //电话号码
-      if (this.autMInfo.phoneNumberWildcard == "") {
-        this.autMInfo.phoneNumberWildcard = "none";
-      }
-      //身份证号
-      if (this.autMInfo.idCard == "") {
-        this.autMInfo.idCard = "none";
-      }
-      //邮箱
-      if (this.autMInfo.emailWildcard == "") {
-        this.autMInfo.emailWildcard = "none";
-      }
-      //性别
-      if (this.autMInfo.sex == "") {
-        this.autMInfo.sex = "none";
-      }
-      //机构
-      if (this.autMInfo.organizationId == "") {
-        this.autMInfo.organizationId = "none";
-      }
       //加解密
       if (this.decrypt_flag) {
         this.autMInfo.decryptFlag = 1;
@@ -346,8 +288,9 @@ export default {
         this.autMInfo.decryptFlag = 0;
       }
     },
-    // 搜索
-    async handleSearch() {
+
+    // 获取数据
+    async getNotaryManagerData() {
       try {
         this.dealData();
         await autmanQuery(this.autMInfo).then((result) => {
@@ -366,43 +309,9 @@ export default {
             console.log(result.message);
           }
         });
-        this.resetData();
       } catch (error) {
         throw new Error(error.message);
       }
-    },
-    resetData() {
-      //用户编号
-      if (this.autMInfo.autManId == "none") {
-        this.autMInfo.autManId = "";
-      }
-      //用户名
-      if (this.autMInfo.autNameWildcard == "none") {
-        this.autMInfo.autNameWildcard = "";
-      }
-      //电话号码
-      if (this.autMInfo.phoneNumberWildcard == "none") {
-        this.autMInfo.phoneNumberWildcard = "";
-      }
-      //身份证号
-      if (this.autMInfo.idCard == "none") {
-        this.autMInfo.idCard = "";
-      }
-      //邮箱
-      if (this.autMInfo.emailWildcard == "none") {
-        this.autMInfo.emailWildcard = "";
-      }
-      //性别
-      if (this.autMInfo.sex == "none") {
-        this.autMInfo.sex = "";
-      }
-      //机构
-      if (this.autMInfo.organizationId == "none") {
-        this.autMInfo.organizationId = "";
-      }
-    },
-    handleDel() {
-      this.$message.success("审核成功");
     },
   },
 };

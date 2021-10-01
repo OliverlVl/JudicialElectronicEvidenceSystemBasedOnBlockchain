@@ -35,11 +35,7 @@
       </el-switch>
     </div>
     <div class="table_container">
-      <el-table
-        :data="pageData"
-        style="width: 100%"
-        stripe
-      >
+      <el-table :data="pageData" style="width: 100%" stripe>
         <el-table-column
           type="index"
           label="序号"
@@ -88,7 +84,7 @@
           align="center"
           prop="transactionBlockchainId"
         ></el-table-column>
-         <el-table-column
+        <el-table-column
           label="交易对象"
           align="center"
           prop="transactionPeople"
@@ -100,7 +96,6 @@
           prop="storageSize"
         ></el-table-column>
       </el-table>
-     
 
       <div class="pagination">
         <el-pagination
@@ -111,7 +106,7 @@
           :total="pageTotal"
           @current-change="handlePageChange"
         ></el-pagination>
-        <span style="float:right">注："/"表示没有数据</span>
+        <span style="float: right">注："/"表示没有数据</span>
       </div>
     </div>
     <el-dialog
@@ -126,6 +121,7 @@
             v-model="transaction.usernameWildcard"
             style="width: 37.5%"
             placeholder="请输入用户名"
+            clearable
           >
           </el-input>
         </el-form-item>
@@ -134,6 +130,7 @@
             v-model="transaction.transactionType"
             style="width: 37.5%"
             placeholder="请选择交易类型"
+            clearable
           >
             <el-option
               v-for="item in transactionType"
@@ -145,12 +142,20 @@
         </el-form-item>
         <el-form-item label="交易金额">
           <el-col :span="4">
-            <el-input v-model="transactionMoneyFloor" placeholder="最低金额">
+            <el-input
+              v-model="transactionMoneyFloor"
+              placeholder="最低金额"
+              clearable
+            >
             </el-input>
           </el-col>
           <el-col class="line" :span="1" align="middle">-</el-col>
           <el-col :span="4">
-            <el-input v-model="transactionMoneyUpper" placeholder="最高金额">
+            <el-input
+              v-model="transactionMoneyUpper"
+              placeholder="最高金额"
+              clearable
+            >
             </el-input>
           </el-col>
         </el-form-item>
@@ -202,8 +207,6 @@ export default {
       pageData: [], // 分页数据
       searchVisible: false,
       transaction: {
-        usernameWildcard: "",
-        transactionType: "",
         decryptFlag: 1,
       },
       decrypt_flag: true,
@@ -289,7 +292,6 @@ export default {
     headTop,
   },
   methods: {
-
     // 序号
     indexMethod(index) {
       // index 从 0 开始的
@@ -298,21 +300,28 @@ export default {
 
     // 交易时间赋值
     selectTransactionTime() {
-      let start = this.transactionTime[0];
-      let end = this.transactionTime[1];
-      this.transaction.transactionTimeStart = start.getTime();
-      this.transaction.transactionTimeEnd = end.getTime();
-      console.log(this.transaction.transactionTimeStart);
+      if (this.transactionTime != "" && this.transactionTime != null) {
+        let start = this.transactionTime[0];
+        let end = this.transactionTime[1];
+        this.transaction.transactionTimeStart = start.getTime();
+        this.transaction.transactionTimeEnd = end.getTime();
+      } else {
+        delete this.transaction.transactionTimeStart;
+        delete this.transaction.transactionTimeEnd;
+      }
     },
 
     // 上链时间赋值
     selectBlockchainTime() {
-      let start = this.blockchainTime[0];
-      let end = this.blockchainTime[1];
-      this.transaction.blockchainTimeStart = start.getTime();
-      console.log(this.transaction.blockchainTimeStart);
-      this.transaction.blockchainTimeEnd = end.getTime();
-      console.log(this.transaction.blockchainTimeEnd);
+      if (this.blockchainTime != "" && this.blockchainTime != null) {
+        let start = this.blockchainTime[0];
+        let end = this.blockchainTime[1];
+        this.transaction.blockchainTimeStart = start.getTime();
+        this.transaction.blockchainTimeEnd = end.getTime();
+      } else {
+        delete this.transaction.blockchainTimeStart;
+        delete this.transaction.blockchainTimeEnd;
+      }
     },
 
     // 获取数据
@@ -320,14 +329,6 @@ export default {
       try {
         // 关闭弹窗
         this.searchVisible = false;
-        // 判断
-        console.log(this.transaction);
-        if (this.transaction.transactionType == "") {
-          this.transaction.transactionType = "none";
-        }
-        if (this.transaction.usernameWildcard == "") {
-          this.transaction.usernameWildcard = "none";
-        }
         if (
           this.transactionMoneyFloor != "" &&
           this.transactionMoneyUpper != ""
@@ -384,8 +385,8 @@ export default {
               }
               if (item.storageSize == null) {
                 item.storageSize = "/";
-              }else{
-                item.storageSize = item.storageSize/1024/1024
+              } else {
+                item.storageSize = item.storageSize / 1024 / 1024;
               }
               if (item.transactionTime != null) {
                 item.transactionTime =

@@ -83,9 +83,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="addOrganizationVisible = false">取 消</el-button>
-        <el-button @click="addOrganization()" type="primary"
-          >确 定</el-button
-        >
+        <el-button @click="addOrganization()" type="primary">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -149,7 +147,7 @@
   
 <script>
 import headTop from "../../components/headTop";
-import { orgaQuery,addOrganization} from "@/api/getData";
+import { orgaQuery, addOrganization } from "@/api/getData";
 export default {
   data() {
     return {
