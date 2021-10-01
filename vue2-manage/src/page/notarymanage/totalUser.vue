@@ -10,7 +10,7 @@
         <el-button
           slot="append"
           icon="el-icon-search"
-          @click="handleSearch()"
+          @click="getUserData()"
         ></el-button>
       </el-input>
       <el-button
@@ -99,7 +99,7 @@
         <el-button @click="searchVisible = false">取 消</el-button>
         <el-button
           @click="
-            handleSearch();
+            getUserData();
             searchVisible = false;
           "
           type="primary"
@@ -119,6 +119,7 @@
         <el-table-column
           label="用户编号"
           align="center"
+          width="300px"
           prop="userId"
         ></el-table-column>
         <el-table-column
@@ -134,7 +135,6 @@
         <el-table-column
           label="性别"
           align="center"
-          width="50px"
           prop="sex"
         ></el-table-column>
         <el-table-column
@@ -148,7 +148,7 @@
           prop="idCard"
         ></el-table-column>
         <el-table-column
-          label="已用空间(GB)"
+          label="已用空间(MB)"
           align="center"
           width="140px"
           prop="hasUsedStorage"
@@ -192,13 +192,7 @@ export default {
       telephone: "",
       //用户信息
       userInfo: {
-        userId: "",
-        usernameWildcard: "",
-        phoneNumberWildcard: "",
-        idCard: "",
-        emailWildcard: "",
-        sex: "",
-        decryptFlag: 1,
+        decryptFlag: 1, // 默认明文显示
       },
       sex_state: [
         {
@@ -215,8 +209,7 @@ export default {
     };
   },
   created() {
-    this.autManId = localStorage.getItem("autManId");
-    this.initData();
+    this.getUserData();
   },
   computed: {},
   components: {
@@ -224,39 +217,9 @@ export default {
   },
   methods: {
     // 序号
-    indexMethod(index){
+    indexMethod(index) {
       // index 从 0 开始的
-      return (this.pageIndex -1)* this.pageSize + index +1;
-    },
-
-    // 初始化数据
-    async initData() {
-      try {
-        const query = {
-          userId: "none",
-          usernameWildcard: "none",
-          phoneNumberWildcard: "none",
-          idCard: "none",
-          emailWildcard: "none",
-          sex: "none",
-          decryptFlag: 1,
-        };
-        await userQuery(query).then((result) => {
-          if (result.status) {
-            this.tableData = [];
-            result.data.forEach((item) => {
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-            this.handlePageChange(1);
-          } else {
-            throw new Error("获取数据失败");
-          }
-        });
-        console.log(this.tableData);
-      } catch (error) {
-        throw new Error(error.message);
-      }
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
 
     // 处理导航页
@@ -273,40 +236,15 @@ export default {
     },
 
     dealData() {
-      //用户编号
-      if (this.userInfo.userId == "") {
-        this.userInfo.userId = "none";
-      }
-      //用户名
-      if (this.userInfo.usernameWildcard == "") {
-        this.userInfo.usernameWildcard = "none";
-      }
-      //电话号码
-      if (this.userInfo.phoneNumberWildcard == "") {
-        this.userInfo.phoneNumberWildcard = "none";
-      }
-      //身份证号
-      if (this.userInfo.idCard == "") {
-        this.userInfo.idCard = "none";
-      }
-      //邮箱
-      if (this.userInfo.emailWildcard == "") {
-        this.userInfo.emailWildcard = "none";
-      }
-      //性别
-      if (this.userInfo.sex == "") {
-        this.userInfo.sex = "none";
-      }
       //加解密
       if (this.decrypt_flag) {
         this.userInfo.decryptFlag = 1;
       } else {
         this.userInfo.decryptFlag = 0;
       }
-      //alert(this.userInfo.decryptFlag);
     },
     // 搜索
-    async handleSearch() {
+    async getUserData() {
       try {
         this.dealData();
         await userQuery(this.userInfo).then((result) => {
@@ -321,6 +259,9 @@ export default {
                 item.storageSpace = str[2].substring(0, 6) + "******";
                 str = item.hasUsedStorage.split(":");
                 item.hasUsedStorage = str[2].substring(0, 6) + "******";
+              } else {
+                item.hasUsedStorage = item.hasUsedStorage / 1024;
+                item.storageSpace = item.storageSpace / 1024 / 1024;
               }
               this.tableData.push(item);
             });
@@ -330,37 +271,11 @@ export default {
             throw new Error("获取数据失败");
           }
         });
-        this.resetData();
       } catch (error) {
         throw new Error(error.message);
       }
     },
-    resetData() {
-      //用户编号
-      if (this.userInfo.userId == "none") {
-        this.userInfo.userId = "";
-      }
-      //用户名
-      if (this.userInfo.usernameWildcard == "none") {
-        this.userInfo.usernameWildcard = "";
-      }
-      //电话号码
-      if (this.userInfo.phoneNumberWildcard == "none") {
-        this.userInfo.phoneNumberWildcard = "";
-      }
-      //身份证号
-      if (this.userInfo.idCard == "none") {
-        this.userInfo.idCard = "";
-      }
-      //邮箱
-      if (this.userInfo.emailWildcard == "none") {
-        this.userInfo.emailWildcard = "";
-      }
-      //性别
-      if (this.userInfo.sex == "none") {
-        this.userInfo.sex = "";
-      }
-    },
+
     handleDel() {
       this.$message.success("审核成功");
     },

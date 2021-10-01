@@ -143,6 +143,7 @@
         <el-table-column
           label="机构管理员编号"
           align="center"
+          width="300px"
           prop="autManId"
         ></el-table-column>
         <el-table-column

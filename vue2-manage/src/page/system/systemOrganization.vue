@@ -102,6 +102,7 @@
         <el-table-column
           label="机构编号"
           align="center"
+          width="300px"
           prop="organizationId"
         ></el-table-column>
         <el-table-column
@@ -121,11 +122,6 @@
           prop="phoneNumber"
         ></el-table-column>
         <el-table-column
-          label="手机号"
-          align="center"
-          prop="phoneNumber"
-        ></el-table-column>
-        <el-table-column
           label="邮箱"
           align="center"
           prop="email"
@@ -133,6 +129,7 @@
         <el-table-column
           label="法人"
           align="center"
+          width="140px"
           prop="legalPeople"
         ></el-table-column>
       </el-table>
