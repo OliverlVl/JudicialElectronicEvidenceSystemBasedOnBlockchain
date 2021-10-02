@@ -11,7 +11,7 @@
         <el-button
           slot="append"
           icon="el-icon-search"
-          @click="getNorayRecord()"
+          @click="getNotaryRecord()"
         ></el-button>
       </el-input>
 
@@ -79,7 +79,7 @@
               v-for="item in notarization_type"
               :key="item.notarizationTypeId"
               :label="item.notarizationType"
-              :value="item.notarizationTypeId"
+              :value="item.notarizationType"
             >
             </el-option>
           </el-select>
@@ -101,7 +101,7 @@
         <el-button @click="searchVisible = false">取 消</el-button>
         <el-button
           @click="
-            getNorayRecord();
+            getNotaryRecord();
             searchVisible = false;
           "
           type="primary"
@@ -316,7 +316,7 @@ export default {
   created() {
     this.getNotaryType();
     this.getEvidenceType();
-    this.getNorayRecord();
+    this.getNotaryRecord();
   },
   computed: {},
   components: {
@@ -340,7 +340,7 @@ export default {
         }
       });
     },
-    //获取公证类型
+    //获取存证类型
     async getEvidenceType() {
       await eviTypeQuery().then((typeres) => {
         if (typeres.status) {
@@ -386,7 +386,7 @@ export default {
           message:
             "您已通过该公证申请，已生成公证证书，可在个人已完成列表中下载查看！",
         });
-        this.initData();
+        this.getNotaryRecord();
       } else {
         alert("操作失败");
       }
@@ -411,7 +411,7 @@ export default {
           type: "success",
           message: "您已拒绝该申请，可在个人已完成列表中查看！",
         });
-        this.initData();
+        this.getNotaryRecord();
       } else {
         alert("操作失败" + result.message);
       }
@@ -421,7 +421,7 @@ export default {
       window.location.href =
         "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
     },
-    async getNorayRecord() {
+    async getNotaryRecord() {
       try {
         this.dealData();
         console.log(this.searchQuery);
@@ -445,20 +445,16 @@ export default {
     dealData() {
       try {
         this.searchQuery.notaryId = sessionStorage.getItem("notaryId");
-        if (this.searchQuery.evidenceName == "") {
-          delete this.searchQuery.evidenceName;
-        }
-        //用户名
-        if (this.searchQuery.usernameWildcard == "") {
-          delete this.searchQuery.usernameWildcard;
-        }
-        //存证名称
-        if (this.searchQuery.evidenceName == "") {
-          delete this.searchQuery.evidenceName;
-        }
         //公证类型
-        if (this.searchQuery.notarizationType == "") {
+        if (
+          this.searchQuery.notarizationType == "" ||
+          this.searchQuery.notarizationType == "不限"
+        ) {
           this.searchQuery.notarizationType = "none";
+        }
+         //存证名称
+        if (this.searchQuery.evidenceName == "") {
+          delete this.searchQuery.evidenceName;
         }
         //存证类型
         if (this.searchQuery.evidenceType == "") {
@@ -548,7 +544,7 @@ export default {
   // 监听路由跳转，刷新数据
   watch: {
     $route() {
-      this.initData();
+      this.getNotaryRecord();
     },
   },
 };

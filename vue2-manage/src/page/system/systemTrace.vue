@@ -327,9 +327,9 @@ export default {
 
     dealData() {
       // 交易类型
-        if (this.transaction.transactionType == "") {
-          this.transaction.transactionType = "none";
-        }
+      if (this.transaction.transactionType == "") {
+        this.transaction.transactionType = "none";
+      }
       // 加解密
       if (this.decrypt_flag) {
         this.transaction.decryptFlag = 1;
@@ -346,7 +346,7 @@ export default {
     // 获取数据
     async getTransactionData() {
       try {
-         this.dealData();
+        this.dealData();
         // 关闭弹窗
         this.searchVisible = false;
         if (
@@ -363,7 +363,7 @@ export default {
             });
             return;
           }
-          if (this.transactionMoneyFloor > this.transactionMoneyUpper) {
+          if (parseInt(this.transactionMoneyFloor) > parseInt(this.transactionMoneyUpper)) {
             this.$message({
               type: "error",
               message: "最低金额需小于等于最高金额",
@@ -373,8 +373,8 @@ export default {
           this.transaction.transactionMoneyFloor = this.transactionMoneyFloor;
           this.transaction.transactionMoneyUpper = this.transactionMoneyUpper;
         }
+        console.log(this.transaction);
         await sysTransQuery(this.transaction).then((result) => {
-          console.log(this.transaction);
           console.log(result);
           if (result.status == true) {
             this.tableData = [];
