@@ -650,7 +650,7 @@ export default {
 }
 
 .totalDiv {
-  background: url("../image/dark-1.jpg") no-repeat;
+  background: url("../../assets/img/dark-1.jpg") no-repeat;
 
   background-size: 500% 500%;
   min-height: 200%;

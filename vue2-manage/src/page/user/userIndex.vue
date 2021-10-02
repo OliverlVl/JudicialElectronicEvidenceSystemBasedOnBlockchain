@@ -588,7 +588,7 @@ export default {
 }
 
 .totalDiv {
-  background: url("../image/dark-1.jpg") no-repeat;
+  background: url("../../assets/img/dark-1.jpg") no-repeat;
   background-size: 500% 500%;
   min-height: 200%;
   position: relative;
@@ -624,7 +624,6 @@ export default {
 .div-set .el-table tr,
 .div-set .el-table td {
   background-color: transparent !important; /* 背景透明 */
-  //border-top: 1px solid #ffffff;
   color: #ffffff;
   line-height: 20px;
 }
@@ -633,12 +632,9 @@ export default {
 }
 .div-set {
   border: 1px solid rgba(0, 0, 0, 0.3);
-
   box-shadow: 5px 0px 29px 0px rgb(48, 131, 167) inset;
   display: flex;
   flex-direction: column;
-
-  //align-items: center;
 }
 .title-set {
   margin-top: 2%;
@@ -669,10 +665,6 @@ export default {
 .tryy .el-table,
 .tryy .el-table__expanded-cell {
   background-color: transparent;
-
-  //margin-left: 10%;
-  //margin-top: 2%;
-  //color: #ffffff;
 }
 .el-table::before {
   height: 0px;
