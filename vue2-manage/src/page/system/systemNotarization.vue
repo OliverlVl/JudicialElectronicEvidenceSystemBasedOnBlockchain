@@ -124,22 +124,16 @@
             </el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item label="公证金额:">
-          <el-select
-            v-model="moneyState"
-            style="width: 240px"
-            placeholder="请选择"
-            clearable
-          >
-            <el-option
-              v-for="item in money_choose"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
+          <el-col :span="6">
+            <el-input v-model="MoneyFloor" placeholder="最低金额" clearable>
+            </el-input>
+          </el-col>
+          <el-col class="line" :span="1" align="middle">-</el-col>
+          <el-col :span="6">
+            <el-input v-model="MoneyUpper" placeholder="最高金额" clearable>
+            </el-input>
+          </el-col>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -275,6 +269,8 @@ import { notarmanageRecord, eviTypeQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
     return {
+      MoneyUpper:"",
+      MoneyFloor:"",
       pageData: [], // 分页数据
       searchVisible: false,
       //时间选择器
@@ -412,6 +408,27 @@ export default {
     // 获取数据
     async getNotarizationData() {
       try {
+        if (this.MoneyFloor != "" && this.MoneyUpper != "") {
+          if (isNaN(this.MoneyFloor) || isNaN(this.MoneyUpper)) {
+            this.$message({
+              type: "error",
+              message: "交易金额必须为数字",
+            });
+            return;
+          }
+          if (this.MoneyFloor > this.MoneyUpper) {
+            this.$message({
+              type: "error",
+              message: "最低金额需小于等于最高金额",
+            });
+            return;
+          }
+          this.notarization.notarizationMoneyFloor = this.MoneyFloor;
+          this.notarization.notarizationMoneyUpper = this.MoneyUpper;
+        }else{
+          delete this.notarization.notarizationMoneyUpper;
+          delete this.notarization.notarizationMoneyFloor;
+        }
         this.dealData();
         if (this.notarization.notarizationStatus == "none") {
           this.notarization.notarizationStatus = "1";
@@ -560,20 +577,6 @@ export default {
         //存证类型
         if (this.notarization.evidenceType == "") {
           this.notarization.evidenceType = "none";
-        }
-        //公证金额
-        if (this.moneyState == "0") {
-          this.notarization.notarizationMoneyUpper = 100;
-          this.notarization.notarizationMoneyFloor = -1;
-        } else if (this.moneyState == "1") {
-          this.notarization.notarizationMoneyUpper = 300;
-          this.notarization.notarizationMoneyFloor = 100;
-        } else if (this.moneyState == "2") {
-          this.notarization.notarizationMoneyUpper = -1;
-          this.notarization.notarizationMoneyFloor = 300;
-        } else {
-          this.notarization.notarizationMoneyUpper = -1;
-          this.notarization.notarizationMoneyFloor = -1;
         }
         //时间
         if (this.timeValue1 != "" && this.timeValue1 != null) {

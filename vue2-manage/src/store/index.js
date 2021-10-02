@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {getAdminInfo} from '@/api/getData'
+// import {getAdminInfo} from '@/api/getData'
 
 Vue.use(Vuex)
 

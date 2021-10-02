@@ -6,11 +6,12 @@
         v-model="searchQuery.usernameWildcard"
         placeholder="请输入申请人"
         style="width: 390px; margin-left: 3%"
+        clearable
       >
         <el-button
           slot="append"
           icon="el-icon-search"
-          @click="handleSearch()"
+          @click="getNorayRecord()"
         ></el-button>
       </el-input>
 
@@ -46,6 +47,7 @@
             v-model="searchQuery.evidenceName"
             placeholder="请输入存证名称"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -91,33 +93,29 @@
               v-for="item in notarization_type"
               :key="item.notarizationTypeId"
               :label="item.notarizationType"
-              :value="item.notarizationType"
+              :value="item.notarizationTypeId"
             >
             </el-option>
           </el-select>
         </el-form-item>
 
         <el-form-item label="公证金额:">
-          <el-select
-            v-model="moneyState"
-            style="width: 240px"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in money_choose"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
+          <el-col :span="6">
+            <el-input v-model="MoneyFloor" placeholder="最低金额" clearable>
+            </el-input>
+          </el-col>
+          <el-col class="line" :span="1" align="middle">-</el-col>
+          <el-col :span="6">
+            <el-input v-model="MoneyUpper" placeholder="最高金额" clearable>
+            </el-input>
+          </el-col>
         </el-form-item>
       </el-form>
       <div slot="footer">
         <el-button @click="searchVisible = false">取 消</el-button>
         <el-button
           @click="
-            handleSearch();
+            getNorayRecord();
             searchVisible = false;
           "
           type="primary"
@@ -243,11 +241,12 @@ import { eviTypeQuery, noTypeQuery, notarmanageRecord } from "@/api/getData";
 export default {
   data() {
     return {
+      MoneyUpper: "",
+      MoneyFloor: "",
       pageData: [], // 分页数据
       //解密
       searchVisible: false,
       decrypt_flag: true,
-      moneyState: "",
       // 表格
       tableData: [],
       // 获取数据
@@ -255,17 +254,9 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       //公证员ID
-      notary_id: "",
       searchQuery: {
-        usernameWildcard: "",
-        evidenceName: "",
-        notarizationStatus: "",
-        notarizationType: "",
-        dealType: "2",
-        evidenceType: "",
         decryptFlag: 1,
-        notarizationMoneyUpper: -1,
-        notarizationMoneyFloor: -1,
+        notarizationStatus: "",
       },
       //存证类型选择器
       evidence_type: [
@@ -279,34 +270,6 @@ export default {
         {
           notarizationTypeId: "none",
           notarizationType: "不限",
-        },
-      ],
-      payment_type: [
-        {
-          label: "未支付",
-          value: "0",
-        },
-        {
-          label: "已支付",
-          value: "1",
-        },
-      ],
-      money_choose: [
-        {
-          label: "小于100元",
-          value: "0",
-        },
-        {
-          label: "100~300元",
-          value: "1",
-        },
-        {
-          label: "大于300元",
-          value: "2",
-        },
-        {
-          label: "不限",
-          value: "none",
         },
       ],
       notarization_status: [
@@ -323,9 +286,9 @@ export default {
     };
   },
   created() {
-    this.notary_id = localStorage.getItem("notaryId");
-    this.decryptFlag = 1;
-    this.initData();
+    this.getNotaryType();
+    this.getEvidenceType();
+    this.getNorayRecord();
   },
   computed: {},
   components: {
@@ -337,124 +300,30 @@ export default {
       // index 从 0 开始的
       return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
-
-    // 初始化数据
-    async initData() {
-      try {
-        if (this.decrypt_flag) {
-          this.decryptFlag = 1;
+    //获取公证类型
+    async getNotaryType() {   
+      await noTypeQuery().then((typeres) => {
+        if (typeres.status) {
+          typeres.data.forEach((item) => {
+            this.notarization_type.push(item);
+          });
         } else {
-          this.decryptFlag = 0;
+          console.log("公证类型获取失败");
         }
-        const query = {
-          decryptFlag: this.decryptFlag,
-          notaryId: sessionStorage.getItem("notaryId"),
-          notarizationStatus: "3",
-        };
-        await notarmanageRecord(query).then((result) => {
-          if (result.status == true) {
-            this.tableData = [];
-            result.data.forEach((item) => {
-              if (item.notarizationEndTime != null) {
-                item.notarizationEndTime =
-                  item.notarizationEndTime.substring(0, 10) +
-                  " " +
-                  item.notarizationEndTime.substring(11, 19);
-              }
-              if (item.notarizationStartTime != null) {
-                item.notarizationStartTime =
-                  item.notarizationStartTime.substring(0, 10) +
-                  " " +
-                  item.notarizationStartTime.substring(11, 19);
-              }
-              if (item.evidenceTime != null) {
-                item.evidenceTime =
-                  item.evidenceTime.substring(0, 10) +
-                  " " +
-                  item.evidenceTime.substring(11, 19);
-              }
-              if (item.blockchainTime != null) {
-                item.blockchainTime =
-                  item.blockchainTime.substring(0, 10) +
-                  " " +
-                  item.blockchainTime.substring(11, 19);
-              }
-              if (item.notarizationBlockchainIdStart == null) {
-                item.notarizationBlockchainIdStart = "暂无数据";
-              }
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-            this.handlePageChange(1);
-          } else {
-            console.log("获取数据失败");
-          }
-        });
-        query.notarizationStatus = "4";
-        await notarmanageRecord(query).then((result) => {
-          if (result.status) {
-            result.data.forEach((item) => {
-              if (item.notarizationEndTime != null) {
-                item.notarizationEndTime =
-                  item.notarizationEndTime.substring(0, 10) +
-                  " " +
-                  item.notarizationEndTime.substring(11, 19);
-              }
-              if (item.notarizationStartTime != null) {
-                item.notarizationStartTime =
-                  item.notarizationStartTime.substring(0, 10) +
-                  " " +
-                  item.notarizationStartTime.substring(11, 19);
-              }
-              if (item.evidenceTime != null) {
-                item.evidenceTime =
-                  item.evidenceTime.substring(0, 10) +
-                  " " +
-                  item.evidenceTime.substring(11, 19);
-              }
-              if (item.blockchainTime != null) {
-                item.blockchainTime =
-                  item.blockchainTime.substring(0, 10) +
-                  " " +
-                  item.blockchainTime.substring(11, 19);
-              }
-              if (item.notarizationBlockchainIdStart == null) {
-                item.notarizationBlockchainIdStart = "暂无数据";
-              }
-              this.tableData.push(item);
-            });
-            this.pageTotal = this.tableData.length;
-            this.handlePageChange(1);
-          } else {
-            throw new Error("获取数据失败");
-          }
-        });
-        console.log(this.tableData);
-        //获取存证类型
-        await eviTypeQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.evidence_type.push(item);
-            });
-          } else {
-            console.log("存证类型获取失败");
-          }
-        });
-        //获取公证类型
-        await noTypeQuery().then((typeres) => {
-          if (typeres.status) {
-            typeres.data.forEach((item) => {
-              this.notarization_type.push(item);
-            });
-          } else {
-            console.log("公证类型获取失败");
-          }
-        });
-      } catch (error) {
-        throw new Error(result.message);
-      }
+      });
     },
-
+    //获取公证类型
+    async getEvidenceType() {     
+      await eviTypeQuery().then((typeres) => {
+        if (typeres.status) {
+          typeres.data.forEach((item) => {
+            this.evidence_type.push(item);
+          });
+        } else {
+          console.log("存证类型获取失败");
+        }
+      });
+    },
     // 处理导航页
     handlePageChange(val) {
       this.pageIndex = val;
@@ -466,57 +335,21 @@ export default {
           val * this.pageSize
         );
       }
+      this.dealDataGet(); //处理得到的数据
     },
-
-    // 搜索
-    async handleSearch() {
+    // 获取记录
+    async getNorayRecord() {
       try {
         this.dealData();
+        console.log(this.searchQuery);
+        this.tableData = [];
         if (this.searchQuery.notarizationStatus == "none") {
           this.searchQuery.notarizationStatus = "3";
           await notarmanageRecord(this.searchQuery).then((result) => {
             if (result.status) {
-              this.tableData = [];
               result.data.forEach((item) => {
-                if (this.searchQuery.decryptFlag == 0) {
-                  var str = item.evidenceName.split(":");
-                  item.evidenceName = str[2].substring(0, 6) + "******";
-                  str = item.notarizationMoney.split(":");
-                  item.notarizationMoney = str[2].substring(0, 6) + "******";
-                  str = item.fileSize.split(":");
-                  item.fileSize = str[2].substring(0, 6) + "******";
-                }
-                if (item.notarizationEndTime != null) {
-                  item.notarizationEndTime =
-                    item.notarizationEndTime.substring(0, 10) +
-                    " " +
-                    item.notarizationEndTime.substring(11, 19);
-                }
-                if (item.notarizationStartTime != null) {
-                  item.notarizationStartTime =
-                    item.notarizationStartTime.substring(0, 10) +
-                    " " +
-                    item.notarizationStartTime.substring(11, 19);
-                }
-                if (item.evidenceTime != null) {
-                  item.evidenceTime =
-                    item.evidenceTime.substring(0, 10) +
-                    " " +
-                    item.evidenceTime.substring(11, 19);
-                }
-                if (item.blockchainTime != null) {
-                  item.blockchainTime =
-                    item.blockchainTime.substring(0, 10) +
-                    " " +
-                    item.blockchainTime.substring(11, 19);
-                }
-                if (item.notarizationBlockchainIdStart == null) {
-                  item.notarizationBlockchainIdStart = "暂无数据";
-                }
                 this.tableData.push(item);
               });
-              this.pageTotal = this.tableData.length;
-              this.handlePageChange(1);
             } else {
               throw new Error("获取数据失败");
             }
@@ -525,45 +358,8 @@ export default {
           await notarmanageRecord(this.searchQuery).then((result) => {
             if (result.status) {
               result.data.forEach((item) => {
-                if (this.searchQuery.decryptFlag == 0) {
-                  var str = item.evidenceName.split(":");
-                  item.evidenceName = str[2].substring(0, 6) + "******";
-                  str = item.notarizationMoney.split(":");
-                  item.notarizationMoney = str[2].substring(0, 6) + "******";
-                  str = item.fileSize.split(":");
-                  item.fileSize = str[2].substring(0, 6) + "******";
-                }
-                if (item.notarizationEndTime != null) {
-                  item.notarizationEndTime =
-                    item.notarizationEndTime.substring(0, 10) +
-                    " " +
-                    item.notarizationEndTime.substring(11, 19);
-                }
-                if (item.notarizationStartTime != null) {
-                  item.notarizationStartTime =
-                    item.notarizationStartTime.substring(0, 10) +
-                    " " +
-                    item.notarizationStartTime.substring(11, 19);
-                }
-                if (item.evidenceTime != null) {
-                  item.evidenceTime =
-                    item.evidenceTime.substring(0, 10) +
-                    " " +
-                    item.evidenceTime.substring(11, 19);
-                }
-                if (item.blockchainTime != null) {
-                  item.blockchainTime =
-                    item.blockchainTime.substring(0, 10) +
-                    " " +
-                    item.blockchainTime.substring(11, 19);
-                }
-                if (item.notarizationBlockchainIdStart == null) {
-                  item.notarizationBlockchainIdStart = "暂无数据";
-                }
                 this.tableData.push(item);
               });
-              this.pageTotal = this.tableData.length;
-              this.handlePageChange(1);
             } else {
               throw new Error("获取数据失败");
             }
@@ -572,53 +368,17 @@ export default {
         } else {
           await notarmanageRecord(this.searchQuery).then((result) => {
             if (result.status) {
-              this.tableData = [];
               result.data.forEach((item) => {
-                if (this.searchQuery.decryptFlag == 0) {
-                  var str = item.evidenceName.split(":");
-                  item.evidenceName = str[2].substring(0, 6) + "******";
-                  str = item.notarizationMoney.split(":");
-                  item.notarizationMoney = str[2].substring(0, 6) + "******";
-                  str = item.fileSize.split(":");
-                  item.fileSize = str[2].substring(0, 6) + "******";
-                }
-                if (item.notarizationEndTime != null) {
-                  item.notarizationEndTime =
-                    item.notarizationEndTime.substring(0, 10) +
-                    " " +
-                    item.notarizationEndTime.substring(11, 19);
-                }
-                if (item.notarizationStartTime != null) {
-                  item.notarizationStartTime =
-                    item.notarizationStartTime.substring(0, 10) +
-                    " " +
-                    item.notarizationStartTime.substring(11, 19);
-                }
-                if (item.evidenceTime != null) {
-                  item.evidenceTime =
-                    item.evidenceTime.substring(0, 10) +
-                    " " +
-                    item.evidenceTime.substring(11, 19);
-                }
-                if (item.blockchainTime != null) {
-                  item.blockchainTime =
-                    item.blockchainTime.substring(0, 10) +
-                    " " +
-                    item.blockchainTime.substring(11, 19);
-                }
-                if (item.notarizationBlockchainIdStart == null) {
-                  item.notarizationBlockchainIdStart = "暂无数据";
-                }
                 this.tableData.push(item);
               });
-              this.pageTotal = this.tableData.length;
-              this.handlePageChange(1);
             } else {
               throw new Error("获取数据失败");
             }
           });
         }
-        this.resetData();
+        this.pageTotal = this.tableData.length;
+        this.handlePageChange(1); //分页
+        this.resetData(); //重置传参
       } catch (error) {
         throw new Error(error.message);
       }
@@ -626,14 +386,8 @@ export default {
     dealData() {
       try {
         this.searchQuery.notaryId = sessionStorage.getItem("notaryId");
-
-        //用户名
-        if (this.searchQuery.usernameWildcard == "") {
-          this.searchQuery.usernameWildcard = "none";
-        }
-        //存证名称
         if (this.searchQuery.evidenceName == "") {
-          this.searchQuery.evidenceName = "none";
+          delete this.searchQuery.evidenceName;
         }
         //公证类型
         if (this.searchQuery.notarizationType == "") {
@@ -647,40 +401,79 @@ export default {
         if (this.searchQuery.notarizationStatus == "") {
           this.searchQuery.notarizationStatus = "none";
         }
-        //公证金额
-        if (this.moneyState == "0") {
-          this.searchQuery.notarizationMoneyUpper = 100;
-          this.searchQuery.notarizationMoneyFloor = -1;
-        } else if (this.moneyState == "1") {
-          this.searchQuery.notarizationMoneyUpper = 300;
-          this.searchQuery.notarizationMoneyFloor = 100;
-        } else if (this.moneyState == "2") {
-          this.searchQuery.notarizationMoneyUpper = -1;
-          this.searchQuery.notarizationMoneyFloor = 300;
-        } else {
-          this.searchQuery.notarizationMoneyUpper = -1;
-          this.searchQuery.notarizationMoneyFloor = -1;
-        }
         //加解密
         if (this.decrypt_flag) {
           this.searchQuery.decryptFlag = 1;
         } else {
           this.searchQuery.decryptFlag = 0;
         }
+        //金额
+        if (this.MoneyFloor != "" && this.MoneyUpper != "") {
+          if (isNaN(this.MoneyFloor) || isNaN(this.MoneyUpper)) {
+            this.$message({
+              type: "error",
+              message: "交易金额必须为数字",
+            });
+            return;
+          }
+          if (this.MoneyFloor > this.MoneyUpper) {
+            this.$message({
+              type: "error",
+              message: "最低金额需小于等于最高金额",
+            });
+            return;
+          }
+          this.searchQuery.notarizationMoneyFloor = this.MoneyFloor;
+          this.searchQuery.notarizationMoneyUpper = this.MoneyUpper;
+        } else {
+          delete this.searchQuery.notarizationMoneyUpper;
+          delete this.searchQuery.notarizationMoneyFloor;
+        }
       } catch (error) {
         throw new Error(error.message);
       }
     },
+    dealDataGet() {
+      this.pageData.forEach((item) => {
+        if (item.notarizationEndTime != null) {
+          item.notarizationEndTime =
+            item.notarizationEndTime.substring(0, 10) +
+            " " +
+            item.notarizationEndTime.substring(11, 19);
+        }
+        if (item.notarizationStartTime != null) {
+          item.notarizationStartTime =
+            item.notarizationStartTime.substring(0, 10) +
+            " " +
+            item.notarizationStartTime.substring(11, 19);
+        }
+        if (item.evidenceTime != null) {
+          item.evidenceTime =
+            item.evidenceTime.substring(0, 10) +
+            " " +
+            item.evidenceTime.substring(11, 19);
+        }
+        if (item.blockchainTime != null) {
+          item.blockchainTime =
+            item.blockchainTime.substring(0, 10) +
+            " " +
+            item.blockchainTime.substring(11, 19);
+        }
+        if (item.notarizationBlockchainIdStart == null) {
+          item.notarizationBlockchainIdStart = "暂无数据";
+        }
+        if (this.searchQuery.decryptFlag == 0) {
+          var str = item.evidenceName.split(":");
+          item.evidenceName = str[2].substring(0, 6) + "******";
+          str = item.notarizationMoney.split(":");
+          item.notarizationMoney = str[2].substring(0, 6) + "******";
+          str = item.fileSize.split(":");
+          item.fileSize = str[2].substring(0, 6) + "******";
+        }
+      });
+    },
     resetData() {
       try {
-        //用户名
-        if (this.searchQuery.usernameWildcard == "none") {
-          this.searchQuery.usernameWildcard = "";
-        }
-        //存证名称
-        if (this.searchQuery.evidenceName == "none") {
-          this.searchQuery.evidenceName = "";
-        }
         //公证类型
         if (this.searchQuery.notarizationType == "none") {
           this.searchQuery.notarizationType = "";
