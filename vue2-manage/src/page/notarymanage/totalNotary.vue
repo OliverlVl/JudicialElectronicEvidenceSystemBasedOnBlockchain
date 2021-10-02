@@ -202,7 +202,6 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
 import { notaQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {

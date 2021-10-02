@@ -6,6 +6,7 @@
         v-model="userInfo.usernameWildcard"
         placeholder="请输入用户名"
         style="width: 390px; margin-left: 3%"
+        clearable
       >
         <el-button
           slot="append"
@@ -45,6 +46,7 @@
             v-model="userInfo.usernameWildcard"
             placeholder="请输入用户名"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
         <el-form-item label="用户编号:">
@@ -52,6 +54,7 @@
             v-model="userInfo.userId"
             placeholder="请输入用户编号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -59,6 +62,7 @@
           <el-input
             v-model="userInfo.phoneNumberWildcard"
             placeholder="请输入手机号"
+            clearable
             style="width: 240px"
           ></el-input>
         </el-form-item>
@@ -68,6 +72,7 @@
             v-model="userInfo.idCard"
             placeholder="请输入身份证号"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
@@ -76,6 +81,7 @@
             v-model="userInfo.emailWildcard"
             placeholder="请输入邮箱"
             style="width: 240px"
+            clearable
           ></el-input>
         </el-form-item>
 
