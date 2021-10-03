@@ -10,7 +10,7 @@
     <el-dropdown @command="handleCommand">
       <!-- <img src="..\assets\img\fzu.jpeg" class="avator"> -->
       <span class="el-dropdown-link">
-        {{ username }}<i class="el-icon-user el-icon--right"></i>
+        {{ loginName }}<i class="el-icon-user el-icon--right"></i>
       </span>
       <span> </span>
       <el-dropdown-menu slot="dropdown">
@@ -28,7 +28,7 @@ import { mapActions, mapState } from "vuex";
 export default {
   data() {
     return {
-      username: sessionStorage.getItem("username"),
+      loginName: sessionStorage.getItem("loginName"),
       baseImgPath,
     };
   },

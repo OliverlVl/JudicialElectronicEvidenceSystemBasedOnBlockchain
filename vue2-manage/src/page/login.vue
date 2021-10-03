@@ -503,7 +503,7 @@ import {
   sysManagerRegist,
   orgaQuery,
   noTypeQuery,
-  notaStasGen
+  notaStasGen,
 } from "@/api/getData";
 
 export default {
@@ -737,10 +737,10 @@ export default {
         noTypeQuery().then((result) => {
           console.log("获取公证类型");
           console.log(result);
-          result.data.forEach((item) =>{
+          result.data.forEach((item) => {
             this.notarizationType.push(item);
             console.log(item);
-          })
+          });
         });
       } catch (e) {
         console.log(e);
@@ -759,14 +759,12 @@ export default {
           await userLogin(this.loginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("userId", result.userId);
-              sessionStorage.setItem("username",this.loginForm.username);
+              sessionStorage.setItem("loginName", this.loginForm.username);
               this.$message({
                 type: "success",
                 message: "登入成功",
               });
-              //alert(sessionStorage.getItem("userId"));
-              // 路由跳转
-            this.$router.push("/userIndex")
+              this.$router.push("/userIndex");
             } else {
               this.$message({
                 type: "error",
@@ -778,6 +776,10 @@ export default {
           await notaryLogin(this.notaryLoginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("notaryId", result.notaryId);
+              sessionStorage.setItem(
+                "loginName",
+                this.notaryLoginForm.notaryName
+              );
               this.$message({
                 type: "success",
                 message: "登入成功",
@@ -796,7 +798,11 @@ export default {
             if (result.status) {
               sessionStorage.setItem("autManId", result.autManId);
               sessionStorage.setItem("organizationId", result.organizationId);
-              console.log(result)
+              sessionStorage.setItem(
+                "loginName",
+                this.autManagerLoginForm.autName
+              );
+              console.log(result);
               this.$message({
                 type: "success",
                 message: "登入成功",
@@ -814,6 +820,10 @@ export default {
           await sysManagerLogin(this.sysManagerLoginForm).then((result) => {
             if (result.status) {
               sessionStorage.setItem("manId", result.manId);
+              sessionStorage.setItem(
+                "loginName",
+                this.sysManagerLoginForm.username
+              );
               this.$message({
                 type: "success",
                 message: "登入成功",
@@ -980,10 +990,10 @@ export default {
     },
 
     // 公证员统计生成
-    async notaStasGen(){
+    async notaStasGen() {
       try {
-        console.log("公证员统计生成")
-       await notaStasGen().then((result) => {
+        console.log("公证员统计生成");
+        await notaStasGen().then((result) => {
           if (result.status) {
             //成功
             console.log(result.data);
@@ -996,7 +1006,7 @@ export default {
       } catch (error) {
         console.log(e);
       }
-    } 
+    },
   },
 
   watch: {

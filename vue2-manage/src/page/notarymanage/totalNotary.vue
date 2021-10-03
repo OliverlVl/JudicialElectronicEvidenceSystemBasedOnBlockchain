@@ -201,7 +201,7 @@
 </template>
 
 <script>
-import headTop from "../../components/headTop";
+import headTop from "../../components/headTop"; 
 import { notaQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
