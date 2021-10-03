@@ -421,7 +421,7 @@ export default {
             });
             return;
           }
-          if (this.MoneyFloor > this.MoneyUpper) {
+          if (parseInt(this.MoneyFloor) > parseInt(this.MoneyUpper)) {
             this.$message({
               type: "error",
               message: "最低金额需小于等于最高金额",

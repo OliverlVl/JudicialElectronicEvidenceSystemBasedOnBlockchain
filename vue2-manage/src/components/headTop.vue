@@ -6,18 +6,20 @@
         item
       }}</el-breadcrumb-item>
     </el-breadcrumb>
-
-    <el-dropdown @command="handleCommand">
-      <!-- <img src="..\assets\img\fzu.jpeg" class="avator"> -->
-      <span class="el-dropdown-link">
-        {{ loginName }}<i class="el-icon-user el-icon--right"></i>
-      </span>
-      <span> </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="home">首页</el-dropdown-item>
-        <el-dropdown-item command="signout">退出</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+    <div style="margin-right:1%">
+      <i class="el-icon-user el-icon--right"></i><span style="font-size: 20px">欢迎： </span>
+      <el-dropdown @command="handleCommand">
+        <!-- <img src="..\assets\img\fzu.jpeg" class="avator"> -->
+        <span class="el-dropdown-link" style="font-size: 20px">
+          {{ loginName }}
+        </span>
+        <span> </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="home">首页</el-dropdown-item>
+          <el-dropdown-item command="signout">退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 

@@ -132,7 +132,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="交易金额">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-input
               v-model="transactionMoneyFloor"
               placeholder="最低金额"
@@ -141,7 +141,7 @@
             </el-input>
           </el-col>
           <el-col class="line" :span="1" align="middle">-</el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-input
               v-model="transactionMoneyUpper"
               placeholder="最高金额"
@@ -355,7 +355,7 @@ export default {
             });
             return;
           }
-          if (this.transactionMoneyFloor > this.transactionMoneyUpper) {
+          if (parseInt(this.transactionMoneyFloor) > parseInt(this.transactionMoneyUpper)) {
             this.$message({
               type: "error",
               message: "最低金额需小于等于最高金额",
