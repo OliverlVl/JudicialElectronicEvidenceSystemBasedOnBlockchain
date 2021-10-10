@@ -269,7 +269,7 @@
               type="success"
               size="small"
               @click="handleCertificateDown(scope.row)"
-              >公证证书下载</el-button
+              >下载公证证书</el-button
             >
           </template>
         </el-table-column>

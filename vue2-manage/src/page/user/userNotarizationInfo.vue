@@ -38,7 +38,7 @@
               type="primary"
               size="small"
               @click="downloadMaterial(scope.row)"
-              >申请材料下载</el-button
+              >下载申请材料</el-button
             >
           </template>
         </el-table-column>
