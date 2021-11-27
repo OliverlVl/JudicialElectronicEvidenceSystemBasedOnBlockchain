@@ -385,6 +385,12 @@ export default {
               if (item.blockchainTime == null) {
                 item.blockchainTime = "暂无数据";
               }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
+              }
               if (item.transactionBlockchainId == null) {
                 item.transactionBlockchainId = "暂无数据";
               }

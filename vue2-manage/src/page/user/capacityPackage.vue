@@ -44,7 +44,7 @@
               round
               @click="
                 memoryVisible = true;
-                formData.storageSize = '200';
+                formData.package = '200';
               "
             >
               立即购买
@@ -62,7 +62,7 @@
               round
               @click="
                 memoryVisible = true;
-                formData.storageSize = '1024';
+                formData.package = '1024';
               "
             >
               立即购买
@@ -80,7 +80,7 @@
               round
               @click="
                 memoryVisible = true;
-                formData.storageSize = '2048';
+                formData.package = '2048';
               "
             >
               立即购买
@@ -98,7 +98,7 @@
               round
               @click="
                 memoryVisible = true;
-                formData.storageSize = '5120';
+                formData.package = '5120';
               "
             >
               立即购买
@@ -115,7 +115,7 @@
     >
       <el-form ref="formData" :model="formData" label-width="25%">
         <el-form-item label="容量套餐:">
-          <el-radio-group v-model="formData.storageSize" size="medium">
+          <el-radio-group v-model="formData.package" size="medium">
             <el-radio border label="200"
               >200GB套餐&nbsp;&nbsp;&nbsp;<span class="money">99</span
               >元/年</el-radio
@@ -137,7 +137,7 @@
         </el-form-item>
         <el-form-item label="支付金额:">
           <span class="money" style="font-size: 150%">{{
-            formData.transactionMoney
+            transaction.transactionMoney
           }}</span
           >元
         </el-form-item>
@@ -156,13 +156,17 @@ import { memPay, userQuery } from "@/api/getData";
 export default {
   data() {
     return {
-      storageSpace: "2055",
-      hasUsedStorage: "500",
+      storageSpace: "",
+      hasUsedStorage: "",
       memoryVisible: false,
 
       formData: {
+        // 套餐
+        package: '',
+      },
+
+      transaction:{
         userId: sessionStorage.getItem("userId"),
-        //userId: "2",
         // 金额
         transactionMoney: -1,
         // 大小
@@ -172,29 +176,29 @@ export default {
     };
   },
 
-  //监听 formData.storageSize 字段 ，改变时执行函数
+  //监听 formData.package 字段 ，改变时执行函数
   watch: {
     $route() {
       this.searchInfo();
     },
-    "formData.storageSize": {
+    "formData.package": {
       handler: function () {
-        switch (this.formData.storageSize) {
+        switch (this.formData.package) {
           case "200":
-            this.formData.transactionMoney = 99;
-            this.formData.storageSize = 200 * 1024 * 1024;
+            this.transaction.transactionMoney = 99;
+            this.transaction.storageSize = 200 * 1024 * 1024;
             break;
           case "1024":
-            this.formData.transactionMoney = 199;
-            this.formData.storageSize = 1024 * 1024 * 1024;
+            this.transaction.transactionMoney = 199;
+            this.transaction.storageSize = 1024 * 1024 * 1024;
             break;
           case "2048":
-            this.formData.transactionMoney = 249;
-            this.formData.storageSize = 2048 * 1024 * 1024;
+            this.transaction.transactionMoney = 249;
+            this.transaction.storageSize = 2048 * 1024 * 1024;
             break;
           case "5120":
-            this.formData.transactionMoney = 298;
-            this.formData.storageSize = 5120 * 1024 * 1024;
+            this.transaction.transactionMoney = 298;
+            this.transaction.storageSize = 5120 * 1024 * 1024;
         }
       },
     },
@@ -235,8 +239,8 @@ export default {
     async memoryPay() {
       try {
         this.memoryVisible = false;
-        console.log(this.formData);
-        memPay(this.formData).then((result) => {
+        console.log(this.transaction);
+        memPay(this.transaction).then((result) => {
           console.log(result);
           if (result.status) {
             //成功
