@@ -68,6 +68,7 @@
 
 <script>
 import headTop from "@/components/headTop";
+import { baseUrl } from "@/config/env";
 import { getEvidenceType, addEvidence } from "@/api/getData";
 import axios from "axios";
 export default {
@@ -150,7 +151,7 @@ export default {
                 "Content-Type": "multipart/form-data",
               },
             };
-            axios.defaults.baseURL = "http://127.0.0.1:8080";
+            axios.defaults.baseURL = baseUrl;
             this.$message("文件开始上传，请稍等！");
             this.loading = true;
             axios

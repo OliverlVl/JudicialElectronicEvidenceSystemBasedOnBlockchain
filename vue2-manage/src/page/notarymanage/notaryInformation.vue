@@ -138,54 +138,54 @@
 
     <div class="info_container">
       <el-col :span="12" :offset="2">
-      <el-form
-        :model="uploadData"
-        :rules="rules"
-        ref="uploadData"
-        label-width="50%"
-        class="demo-formData"
-      >
-        <el-form-item label="公证类型" prop="notarizationType">
-          <el-select
-            v-model="uploadData.notarizationType"
-            style="width: 100%"
-            placeholder="请选择公证类型"
-          >
-            <el-option
-              v-for="item in notarizationType"
-              :key="item.notarizationTypeId"
-              :label="item.notarizationType"
-              :value="item.notarizationType"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+        <el-form
+          :model="uploadData"
+          :rules="rules"
+          ref="uploadData"
+          label-width="50%"
+          class="demo-formData"
+        >
+          <el-form-item label="公证类型" prop="notarizationType">
+            <el-select
+              v-model="uploadData.notarizationType"
+              style="width: 100%"
+              placeholder="请选择公证类型"
+            >
+              <el-option
+                v-for="item in notarizationType"
+                :key="item.notarizationTypeId"
+                :label="item.notarizationType"
+                :value="item.notarizationType"
+              ></el-option>
+            </el-select>
+          </el-form-item>
 
-        <el-form-item label="上传申报材料等相关文件">
-          <el-upload
-            class="avatar-uploader"
-            :action="no"
-            :http-request="uploadFile"
-            :show-file-list="true"
-            :auto-upload="false"
-            :file-list="fileList"
-            ref="upload"
-            multiple
-            drag
-          >
-            <i class="el-icon-upload"></i>
-            <div class="el-upload__text">
-              将文件拖到此处，或<em>点击上传</em>
-            </div>
-            <div slot="tip" class="el-upload__tip">可以选个多个文件上传</div>
-          </el-upload>
-        </el-form-item>
-        <el-form-item class="button_submit">
-          <el-button type="primary" @click="submitForm('uploadData')"
-            >确定上传</el-button
-          >
-          <el-button @click="resetForm('uploadData')">重置</el-button>
-        </el-form-item>
-      </el-form>
+          <el-form-item label="上传申报材料等相关文件">
+            <el-upload
+              class="avatar-uploader"
+              :action="no"
+              :http-request="uploadFile"
+              :show-file-list="true"
+              :auto-upload="false"
+              :file-list="fileList"
+              ref="upload"
+              multiple
+              drag
+            >
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">
+                将文件拖到此处，或<em>点击上传</em>
+              </div>
+              <div slot="tip" class="el-upload__tip">可以选个多个文件上传</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item class="button_submit">
+            <el-button type="primary" @click="submitForm('uploadData')"
+              >确定上传</el-button
+            >
+            <el-button @click="resetForm('uploadData')">重置</el-button>
+          </el-form-item>
+        </el-form>
       </el-col>
       <div></div>
     </div>
@@ -200,6 +200,7 @@ import {
   updateMoney,
   noTypeQuery,
 } from "@/api/getData";
+import { baseUrl } from "@/config/env";
 import axios from "axios";
 export default {
   data() {
@@ -215,7 +216,7 @@ export default {
         newNotarizationMoney: "",
       },
 
-       createTypeRules: {
+      createTypeRules: {
         newNotarizationType: [
           { required: true, message: "请输入新增存证类型", trigger: "blur" },
         ],
@@ -230,7 +231,7 @@ export default {
         newNotarizationType: "", // 修改后的公正类型
         notarizationType: "", // 所要修改的公证类型
       },
-       updateTypeRules: {
+      updateTypeRules: {
         newNotarizationType: [
           {
             required: true,
@@ -247,7 +248,7 @@ export default {
         ],
       },
 
-    // 修改公证金额
+      // 修改公证金额
       updateMoneyData: {
         autManId: sessionStorage.getItem("autManId"),
         notarizationType: "",
@@ -262,19 +263,15 @@ export default {
         ],
       },
 
-
       uploadData: {
         notarizationType: "",
         fileList: [],
       },
       rules: {
-        notarizationType: [{ required: true, message: "请输入存证名称", trigger: "blur"}],
+        notarizationType: [
+          { required: true, message: "请输入存证名称", trigger: "blur" },
+        ],
       },
-
-     
-     
-
-      
 
       notarizationType: [],
       //判断文件是否上传
@@ -425,7 +422,10 @@ export default {
     submitForm() {
       this.formData = new FormData();
       this.$refs.upload.submit(); // 必须设置，这样才会上次文件，触发uploadFile()函数
-      this.formData.append("notarizationType", this.uploadData.notarizationType);
+      this.formData.append(
+        "notarizationType",
+        this.uploadData.notarizationType
+      );
       this.$refs.uploadData.validate((valid) => {
         if (valid) {
           if (!this.isuploadfile) {
@@ -437,14 +437,17 @@ export default {
           }
           // 开始上传
           try {
-            this.formData.append("autManId",sessionStorage.getItem("autManId"))
+            this.formData.append(
+              "autManId",
+              sessionStorage.getItem("autManId")
+            );
             let config = {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
             };
-            axios.defaults.baseURL = "http://127.0.0.1:8080";
-            this.$message('文件开始上传，请稍等！');
+            axios.defaults.baseURL = baseUrl;
+            this.$message("文件开始上传，请稍等！");
             axios
               .post("/aut/uploadMaterialFile", this.formData, config)
               .then((res) => {
@@ -456,7 +459,6 @@ export default {
                   });
                   this.isuploadfile = false;
                   this.$refs.upload.clearFiles(); // 清除文件
-
                 } else {
                   this.$message({
                     type: "error",
