@@ -264,7 +264,12 @@
     </el-dialog>
 
     <!-- 申请缴费弹窗-->
-    <el-dialog title="公证缴费" :visible.sync="notarPayVisible" size="tiny">
+    <el-dialog
+      title="公证缴费"
+      :visible.sync="notarPayVisible"
+      size="tiny"
+      :append-to-body="true"
+    >
       <p style="">
         所需公证金额为：{{ notarizationPay.notarizationMoney }}元，是否支付？
       </p>
@@ -607,20 +612,31 @@ export default {
     // 公证缴费
     async notarPay() {
       try {
+        this.notarPayVisible = false;
+        this.$message({
+          type: "info",
+          message: "公证申请及缴费信息上链中，请耐心等待!",
+        });
         notarPay(this.notarizationPay).then((result) => {
           console.log(result);
           if (result.status == true) {
             //成功
-            this.notarPayVisible = false;
             this.$message({
               type: "success",
-              message: "缴费成功!",
+              message: "公证申请成功!",
             });
           } else {
-            this.$message({
-              type: "error",
-              message: "缴费失败!",
-            });
+            if (result.message == "余额不足，无法进行公证缴费") {
+              this.$message({
+                type: "error",
+                message: "余额不足，请先充值!",
+              });
+            } else {
+              this.$message({
+                type: "error",
+                message: "公证申请失败!",
+              });
+            }
           }
         });
       } catch (e) {

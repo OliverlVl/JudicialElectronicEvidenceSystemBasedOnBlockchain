@@ -4,6 +4,9 @@
     <el-row style="margin-top: 20px">
       <el-col :span="12" :offset="2">
         <el-form
+          v-loading="loading"
+          element-loading-text="拼命上传中"
+          element-loading-spinner="el-icon-loading"
           :model="uploadData"
           :rules="rules"
           ref="uploadData"
@@ -70,6 +73,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      loading: false,
       uploadData: {
         evidenceType: "",
         evidenceName: "",
@@ -147,19 +151,20 @@ export default {
               },
             };
             axios.defaults.baseURL = "http://127.0.0.1:8080";
-            this.$message('文件开始上传，请稍等！');
+            this.$message("文件开始上传，请稍等！");
+            this.loading = true;
             axios
               .post("/user/addEvidence", this.formData, config)
               .then((res) => {
                 let data = res.data;
                 if (data.status == true) {
+                  this.loading = false;
                   this.$message({
                     type: "success",
                     message: "存证上传成功",
                   });
                   this.isuploadfile = false;
                   this.$refs.upload.clearFiles(); // 清除文件
-                  
                 } else {
                   this.$message({
                     type: "error",
@@ -186,8 +191,6 @@ export default {
         this.$refs.upload.clearFiles(); // 清除文件
       });
     },
-
-
   },
 };
 </script>

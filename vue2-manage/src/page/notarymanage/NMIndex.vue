@@ -8,6 +8,10 @@
           <i class="el-icon-user-solid title-set">公证员信息</i>
           <el-scrollbar wrap-style="overflow-x:hidden;">
             <el-table
+              v-loading="loading"
+              element-loading-text="公证员公证次数排名生成中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(0, 0, 0, 0.8)"
               :data="noRank"
               align="center"
               :header-cell-style="{
@@ -228,8 +232,9 @@ import {
 export default {
   data() {
     return {
+      loading: false,
       orgInfo: [], // 机构公证统计信息
- 
+
       status: false,
       noreqType: "",
       //公证数量
@@ -420,6 +425,7 @@ export default {
       });
     },
     async rankQue() {
+      this.loading = true;
       this.noRank = [];
       await notaStasGen().then((result) => {
         if (result.status) {
@@ -449,6 +455,7 @@ export default {
         }
       });
       await rankStasQue(query).then((result) => {
+        this.loading = false;
         if (result.status) {
           console.log(result);
           result.data.forEach((item, index) => {

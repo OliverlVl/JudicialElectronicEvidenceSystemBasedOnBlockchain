@@ -37,7 +37,14 @@
     </div>
     <!-- 记录列表-->
     <div class="table_container">
-      <el-table :data="pageData" style="width: 100%" stripe>
+      <el-table
+        v-loading="loading"
+        element-loading-text="公证申请上链"
+        element-loading-spinner="el-icon-loading"
+        :data="pageData"
+        style="width: 100%"
+        stripe
+      >
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="right" inline class="demo-table-expand">
@@ -259,7 +266,8 @@ import {
 export default {
   data() {
     return {
-      pageData:[],
+      loading: false,
+      pageData: [],
       searchVisible: false,
       notarPayVisible: false,
       decrypt_flag: true,
@@ -372,9 +380,9 @@ export default {
   },
   methods: {
     // 序号
-    indexMethod(index){
+    indexMethod(index) {
       // index 从 0 开始的
-      return (this.pageIndex -1)* this.pageSize + index +1;
+      return (this.pageIndex - 1) * this.pageSize + index + 1;
     },
 
     //获取存证类型
@@ -457,10 +465,10 @@ export default {
             console.log(result.notarizationMoney);
             //缴费
             this.notarization.notarizationMoney = result.notarizationMoney;
-            this.$message({
-              type: "success",
-              message: "请缴费",
-            });
+            // this.$message({
+            //   type: "success",
+            //   message: "请缴费",
+            // });
 
             //
             this.dialogVisible_notarization = false;
@@ -481,19 +489,33 @@ export default {
     async notarPay() {
       try {
         this.notarization.transactionPeople = this.notarization.organizationId;
+        this.notarPayVisible = false;
+        this.loading = true;
+        this.$message({
+          type: "info",
+          message: "公证申请及缴费信息上链中，请耐心等待!",
+        });
         notarPay(this.notarization).then((result) => {
+          console.log(result);
+          this.loading = false;
           if (result.status == true) {
             //成功
-            this.notarPayVisible = false;
             this.$message({
               type: "success",
-              message: "缴费成功!",
+              message: "公证申请成功！可在公证列表中查看具体信息",
             });
           } else {
-            this.$message({
-              type: "error",
-              message: "缴费失败!",
-            });
+            if (result.message == "余额不足，无法进行公证缴费") {
+              this.$message({
+                type: "error",
+                message: "余额不足，请先充值!",
+              });
+            } else {
+              this.$message({
+                type: "error",
+                message: "公证申请失败!",
+              });
+            }
           }
         });
       } catch (e) {
@@ -511,6 +533,10 @@ export default {
 
     // 文件下载
     async handleDown(row) {
+      this.$message({
+        type: "info",
+        message: "文件下载中，请耐心等待！",
+      });
       window.location.href =
         "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
     },

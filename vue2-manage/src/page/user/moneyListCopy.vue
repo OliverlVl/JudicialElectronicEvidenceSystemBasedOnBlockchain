@@ -41,7 +41,11 @@
       </el-switch>
     </div>
     <div class="table_container">
-      <el-table :data="pageData" style="width: 100%" stripe>
+      <el-table
+        :data="pageData"
+        style="width: 100%"
+        stripe
+      >
         <el-table-column
           type="index"
           label="序号"
@@ -355,7 +359,10 @@ export default {
             });
             return;
           }
-          if (parseInt(this.transactionMoneyFloor) > parseInt(this.transactionMoneyUpper)) {
+          if (
+            parseInt(this.transactionMoneyFloor) >
+            parseInt(this.transactionMoneyUpper)
+          ) {
             this.$message({
               type: "error",
               message: "最低金额需小于等于最高金额",
@@ -367,8 +374,6 @@ export default {
         }
         // 请求数据
         await transQuery(this.transaction).then((result) => {
-          console.log(this.transaction);
-          console.log(result);
           if (result.status == true) {
             this.tableData = [];
             result.data.forEach((item) => {
@@ -381,9 +386,22 @@ export default {
                 } else {
                   item.transactionPeople = "/";
                 }
+                if (item.storageSize != null) {
+                  console.log("金额" + item.storageSize);
+                  str = item.storageSize.split(":");
+                  item.storageSize = str[2].substring(0, 6) + "******";
+                } else {
+                  item.storageSize = "/";
+                }
+              } else {
+                if (item.storageSize == null) {
+                  item.storageSize = "/";
+                } else {
+                  item.storageSize = item.storageSize / 1024 / 1024;
+                }
               }
               if (item.blockchainTime == null) {
-                item.blockchainTime = "暂无数据";
+                item.blockchainTime = "/";
               }
               if (item.blockchainTime != null) {
                 item.blockchainTime =
@@ -392,12 +410,7 @@ export default {
                   item.blockchainTime.substring(11, 19);
               }
               if (item.transactionBlockchainId == null) {
-                item.transactionBlockchainId = "暂无数据";
-              }
-              if (item.storageSize == null) {
-                item.storageSize = "/";
-              } else {
-                item.storageSize = item.storageSize / 1024 / 1024;
+                item.transactionBlockchainId = "/";
               }
 
               if (item.transactionPeople == null) {

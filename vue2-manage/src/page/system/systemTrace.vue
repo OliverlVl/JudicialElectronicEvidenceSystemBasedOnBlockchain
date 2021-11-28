@@ -387,21 +387,34 @@ export default {
                   item.transactionPeople = str[2].substring(0, 6) + "******";
                 } else {
                   item.transactionPeople = "/";
+                }if (item.storageSize != null) {
+                  console.log("金额" + item.storageSize);
+                  str = item.storageSize.split(":");
+                  item.storageSize = str[2].substring(0, 6) + "******";
+                } else {
+                  item.storageSize = "/";
+                }
+              } else {
+                if (item.storageSize == null) {
+                  item.storageSize = "/";
+                } else {
+                  item.storageSize = item.storageSize / 1024 / 1024;
                 }
               }
               if (item.blockchainTime == null) {
-                item.blockchainTime = "暂无数据";
+                item.blockchainTime = "/";
+              }
+              if (item.blockchainTime != null) {
+                item.blockchainTime =
+                  item.blockchainTime.substring(0, 10) +
+                  " " +
+                  item.blockchainTime.substring(11, 19);
               }
               if (item.transactionBlockchainId == null) {
-                item.transactionBlockchainId = "暂无数据";
+                item.transactionBlockchainId = "/";
               }
               if (item.transactionPeople == null) {
                 item.transactionPeople = "/";
-              }
-              if (item.storageSize == null) {
-                item.storageSize = "/";
-              } else {
-                item.storageSize = item.storageSize / 1024 / 1024;
               }
               if (item.transactionTime != null) {
                 item.transactionTime =

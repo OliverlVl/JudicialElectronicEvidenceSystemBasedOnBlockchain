@@ -137,12 +137,10 @@
             <el-table-column
               label="交易编号"
               align="center"
-              width="300px"
               prop="transactionId"
             ></el-table-column>
             <el-table-column
               label="充值金额(￥)"
-              width="120px"
               align="center"
               prop="transactionMoney"
             ></el-table-column>
@@ -150,11 +148,6 @@
               label="充值时间"
               align="center"
               prop="transactionTime"
-            ></el-table-column>
-            <el-table-column
-              label="区块链ID"
-              align="center"
-              prop="transactionBlockchainId"
             ></el-table-column>
           </el-table>
           <div class="pagination">
@@ -195,24 +188,17 @@
             <el-table-column
               label="交易编号"
               align="center"
-              width="300px"
               prop="transactionId"
             ></el-table-column>
             <el-table-column
               label="提现金额(￥)"
               align="center"
-              width="120px"
               prop="transactionMoney"
             ></el-table-column>
             <el-table-column
               label="提现时间"
               align="center"
               prop="transactionTime"
-            ></el-table-column>
-            <el-table-column
-              label="区块链ID"
-              align="center"
-              prop="transactionBlockchainId"
             ></el-table-column>
           </el-table>
           <div class="pagination">
@@ -253,25 +239,23 @@
             <el-table-column
               label="交易编号"
               align="center"
-              width="300px"
               prop="transactionId"
             ></el-table-column>
             <el-table-column
               label="转账金额(￥)"
               prop="transactionMoney"
               align="center"
-              width="120px"
             ></el-table-column>
             <el-table-column
               label="转账时间"
               align="center"
               prop="transactionTime"
             ></el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               label="区块链ID"
               align="center"
               prop="transactionBlockchainId"
-            ></el-table-column>
+            ></el-table-column> -->
             <el-table-column
               label="转账对象"
               align="center"
