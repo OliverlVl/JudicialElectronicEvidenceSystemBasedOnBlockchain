@@ -83,7 +83,7 @@
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="公证管理员" name="third">
+        <el-tab-pane label="机构管理员" name="third">
           <el-form
             :model="autManagerLoginForm"
             :rules="rulesAutManagerLogin"
