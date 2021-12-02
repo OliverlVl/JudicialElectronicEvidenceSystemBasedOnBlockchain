@@ -266,11 +266,12 @@
 <script>
 import headTop from "../../components/headTop";
 import { notarmanageRecord, eviTypeQuery, noTypeQuery } from "@/api/getData";
+import { baseUrl } from "@/config/env";
 export default {
   data() {
     return {
-      MoneyUpper:"",
-      MoneyFloor:"",
+      MoneyUpper: "",
+      MoneyFloor: "",
       pageData: [], // 分页数据
       searchVisible: false,
       //时间选择器
@@ -425,7 +426,7 @@ export default {
           }
           this.notarization.notarizationMoneyFloor = this.MoneyFloor;
           this.notarization.notarizationMoneyUpper = this.MoneyUpper;
-        }else{
+        } else {
           delete this.notarization.notarizationMoneyUpper;
           delete this.notarization.notarizationMoneyFloor;
         }
@@ -623,7 +624,7 @@ export default {
     // 文件下载
     async handleDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
   },
 };

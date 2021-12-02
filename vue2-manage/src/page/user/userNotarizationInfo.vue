@@ -59,7 +59,7 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
+import { baseUrl } from "@/config/env";
 import {
   orgaQuery,
   downloadMaterialFile,
@@ -143,8 +143,7 @@ export default {
     downloadMaterial(row) {
       console.log(row);
       window.location.href =
-        "http://localhost:8080/downloadMaterialFile?materialId=" +
-        row.materialId;
+        baseUrl + "/downloadMaterialFile?materialId=" + row.materialId;
     },
     // 处理导航页
     handlePageChange(val) {

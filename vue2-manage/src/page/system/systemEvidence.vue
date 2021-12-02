@@ -190,7 +190,7 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
+import { baseUrl } from "@/config/env";
 import { evidenceQuery, eviTypeQuery } from "@/api/getData";
 export default {
   data() {
@@ -398,7 +398,7 @@ export default {
     // 文件下载
     async handleDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
   },
 };

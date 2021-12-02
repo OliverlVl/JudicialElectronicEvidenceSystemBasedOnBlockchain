@@ -296,7 +296,7 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
+import { baseUrl } from "@/config/env";
 import { notarmanageRecord, eviTypeQuery, noTypeQuery } from "@/api/getData";
 export default {
   data() {
@@ -455,7 +455,7 @@ export default {
           }
           this.notarization.notarizationMoneyFloor = this.MoneyFloor;
           this.notarization.notarizationMoneyUpper = this.MoneyUpper;
-        }else{
+        } else {
           delete this.notarization.notarizationMoneyUpper;
           delete this.notarization.notarizationMoneyFloor;
         }
@@ -669,11 +669,11 @@ export default {
         if (this.notarization.notarizationStatus == "none") {
           this.notarization.notarizationStatus = "";
         }
-        if (this.notarization.notarizationMoneyFloor == null){
-          delete this.notarization.notarizationMoneyFloor
+        if (this.notarization.notarizationMoneyFloor == null) {
+          delete this.notarization.notarizationMoneyFloor;
         }
-        if (this.notarization.notarizationMoneyUpper == null){
-          delete this.notarization.notarizationMoneyUpper
+        if (this.notarization.notarizationMoneyUpper == null) {
+          delete this.notarization.notarizationMoneyUpper;
         }
       } catch (error) {
         throw new Error(error.message);
@@ -683,14 +683,13 @@ export default {
     // 文件下载
     handleDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
 
     // 公证证书下载
     handleCertificateDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadCertificateFile?evidenceId=" +
-        row.evidenceId;
+        baseUrl + "/downloadCertificateFile?evidenceId=" + row.evidenceId;
     },
   },
 };

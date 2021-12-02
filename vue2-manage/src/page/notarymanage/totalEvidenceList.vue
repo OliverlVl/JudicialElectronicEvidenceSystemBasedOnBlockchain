@@ -191,6 +191,7 @@
 <script>
 import headTop from "../../components/headTop";
 import { evidenceQuery, eviTypeQuery } from "@/api/getData";
+import { baseUrl } from "@/config/env";
 export default {
   data() {
     return {
@@ -333,17 +334,17 @@ export default {
         }
         if (this.timeValue2 != "" && this.timeValue2 != null) {
           this.evidence.evidenceTimeEnd = this.timeValue2.getTime();
-        }else {
+        } else {
           delete this.evidence.evidenceTimeEnd;
         }
         if (this.timeValue3 != "" && this.timeValue3 != null) {
           this.evidence.blockchainTimeStart = this.timeValue3.getTime();
-        }else {
+        } else {
           delete this.evidence.blockchainTimeStart;
         }
         if (this.timeValue4 != "" && this.timeValue4 != null) {
           this.evidence.blockchainTimeEnd = this.timeValue4.getTime();
-        }else {
+        } else {
           delete this.evidence.blockchainTimeEnd;
         }
       } catch (error) {
@@ -384,7 +385,7 @@ export default {
     // 文件下载
     async handleDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
   },
 };

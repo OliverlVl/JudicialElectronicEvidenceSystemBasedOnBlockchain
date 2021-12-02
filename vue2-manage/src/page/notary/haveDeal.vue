@@ -238,6 +238,7 @@
 <script>
 import headTop from "../../components/headTop";
 import { eviTypeQuery, noTypeQuery, notarmanageRecord } from "@/api/getData";
+import { baseUrl } from "@/config/env";
 export default {
   data() {
     return {
@@ -499,14 +500,13 @@ export default {
     // 文件下载
     handleDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
 
     // 公证证书下载
     handleCertificateDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadCertificateFile?evidenceId=" +
-        row.evidenceId;
+        baseUrl + "/downloadCertificateFile?evidenceId=" + row.evidenceId;
     },
   },
 

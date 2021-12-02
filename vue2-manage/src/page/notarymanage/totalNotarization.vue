@@ -261,6 +261,7 @@
 <script>
 import headTop from "../../components/headTop";
 import { notarmanageRecord, eviTypeQuery, noTypeQuery } from "@/api/getData";
+import { baseUrl } from "@/config/env";
 export default {
   data() {
     return {
@@ -422,7 +423,7 @@ export default {
         ) {
           this.notarization.notarizationType = "none";
         }
-         //存证名称
+        //存证名称
         if (this.notarization.evidenceName == "") {
           delete this.notarization.evidenceName;
         }
@@ -438,14 +439,14 @@ export default {
         if (this.timeValue1 != "" && this.timeValue1 != null) {
           this.notarization.notarizationStartTimeStart =
             this.timeValue1.getTime();
-        }else{
-          delete this.notarization.notarizationStartTimeStart
+        } else {
+          delete this.notarization.notarizationStartTimeStart;
         }
         if (this.timeValue2 != "" && this.timeValue2 != null) {
           this.notarization.notarizationStartTimeEnd =
             this.timeValue2.getTime();
-        }else{
-          delete this.notarization.notarizationStartTimeEnd
+        } else {
+          delete this.notarization.notarizationStartTimeEnd;
         }
         //加解密
         if (this.decrypt_flag) {
@@ -453,7 +454,7 @@ export default {
         } else {
           this.notarization.decryptFlag = 0;
         }
-        console.log(this.MoneyFloor + this.MoneyUpper)
+        console.log(this.MoneyFloor + this.MoneyUpper);
         //金额
         if (this.MoneyFloor != "" && this.MoneyUpper != "") {
           if (isNaN(this.MoneyFloor) || isNaN(this.MoneyUpper)) {
@@ -532,7 +533,7 @@ export default {
     // 文件下载
     async handleDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
   },
 };

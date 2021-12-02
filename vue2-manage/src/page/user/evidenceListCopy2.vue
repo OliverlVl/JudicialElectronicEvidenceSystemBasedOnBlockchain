@@ -253,7 +253,7 @@
 
 <script>
 import headTop from "../../components/headTop";
-// import { baseUrl, baseImgPath } from "@/config/env";
+import { baseUrl } from "@/config/env";
 import {
   getEvidenceType,
   orgaQuery,
@@ -537,8 +537,9 @@ export default {
         type: "info",
         message: "文件下载中，请耐心等待！",
       });
+
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
 
     // 存证时间赋值

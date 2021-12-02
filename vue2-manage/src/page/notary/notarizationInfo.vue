@@ -59,7 +59,7 @@
 
 <script>
 import headTop from "../../components/headTop";
-import { baseUrl, baseImgPath } from "@/config/env";
+import { baseUrl } from "@/config/env";
 import {
   orgaQuery,
   downloadMaterialFile,
@@ -78,9 +78,7 @@ export default {
         { organization_id: "1", organization_name: "福州公证处" },
         { organization_id: "2", organization_name: "厦门公证处" },
       ],
-      orgMaterialList: [
-
-      ],
+      orgMaterialList: [],
       // 获取数据
       pageTotal: 0,
       pageIndex: 1,
@@ -129,7 +127,7 @@ export default {
       };
       await notarizationMaterial(query).then((result) => {
         if (result.status) {
-          console.log(result)
+          console.log(result);
           this.orgMaterialList = [];
           result.data.forEach((item) => {
             this.orgMaterialList.push(item);
@@ -140,14 +138,12 @@ export default {
           console.log("获取材料失败");
         }
       });
-
     },
 
     downloadMaterial(row) {
-      console.log(row)
+      console.log(row);
       window.location.href =
-        "http://localhost:8080/downloadMaterialFile?materialId=" + row.materialId;
-      
+        baseUrl + "/downloadMaterialFile?materialId=" + row.materialId;
     },
 
     // 处理导航页
@@ -162,7 +158,6 @@ export default {
         );
       }
     },
-
   },
 };
 </script>

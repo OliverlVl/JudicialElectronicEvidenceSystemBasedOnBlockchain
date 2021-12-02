@@ -265,6 +265,7 @@
 
 <script>
 import headTop from "../../components/headTop";
+import { baseUrl } from "@/config/env";
 import {
   notarRecord,
   audit,
@@ -419,7 +420,7 @@ export default {
     // 文件下载
     handleDown(row) {
       window.location.href =
-        "http://localhost:8080/downloadUserFile?evidenceId=" + row.evidenceId;
+        baseUrl + "/downloadUserFile?evidenceId=" + row.evidenceId;
     },
     async getNotaryRecord() {
       try {
@@ -452,7 +453,7 @@ export default {
         ) {
           this.searchQuery.notarizationType = "none";
         }
-         //存证名称
+        //存证名称
         if (this.searchQuery.evidenceName == "") {
           delete this.searchQuery.evidenceName;
         }
