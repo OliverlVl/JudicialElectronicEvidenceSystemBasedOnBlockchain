@@ -11,10 +11,10 @@ let routerMode = 'hash';
 let baseImgPath;
 
 if (process.env.NODE_ENV == 'development') {
-	baseUrl = 'http://localhost:8080';
+	baseUrl = 'http://218.193.126.52:8080';
     baseImgPath = '';
 }else{
-	baseUrl = 'http://localhost:8080'
+	baseUrl = 'http://218.193.126.52:8080'
     baseImgPath = '';
 }
 
