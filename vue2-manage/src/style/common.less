@@ -1,94 +1,126 @@
-body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption {
+body,
+div,
+span,
+header,
+footer,
+nav,
+section,
+aside,
+article,
+ul,
+dl,
+dt,
+dd,
+li,
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+i,
+b,
+textarea,
+button,
+input,
+select,
+figure,
+figcaption {
     padding: 0;
     margin: 0;
     list-style: none;
     font-style: normal;
     text-decoration: none;
     border: none;
-    font-family: "Microsoft Yahei",sans-serif;
-    -webkit-tap-highlight-color:transparent;
+    font-family: "Microsoft Yahei", sans-serif;
+    -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     &:focus {
         outline: none;
     }
 }
 
-/*定义滚动条整体部分*/  
-::-webkit-scrollbar  
-{  
+/*定义滚动条整体部分*/
+::-webkit-scrollbar {
     width: 0px;
-    height: 0px;  
-    background-color: #ffffff;  
-}  
-  
-/*定义滚动条轨道 内阴影+圆角*/  
-::-webkit-scrollbar-track  
-{  
-    -webkit-box-shadow: inset 0 0 1px rgb(248, 236, 236);  
-    border-radius: 0px;  
-    background-color: #ffffff;  
-}  
-  
-/*定义滑块 内阴影+圆角*/  
-::-webkit-scrollbar-thumb  
-{  
-    border-radius: 5px;  
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);  
-    background-color: rgb(206, 201, 201);  
-}  
+    height: 0px;
+    background-color: #ffffff;
+}
 
-input[type="button"], input[type="submit"], input[type="search"], input[type="reset"] {
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 1px rgb(248, 236, 236);
+    border-radius: 0px;
+    background-color: #ffffff;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    background-color: rgb(206, 201, 201);
+}
+
+input[type="button"],
+input[type="submit"],
+input[type="search"],
+input[type="reset"] {
     -webkit-appearance: none;
 }
 
-textarea { -webkit-appearance: none;}   
+textarea {
+    -webkit-appearance: none;
+}
 
-html,body{
+html,
+body {
     height: 100%;
     width: 100%;
     // background-color: #F5F5F5;
 }
 
-.fillcontain{
+.fillcontain {
     height: 100%;
     width: 100%;
 }
-.clear:after{
-    content: '';
+.clear:after {
+    content: "";
     display: block;
     clear: both;
 }
 
-.clear{
-    zoom:1;
+.clear {
+    zoom: 1;
 }
 
-.back_img{
+.back_img {
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
 
-.margin{
+.margin {
     margin: 0 auto;
 }
 
-.left{
+.left {
     float: left;
 }
 
-.right{
+.right {
     float: right;
 }
 
-.hide{
+.hide {
     display: none;
 }
 
-.show{
+.show {
     display: block;
 }
 
-.ellipsis{
+.ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
