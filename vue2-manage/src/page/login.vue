@@ -4,7 +4,7 @@
       <div class="manage_tip">
         <p>区块链电子存证系统</p>
         <br />
-        <p style="font-size: 20px">（序列号：YC-21-03）</p>
+        <p style="font-size: 20px">（版本号：V1.0）</p>
       </div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="用户" name="first">
